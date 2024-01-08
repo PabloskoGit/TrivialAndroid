@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Proyecto_Kahoot_pmg_sgg</string>
+    <string name="boton_JuegoLocal">Juego 1 vs 1</string>
+    <string name="boton_JuegoMultijugador">Juego Multijugador</string>
+    <string name="boton_Ajustes">Ajustes</string>
+    <string name="boton_Salir">Salir</string>
+    <string name="boton_LanzarDado">Lanzar Dado</string>
+
+
+    <!-- VistaJuego -->
+    <string name="btnResp">Respuesta</string>
+    <string name="btnResp1">Respuesta1</string>
+    <string name="btnResp2">Respuesta2</string>
+    <string name="btnResp3">Respuesta3</string>
+
+    <string name="modoJuego">Acierta 5 preguntas para ganar</string>
+    <string name="modoJuegoMemory">Descubre todas las parejas para ganar</string>
+    <string name="modoJuegoFinal">Acierta la pregunta final para ganar</string>
+    <string name="ahorcado">Adivina la palabra para ganar</string>
+    <string name="tvPreg">Pregunta</string>
+
+    <string name="hintAhorcado">Introduce una letra</string>
+    <string name="btnComprobar">Comprobar</string>
+
+</resources>

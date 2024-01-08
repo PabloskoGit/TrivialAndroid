@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".feature.vistaTablero.VistaTableroFragment">
+
+    <!-- LinearLayout con orientación vertical -->
+    <LinearLayout
+        android:id="@+id/linlay_contenedor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- gridTablero -->
+
+        <LinearLayout
+            android:id="@+id/linlay_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:orientation="horizontal"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:orientation="horizontal"
+            android:background="@drawable/respuestas_design">
+
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/gridTablero"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="25dp" >
+
+            </androidx.gridlayout.widget.GridLayout>
+
+            <ImageView
+                android:id="@+id/iv_logoTablero"
+                android:layout_width="310dp"
+                android:layout_height="250dp"
+                android:src="@drawable/quickz_icon_triangle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/gridControles"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp"
+            android:layout_weight="1"
+            android:background="@drawable/respuestas_design">
+
+
+            <Button
+                android:id="@+id/btn_CambiarJugador"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_botones_juego_design"
+                android:text="Cambiar Jugador"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_PuntosUsuario" />
+
+            <Button
+                android:id="@+id/btn_LanzarDado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_botones_juego_design"
+                android:text="@string/boton_LanzarDado"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_CambiarJugador" />
+
+            <TextView
+                android:id="@+id/txt_UsuarioActivo"
+                android:layout_width="191dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:background="@drawable/respuestas_design"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txt_PuntosUsuario"
+                android:layout_width="192dp"
+                android:layout_height="76dp"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:background="@drawable/respuestas_design"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_UsuarioActivo" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/baseline_person_24"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_UsuarioActivo"
+                app:layout_constraintStart_toEndOf="@+id/txt_UsuarioActivo"
+                app:layout_constraintTop_toTopOf="@+id/txt_UsuarioActivo" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</FrameLayout>

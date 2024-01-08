@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/vistaMenuCompletoView">
+    <fragment
+        android:id="@+id/vistaMenuCompletoView"
+        android:name="com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaInicioJuego.VistaMenuCompletoFragment"
+        android:label="fragment_vista_menu_completo_view"
+        tools:layout="@layout/fragment_vista_menu_completo_view">
+
+        <action
+            android:id="@+id/navegarVistaTablero"
+            app:destination="@id/vistaTableroView" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/vistaTableroView"
+        android:name="com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero.VistaTableroFragment"
+        android:label="fragment_vista_tablero_view"
+        tools:layout="@layout/fragment_vista_tablero_view">
+
+        <action
+            android:id="@+id/navegarVistaJuego"
+            app:destination="@id/vistaJuegoView2" />
+
+        <action
+            android:id="@+id/navegarVistaRepaso"
+            app:destination="@id/vistaRepaso2" />
+
+        <action
+            android:id="@+id/navegarVistaPreguntaFinal"
+            app:destination="@id/vistaPregFinal2" />
+
+        <action
+            android:id="@+id/navegarVistaMemory"
+            app:destination="@id/vistaMemoryView" />
+
+        <action
+            android:id="@+id/navegarAhorcadoVista"
+            app:destination="@id/vistaAhorcadoView" />
+
+        <argument
+            android:name="informacionTablero"
+            app:argType="com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/vistaJuegoView2"
+        android:name="com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaJuego.VistaJuegoFragment"
+        android:label="fragment_vista_juego"
+        tools:layout="@layout/fragment_vista_juego">
+
+        <argument
+            android:name="Jugador"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/vistaRepaso2"
+        android:name="com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaRepaso.VistaRepasoFragment"
+        android:label="fragment_vista_repaso"
+        tools:layout="@layout/fragment_vista_repaso">
+
+        <argument
+            android:name="Jugador"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/vistaPregFinal2"
+        android:name="com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaPreguntaFinal.VistaPregFinalFragment"
+        android:label="fragment_vista_pregfinal"
+        tools:layout="@layout/fragment_vista_pregfinal">
+
+        <argument
+            android:name="Jugador"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/vistaMemoryView"
+        android:name="com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaMemory.VistaMemoryFragment"
+        android:label="fragment_vista_memory_view"
+        tools:layout="@layout/fragment_vista_memory">
+
+        <argument
+            android:name="Jugador"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/vistaAhorcadoView"
+        android:name="com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaAhorcado.VistaAhorcadoFragment"
+        android:label="VistaAhorcadoView">
+
+        <argument
+            android:name="Jugador"
+            app:argType="integer" />
+
+    </fragment>
+
+</navigation>
