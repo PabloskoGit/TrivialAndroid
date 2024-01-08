@@ -1,6 +1,10 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
+import com.example.t8_ej01_persistenciadatossqlite.DatabaseHelper
+import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.Jugador
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,13 +36,22 @@ class VistaTableroViewModel : ViewModel() {
     // Mapa que asocia ID de jugador con su LiveData de posición
     private val mapPosicionesJugadores = mutableMapOf<Int, MutableLiveData<Pair<Int, Int>>>()
 
+    private lateinit var databaseHelper: DatabaseHelper
+
+
+
     init {
         // Inicializar aquí la lista de jugadores
         _jugadores.value = listOf(
             Jugador(id = 1, posicion = Pair(0, 0), direccion = "DERECHA"),
             Jugador(id = 2, posicion = Pair(0, 0), direccion = "DERECHA")
             // Puedes agregar más jugadores según sea necesario
+
         )
+
+
+        // Inicializar DatabaseHelper con el contexto de la aplicación
+        databaseHelper = MainActivity.databaseHelper!!
     }
 
 
@@ -257,4 +270,36 @@ class VistaTableroViewModel : ViewModel() {
         DERECHA, ABAJO, IZQUIERDA, ARRIBA
     }
 
+    fun guardarPartida(partidaId: Long) {
+        val jugador1 = _jugadores.value?.find { it.id == 1 } ?: return
+        val jugador2 = _jugadores.value?.find { it.id == 2 } ?: return
+        val jugadorActivo = _jugadorActual.value ?: return
+
+        Log.d("VistaTableroViewModel", "Guardando partida. ID: $partidaId, Jugador1: $jugador1, Jugador2: $jugador2, Jugador Activo: $jugadorActivo")
+
+        databaseHelper.insertarPartida(partidaId, jugador1, jugador2, jugadorActivo)
+    }
+
+    fun cargarPartida(partidaId: Long) {
+        Log.d("VistaTableroViewModel", "Cargando partida. ID: $partidaId")
+
+        val partidaInfo = databaseHelper.obtenerPartidaPorId(partidaId)
+        if (partidaInfo != null) {
+            val (_, jugador1, jugador2) = partidaInfo
+
+            Log.d("VistaTableroViewModel", "Partida cargada. Jugador1: $jugador1, Jugador2: $jugador2")
+
+            // Actualizar jugadores en el ViewModel
+            _jugadores.value = listOf(jugador1, jugador2)
+
+            // Establecer jugador activo
+            _jugadorActual.value = databaseHelper.obtenerJugadorActivoDePartida(partidaId)
+
+            Log.d("VistaTableroViewModel", "Partida cargada. Jugadoractual: $_jugadorActual.value")
+
+            // Aquí puedes actualizar otros elementos del ViewModel según sea necesario
+        } else {
+            Log.d("VistaTableroViewModel", "No se encontró la partida con ID: $partidaId")
+        }
+    }
 }

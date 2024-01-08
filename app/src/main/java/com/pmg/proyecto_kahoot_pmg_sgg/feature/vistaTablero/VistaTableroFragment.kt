@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,7 +27,8 @@ class VistaTableroFragment : Fragment() {
     private lateinit var btnLanzarDado: Button
     private lateinit var txtJugadorActivo: TextView
     private lateinit var txtPuntosJugador: TextView
-    private lateinit var btnCambiarJugador: Button
+    private lateinit var btnGuardarPartida: Button
+    private lateinit var btnCargarPartida: Button
 
     private lateinit var botones: Array<Array<Button>>
 
@@ -52,7 +52,8 @@ class VistaTableroFragment : Fragment() {
         btnLanzarDado = viewTablero.findViewById(R.id.btn_LanzarDado)
         txtJugadorActivo = viewTablero.findViewById(R.id.txt_UsuarioActivo)
         txtPuntosJugador = viewTablero.findViewById(R.id.txt_PuntosUsuario)
-        btnCambiarJugador = viewTablero.findViewById(R.id.btn_CambiarJugador)
+        btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
+        btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
         // Obtiene una referencia al GridLayout
         val gridLayout = viewTablero.findViewById<GridLayout>(R.id.gridTablero)
 
@@ -190,8 +191,12 @@ class VistaTableroFragment : Fragment() {
         }
 
 
-        btnCambiarJugador.setOnClickListener {
-            viewModel.cambiarJugador()
+        btnGuardarPartida.setOnClickListener {
+            viewModel.guardarPartida(4)
+        }
+
+        btnCargarPartida.setOnClickListener {
+            viewModel.cargarPartida(4)
         }
     }
 
