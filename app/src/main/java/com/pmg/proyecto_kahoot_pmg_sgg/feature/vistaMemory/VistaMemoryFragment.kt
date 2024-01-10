@@ -1,5 +1,6 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaMemory
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.*
@@ -80,7 +81,7 @@ class VistaMemoryFragment : Fragment() {
 
             override fun onFinish() {
                 // El temporizador ha terminado, puedes realizar acciones cuando el tiempo se agota
-                perderJuego()
+                alertaDerrota()
             }
         }.start()
     }
@@ -157,7 +158,7 @@ class VistaMemoryFragment : Fragment() {
 
                 // Verificar si se alcanzaron los 8 puntos
                 if (puntos == 8) {
-                    ganarJuego()
+                    alertaVictoria()
                 }
             } else {
                 boton.setBackgroundResource(getBackgroundResourceFromTag(boton.tag))
@@ -218,8 +219,6 @@ class VistaMemoryFragment : Fragment() {
 
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
-
-
     // Función para obtener el recurso de fondo según el tag
     private fun getBackgroundResourceFromTag(tag: Any?): Int {
         return when (tag) {
@@ -233,5 +232,33 @@ class VistaMemoryFragment : Fragment() {
             "8" -> R.drawable.background_boton_tablero_usado
             else -> R.drawable.background_boton_tablero_nuevo
         }
+    }
+
+    private fun alertaVictoria() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("¡Victoria!")
+        builder.setMessage(
+            "¡Has ganado este minijuego! \n\nSe te añadira a tu contador de minijuegos y continuará tu turno." +
+                    " \n\nSi ya ganaste el minijuego anteriormente, se guardará tu victoria." +
+                    "\n\nAcepta para continuar."
+        )
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            ganarJuego()
+        }
+        builder.show()
+    }
+
+    private fun alertaDerrota() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("Derrota")
+        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            perderJuego()
+        }
+        builder.show()
     }
 }

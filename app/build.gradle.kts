@@ -69,6 +69,8 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
+    // SharedPreferences
+    implementation("androidx.preference:preference-ktx:1.2.1")
 
 
     testImplementation("junit:junit:4.13.2")

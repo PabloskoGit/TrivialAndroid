@@ -1,5 +1,8 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaAhorcado
 
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import androidx.lifecycle.*
 import com.pmg.proyecto_kahoot_pmg_sgg.core.data.ahorcado.model.PalabrasDTO
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.usecase.GetAhorcadoUseCase
@@ -20,6 +23,7 @@ class VistaAhorcadoViewModel : ViewModel() {
     private var fallos = 0
     private var aciertos = 0
     val palabraMostrar = MutableLiveData<String>()
+    val imagenAhorcado = MutableLiveData<Int>()
 
     val juegoGanado = MutableLiveData(false)
     val juegoPerdido = MutableLiveData(false)
@@ -90,11 +94,16 @@ class VistaAhorcadoViewModel : ViewModel() {
 
         if (aciertos == palabraDividida.size) {
             juegoGanado.value = true
+
         } else if (fallos == 6) {
             juegoPerdido.value = true
         }
 
+        cambiarImagenAhorcado()
         return letrasEncontradas
+    }
+    private fun cambiarImagenAhorcado() {
+        imagenAhorcado.value = fallos
     }
 
 }

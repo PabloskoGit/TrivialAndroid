@@ -1,5 +1,6 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
+import com.pmg.proyecto_kahoot_pmg_sgg.app.utils.AlertaPreferencias
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
 import kotlin.properties.Delegates
@@ -37,7 +39,6 @@ class VistaTableroFragment : Fragment() {
     private var jugador: Int by Delegates.notNull()
     private var ultimaPosicionJugador: Pair<Int, Int> = Pair(0, 0)
 
-
     /**
      * Método llamado al crear la vista del fragmento.
      */
@@ -53,6 +54,7 @@ class VistaTableroFragment : Fragment() {
         txtJugadorActivo = viewTablero.findViewById(R.id.txt_UsuarioActivo)
         txtPuntosJugador = viewTablero.findViewById(R.id.txt_PuntosUsuario)
         btnCambiarJugador = viewTablero.findViewById(R.id.btn_CambiarJugador)
+
         // Obtiene una referencia al GridLayout
         val gridLayout = viewTablero.findViewById<GridLayout>(R.id.gridTablero)
 
@@ -75,6 +77,10 @@ class VistaTableroFragment : Fragment() {
 
         val infoTablero = args.informacionTablero
 
+        if (!AlertaPreferencias.wasDialogShown(requireContext())) {
+            alertaBienvenida()
+            AlertaPreferencias.setDialogShown(requireContext(), true)
+        }
 
         // Observa los cambios en el LiveData del tablero
         viewModel.tablero.observe(viewLifecycleOwner, Observer { tableroNuevo ->
@@ -133,13 +139,14 @@ class VistaTableroFragment : Fragment() {
         viewModel.jugadores.observe(viewLifecycleOwner, Observer { jugadores ->
             jugadores.forEach { jugador ->
                 // Observa los cambios en la posición del jugador actual
-                viewModel.getPosicionJugadorLiveData(jugador.id).observe(viewLifecycleOwner, Observer { nuevaPosicion ->
-                    actualizarPosicionJugadorUI(nuevaPosicion)
-                    if (jugar) {
-                        inicioMiniJuego(numMinijuego)
-                        jugar = false
-                    }
-                })
+                viewModel.getPosicionJugadorLiveData(jugador.id)
+                    .observe(viewLifecycleOwner, Observer { nuevaPosicion ->
+                        actualizarPosicionJugadorUI(nuevaPosicion)
+                        if (jugar) {
+                            inicioMiniJuego(numMinijuego)
+                            jugar = false
+                        }
+                    })
             }
         })
 
@@ -205,6 +212,21 @@ class VistaTableroFragment : Fragment() {
 
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
+    }
+
+    private fun alertaBienvenida() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("1 Vs 1")
+        builder.setMessage(
+            "Bienvenido al trivial. Tu mision es completar todos los minijuegos para ganar la partida." +
+                    "\n\nEn el tablero hay 4 minijuegos, y una vez completes todos, llegaras a la pregunta final. Se el primero en acertarla y ganaras la partida." +
+                    "\n\n¡Mucha suerte!\n\nAcepta para continuar."
+        )
+        builder.setPositiveButton("Aceptar") { _, _ ->
+            // Empieza la partida
+        }
+        builder.show()
     }
 
     /**
@@ -290,14 +312,12 @@ class VistaTableroFragment : Fragment() {
         viewModel.moverJugador(numeroCasillas)
     }
 
-
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (casilla) {
+        when (3) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaRepaso)
                 findNavController().navigate(
                     VistaTableroFragmentDirections.navegarVistaRepaso(
                         Jugador = jugador
@@ -307,33 +327,33 @@ class VistaTableroFragment : Fragment() {
 
             2 -> {
                 // Navega al fragmento de vistaMemoryView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaMenuCompletoView_to_vistaTableroView)
-                findNavController().navigate(VistaTableroFragmentDirections.navegarVistaMemory(
-                    Jugador = jugador
-                ))
+                findNavController().navigate(
+                    VistaTableroFragmentDirections.navegarVistaMemory(
+                        Jugador = jugador
+                    )
+                )
             }
 
             3 -> {
                 // Navega al fragmento de vistaJuegoView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaJuegoView)
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaJuegoView)
-                findNavController().navigate(VistaTableroFragmentDirections.navegarVistaJuego(
-                    Jugador = jugador
-                ))
+                findNavController().navigate(
+                    VistaTableroFragmentDirections.navegarVistaJuego(
+                        Jugador = jugador
+                    )
+                )
             }
 
             4 -> {
                 // Navega al fragmento de vistaAhorcadoView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaMenuCompletoView_to_vistaTableroView)
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaAhorcadoView)
-                findNavController().navigate(VistaTableroFragmentDirections.navegarAhorcadoVista(
-                    Jugador = jugador
-                ))
+                findNavController().navigate(
+                    VistaTableroFragmentDirections.navegarAhorcadoVista(
+                        Jugador = jugador
+                    )
+                )
             }
 
             5 -> {
                 // Navega al fragmento de vistaPregFinalView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaPregFinal2)
                 findNavController().navigate(
                     VistaTableroFragmentDirections.navegarVistaPreguntaFinal(
                         Jugador = jugador

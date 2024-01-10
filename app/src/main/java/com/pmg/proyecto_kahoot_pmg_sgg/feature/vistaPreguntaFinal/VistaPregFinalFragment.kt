@@ -1,5 +1,6 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaPreguntaFinal
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
@@ -57,20 +58,40 @@ class VistaPregFinalFragment : Fragment() {
 
         btn0.setOnClickListener{
 
+            btn0.isEnabled = false
+            btn1.isEnabled = false
+            btn2.isEnabled = false
+            btn3.isEnabled = false
+
             viewModel.comprobarRespuestaAcertada(0, btn0)
         }
 
         btn1.setOnClickListener{
+
+            btn0.isEnabled = false
+            btn1.isEnabled = false
+            btn2.isEnabled = false
+            btn3.isEnabled = false
 
             viewModel.comprobarRespuestaAcertada(1, btn1)
         }
 
         btn2.setOnClickListener{
 
+            btn0.isEnabled = false
+            btn1.isEnabled = false
+            btn2.isEnabled = false
+            btn3.isEnabled = false
+
             viewModel.comprobarRespuestaAcertada(2, btn2)
         }
 
         btn3.setOnClickListener{
+
+            btn0.isEnabled = false
+            btn1.isEnabled = false
+            btn2.isEnabled = false
+            btn3.isEnabled = false
 
             viewModel.comprobarRespuestaAcertada(3, btn3)
         }
@@ -87,19 +108,24 @@ class VistaPregFinalFragment : Fragment() {
             btn2.text = pregunta?.respuestas?.get(2).toString()
             btn3.text = pregunta?.respuestas?.get(3).toString()
 
+            btn0.isEnabled = true
+            btn1.isEnabled = true
+            btn2.isEnabled = true
+            btn3.isEnabled = true
+
         }
 
         // Observa los cambios en el LiveData de shouldNavigateBack del viewModel. Si el valor es true, navega hacia atrás
         viewModel.juegoGanado.observe(viewLifecycleOwner) { juegoGanado ->
             if (juegoGanado) {
-                ganarJuego()
+                alertaVictoria()
             }
         }
 
         // Observa los cambios en el LiveData de shouldShowDialog del viewModel. Si el valor es true, muestra un diálogo
         viewModel.juegoPerdido.observe(viewLifecycleOwner) { juegoPerdido ->
             if (juegoPerdido) {
-                perderJuego()
+                alertaDerrota()
             }
         }
 
@@ -137,5 +163,32 @@ class VistaPregFinalFragment : Fragment() {
         }
 
         findNavController().popBackStack(R.id.vistaTableroView, false)
+    }
+
+    private fun alertaVictoria() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("¡Victoria!")
+        builder.setMessage(
+            "¡Has ganado la partida! \n\nHas sido el primero en completar todos los minijuegos. ¡Enhorabuena!" +
+                    "\n\nAcepta para continuar."
+        )
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            ganarJuego()
+        }
+        builder.show()
+    }
+
+    private fun alertaDerrota() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("Derrota")
+        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            perderJuego()
+        }
+        builder.show()
     }
 }

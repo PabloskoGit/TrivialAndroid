@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 // Author: Pablo Mata
 
-class VistaJuegoViewModel : ViewModel(){
+class VistaJuegoViewModel : ViewModel() {
 
     val preguntaDTOModel = MutableLiveData<PreguntaDTO>()
     var getPreguntaUseCase = GetPreguntasUseCase()
@@ -48,6 +48,16 @@ class VistaJuegoViewModel : ViewModel(){
 
             if (aciertos == 5) {
                 juegoGanado.value = true
+            } else {
+
+                // Independientemente de la respuesta, avanza a la siguiente pregunta
+                // Programar una tarea para pasar a la siguiente pregunta después de 3 segundos
+                Handler(Looper.getMainLooper()).postDelayed({
+
+                    boton.setBackgroundResource(R.drawable.background_botones_juego_design)
+                    nextOracion()
+
+                }, 1500)
             }
 
         } else {
@@ -60,19 +70,6 @@ class VistaJuegoViewModel : ViewModel(){
             }
         }
 
-        boton.isEnabled = false
-
-        // Independientemente de la respuesta, avanza a la siguiente pregunta
-        // Programar una tarea para pasar a la siguiente pregunta después de 3 segundos
-        Handler(Looper.getMainLooper()).postDelayed({
-
-            boton.setBackgroundResource(R.drawable.background_botones_juego_design)
-            nextOracion()
-
-            // Restaurar color original
-            boton.isEnabled = true
-
-        }, 1500)
     }
 
 
@@ -93,6 +90,7 @@ class VistaJuegoViewModel : ViewModel(){
     private fun getListaRespuestas(): List<String>? {
         return preguntaDTOModel.value?.respuestas
     }
+
     // Obtiene el numero de respuesta correcta
     private fun getRespuestaCorrecta(): Int? {
         return preguntaDTOModel.value?.correcta
