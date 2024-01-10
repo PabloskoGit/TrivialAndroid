@@ -1,8 +1,10 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaInicioJuego
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -46,5 +48,27 @@ class VistaMenuCompletoFragment : Fragment() {
         // Puedes agregar lógica adicional y OnClickListener a otros botones aquí
 
         return viewInicio
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Alerta de que si quiere salir de la aplicación
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Salir")
+                builder.setMessage("¿Estás seguro de que quieres salir de la aplicación?")
+                builder.setPositiveButton("Sí") { _, _ ->
+                    // Cierra la aplicación
+                    requireActivity().finish()
+                }
+                builder.setNegativeButton("No") { _, _ ->
+                    // No hace nada
+                }
+                builder.show()
+            }
+        })
     }
 }

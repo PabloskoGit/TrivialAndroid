@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -190,7 +191,7 @@ class VistaTableroFragment : Fragment() {
             val numeroAleatorio = (1..6).random()
 
             // Muestra un AlertDialog con el número aleatorio
-            mostrarNumeroAleatorioDialog(numeroAleatorio)
+            //mostrarNumeroAleatorioDialog(numeroAleatorio)
 
             // Mueve el jugador en el tablero según el número aleatorio
             moverJugadorEnTablero(numeroAleatorio)
@@ -200,9 +201,17 @@ class VistaTableroFragment : Fragment() {
         btnCambiarJugador.setOnClickListener {
             viewModel.cambiarJugador()
         }
+
+        // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // No hace nada
+            }
+        })
+
     }
 
-    private fun mostrarNumeroAleatorioDialog(numero: Int) {
+    /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setTitle("Número Aleatorio")
         alertDialogBuilder.setMessage("El número aleatorio es: $numero")
@@ -212,7 +221,7 @@ class VistaTableroFragment : Fragment() {
 
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
-    }
+    }*/
 
     private fun alertaBienvenida() {
         val builder = AlertDialog.Builder(requireContext())
@@ -367,5 +376,6 @@ class VistaTableroFragment : Fragment() {
 
         }
     }
+
 
 }
