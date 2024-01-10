@@ -15,7 +15,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
+import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
+import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils.NetworkUtils
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
 import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaSeleccionPartida.VistaSeleccionPartida
 
@@ -42,6 +44,8 @@ class VistaTableroFragment : Fragment() {
     private var ultimaPosicionJugador: Pair<Int, Int> = Pair(0, 0)
 
     private var partidaCargada = 0
+
+    private var dialog: AlertDialog? = null
 
 
     private val startForResultCargarPartida = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -115,6 +119,24 @@ class VistaTableroFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (!NetworkUtils.isConnected(requireContext())) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Sin conexión a Internet")
+            builder.setMessage("Por favor, comprueba tu conexión a Internet y vuelve a intentarlo, si das a aceptar sin internet se cerrará la aplicación.")
+            builder.setCancelable(false)
+
+            builder.setPositiveButton("Aceptar") { _, _ ->
+                if (NetworkUtils.isConnected(requireContext())) {
+                    dialog?.dismiss()
+                } else {
+                    (context as? MainActivity)?.cerrarApp()
+                }
+            }
+
+            dialog = builder.create()
+            dialog?.show()
+        }
 
         val infoTablero = args.informacionTablero
 
@@ -229,15 +251,46 @@ class VistaTableroFragment : Fragment() {
 
         // Agrega el OnClickListener al botón para lanzar el dado
         btnLanzarDado.setOnClickListener {
-            jugar = true
-            // Genera un número aleatorio del 1 al 6
-            val numeroAleatorio = (1..6).random()
+            if (!NetworkUtils.isConnected(requireContext())) {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Sin conexión a Internet")
+                builder.setMessage("Por favor, comprueba tu conexión a Internet y vuelve a intentarlo, si das a aceptar sin internet se cerrará la aplicación.")
+                builder.setCancelable(false)
 
-            // Muestra un AlertDialog con el número aleatorio
-            mostrarNumeroAleatorioDialog(numeroAleatorio)
+                builder.setPositiveButton("Aceptar") { _, _ ->
+                    if (NetworkUtils.isConnected(requireContext())) {
+                        dialog?.dismiss()
 
-            // Mueve el jugador en el tablero según el número aleatorio
-            moverJugadorEnTablero(numeroAleatorio)
+                        jugar = true
+                        // Genera un número aleatorio del 1 al 6
+                        val numeroAleatorio = (1..6).random()
+
+                        // Muestra un AlertDialog con el número aleatorio
+                        mostrarNumeroAleatorioDialog(numeroAleatorio)
+
+                        // Mueve el jugador en el tablero según el número aleatorio
+                        moverJugadorEnTablero(numeroAleatorio)
+                    } else {
+                        (context as? MainActivity)?.cerrarApp()
+                    }
+                }
+
+                dialog = builder.create()
+                dialog?.show()
+            } else {
+
+                jugar = true
+                // Genera un número aleatorio del 1 al 6
+                val numeroAleatorio = (1..6).random()
+
+                // Muestra un AlertDialog con el número aleatorio
+                mostrarNumeroAleatorioDialog(numeroAleatorio)
+
+                // Mueve el jugador en el tablero según el número aleatorio
+                moverJugadorEnTablero(numeroAleatorio)
+
+            }
+
         }
 
 
