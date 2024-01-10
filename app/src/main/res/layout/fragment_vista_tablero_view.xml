@@ -64,6 +64,20 @@
 
 
             <Button
+                android:id="@+id/btn_GuardarPartidaExistente"
+                android:layout_width="92dp"
+                android:layout_height="49dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_botones_juego_design"
+                android:text="Sobreescribir partidar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.384"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_PuntosUsuario" />
+
+            <Button
                 android:id="@+id/btn_CargarPartida"
                 android:layout_width="92dp"
                 android:layout_height="49dp"
@@ -71,7 +85,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/background_botones_juego_design"
-                android:text="Cambiar Jugador"
+                android:text="Cargar Partida"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.953"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +99,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/background_botones_juego_design"
-                android:text="Cambiar Jugador"
+                android:text="Guardar Partida"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

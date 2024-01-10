@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.Patida.Partida
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.Jugador
 
 // Clase DatabaseHelper que extiende SQLiteOpenHelper para manejar la base de datos de la aplicación.
@@ -16,7 +17,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     // Son como los valores estáticos en Java
     companion object {
         private const val DATABASE_NAME = "JuegosDatabase"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 5
         private const val TABLE_PARTIDAS = "partidas"
         private const val KEY_ID = "id"
         private const val KEY_JUGADOR1_ID = "jugador1_id"
@@ -36,7 +37,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     override fun onCreate(db: SQLiteDatabase) {
         val createPartidasTable = ("CREATE TABLE " + TABLE_PARTIDAS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + KEY_JUGADOR1_ID + " INTEGER,"
                 + KEY_POSICION_FILA_JUGADOR1 + " INTEGER,"
                 + KEY_POSICION_COLUMNA_JUGADOR1 + " INTEGER,"
@@ -58,11 +59,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         onCreate(db)
     }
 
-    fun insertarPartida(partidaId: Long, jugador1: Jugador, jugador2: Jugador, jugadorActivo: Int) {
+    fun insertarPartida( jugador1: Jugador, jugador2: Jugador, jugadorActivo: Int) {
         val db = writableDatabase
 
         val values = ContentValues().apply {
-            put(KEY_ID, partidaId)
             put(KEY_JUGADOR1_ID, jugador1.id)
             put(KEY_POSICION_FILA_JUGADOR1, jugador1.posicion.first)
             put(KEY_POSICION_COLUMNA_JUGADOR1, jugador1.posicion.second)
@@ -194,6 +194,84 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor?.close()
         db.close()
         return jugadorActivo
+    }
+
+
+    fun obtenerTodasLasPartidas(): ArrayList<Partida> {
+        val partidasList = ArrayList<Partida>()
+        val db = readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_PARTIDAS"
+        val cursor: Cursor
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            // Manejar la excepción según tus necesidades
+            Log.e("DatabaseHelper", "Error al obtener todas las partidas: ${e.message}")
+            db.close()
+            return partidasList
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                val partidaIdColumnIndex = cursor.getColumnIndex(KEY_ID)
+                if (partidaIdColumnIndex != -1) {
+                    val partidaId = cursor.getLong(partidaIdColumnIndex)
+
+                    val juegosCompletadosJugador1ColumnIndex = cursor.getColumnIndex(KEY_JUEGOS_COMPLETADOS_JUGADOR1)
+                    val juegosCompletadosJugador2ColumnIndex = cursor.getColumnIndex(KEY_JUEGOS_COMPLETADOS_JUGADOR2)
+
+                    // Verificar si las columnas existen en el cursor antes de intentar obtener su valor
+                    if (juegosCompletadosJugador1ColumnIndex != -1 && juegosCompletadosJugador2ColumnIndex != -1) {
+                        val juegosCompletadosJugador1 = cursor.getString(juegosCompletadosJugador1ColumnIndex)
+                        val juegosCompletadosJugador2 = cursor.getString(juegosCompletadosJugador2ColumnIndex)
+
+                        val juegosCompletadosJugador1List = juegosCompletadosJugador1?.split(", ")
+                        Log.d("DatabaseHelper", "Lista después de split. juegosCompletadosJugador1List: $juegosCompletadosJugador1List")
+                        val juegosCompletadosJugador2List = juegosCompletadosJugador2?.split(", ")
+                        Log.d("DatabaseHelper", "Lista después de split. juegosCompletadosJugador1List: $juegosCompletadosJugador2List")
+
+                        // Contar la cantidad de "true" en la lista de juegos completados para cada jugador
+                        val cantidadTrueJugador1 = juegosCompletadosJugador1?.split(", ")?.map { it.toIntOrNull() }?.count { it != null && it != 0 } ?: 0
+                        val cantidadTrueJugador2 = juegosCompletadosJugador2?.split(", ")?.map { it.toIntOrNull() }?.count { it != null && it != 0 } ?: 0
+
+                        Log.d("DatabaseHelper", "Conteo Jugadores. cantidadTrueJugador1: $cantidadTrueJugador1, cantidadTrueJugador2: $cantidadTrueJugador2")
+
+                        val partida = Partida(partidaId.toInt(), cantidadTrueJugador1, cantidadTrueJugador2)
+                        partidasList.add(partida)
+                    }
+                }
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return partidasList
+    }
+
+    fun actualizarPartida(partidaId: Long, jugador1: Jugador, jugador2: Jugador, jugadorActivo: Int) {
+        val db = writableDatabase
+
+        val values = ContentValues().apply {
+            put(KEY_JUGADOR1_ID, jugador1.id)
+            put(KEY_POSICION_FILA_JUGADOR1, jugador1.posicion.first)
+            put(KEY_POSICION_COLUMNA_JUGADOR1, jugador1.posicion.second)
+            put(KEY_DIRECCION_JUGADOR1, jugador1.direccion)
+            put(KEY_JUEGOS_COMPLETADOS_JUGADOR1, jugador1.mostrarJuegosCompletados())
+            put(KEY_VICTORIA_JUGADOR1, if (jugador1.obtenerVictoria()) 1 else 0)
+            put(KEY_JUGADOR2_ID, jugador2.id)
+            put(KEY_POSICION_FILA_JUGADOR2, jugador2.posicion.first)
+            put(KEY_POSICION_COLUMNA_JUGADOR2, jugador2.posicion.second)
+            put(KEY_DIRECCION_JUGADOR2, jugador2.direccion)
+            put(KEY_JUEGOS_COMPLETADOS_JUGADOR2, jugador2.mostrarJuegosCompletados())
+            put(KEY_VICTORIA_JUGADOR2, if (jugador2.obtenerVictoria()) 1 else 0)
+            put(KEY_JUGADOR_ACTIVO, jugadorActivo)
+        }
+
+        // Utiliza el método update para actualizar la partida existente
+        db.update(TABLE_PARTIDAS, values, "$KEY_ID=?", arrayOf(partidaId.toString()))
+
+        db.close()
     }
 
 }

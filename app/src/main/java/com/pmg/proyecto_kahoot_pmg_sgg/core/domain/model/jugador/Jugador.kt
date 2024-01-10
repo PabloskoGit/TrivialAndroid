@@ -39,7 +39,7 @@ class Jugador(
     }
 
     fun mostrarJuegosCompletados(): String {
-        return "juegos Completados=${juegosCompletados.joinToString(", ")}"
+        return "${juegosCompletados.joinToString(", ")}"
     }
 
     override fun toString(): String {
