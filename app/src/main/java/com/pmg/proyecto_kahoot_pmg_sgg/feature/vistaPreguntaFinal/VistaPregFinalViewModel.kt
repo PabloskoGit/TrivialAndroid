@@ -26,6 +26,7 @@ class VistaPregFinalViewModel : ViewModel(){
     fun onCreate() {
         viewModelScope.launch {
             val result = getPregFinalUseCase()
+            indiceOracion = (result.indices).random()
 
             if (!result.isNullOrEmpty()) {
                 repasoModel.value = result[indiceOracion]

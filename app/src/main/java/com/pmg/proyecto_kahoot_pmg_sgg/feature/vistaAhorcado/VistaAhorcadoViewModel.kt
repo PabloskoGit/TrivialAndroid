@@ -35,10 +35,9 @@ class VistaAhorcadoViewModel : ViewModel() {
     // Obtiene la lista de palabras, y segun el indice, obtiene la palabra que quieras, y luego la divide en letras
     private fun getAhorcado() {
 
-        indiceOracion = (0..11).random()
-
         viewModelScope.launch {
             val result = getAhorcadoUseCase()
+            indiceOracion = (result.indices).random()
 
             if (!result.isNullOrEmpty()) {
                 repasoModel.value = result[0]

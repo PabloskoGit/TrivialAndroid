@@ -2,8 +2,6 @@ package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaAhorcado
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView

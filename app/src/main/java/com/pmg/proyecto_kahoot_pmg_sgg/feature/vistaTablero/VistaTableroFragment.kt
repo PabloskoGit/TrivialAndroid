@@ -1,11 +1,9 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -323,7 +321,7 @@ class VistaTableroFragment : Fragment() {
 
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (3) {
+        when (4) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón
