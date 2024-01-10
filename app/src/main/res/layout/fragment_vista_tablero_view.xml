@@ -64,15 +64,44 @@
 
 
             <Button
-                android:id="@+id/btn_CambiarJugador"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/btn_GuardarPartidaExistente"
+                android:layout_width="92dp"
+                android:layout_height="49dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/background_botones_juego_design"
-                android:text="Cambiar Jugador"
+                android:text="Sobreescribir partidar"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.384"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_PuntosUsuario" />
+
+            <Button
+                android:id="@+id/btn_CargarPartida"
+                android:layout_width="92dp"
+                android:layout_height="49dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_botones_juego_design"
+                android:text="Cargar Partida"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.953"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_PuntosUsuario" />
+
+            <Button
+                android:id="@+id/btn_GuardarPartida"
+                android:layout_width="92dp"
+                android:layout_height="49dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_botones_juego_design"
+                android:text="Guardar Partida"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_PuntosUsuario" />
 
@@ -87,7 +116,7 @@
                 android:text="@string/boton_LanzarDado"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_CambiarJugador" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_GuardarPartida" />
 
             <TextView
                 android:id="@+id/txt_UsuarioActivo"

@@ -1,10 +1,12 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,7 +17,7 @@ import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
-import kotlin.properties.Delegates
+import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaSeleccionPartida.VistaSeleccionPartida
 
 /**
  * Fragmento que representa la vista del tablero del juego.
@@ -28,14 +30,53 @@ class VistaTableroFragment : Fragment() {
     private lateinit var btnLanzarDado: Button
     private lateinit var txtJugadorActivo: TextView
     private lateinit var txtPuntosJugador: TextView
-    private lateinit var btnCambiarJugador: Button
+    private lateinit var btnGuardarPartida: Button
+    private lateinit var btnCargarPartida: Button
+    private lateinit var btnGuardarPartidaExistente: Button
 
     private lateinit var botones: Array<Array<Button>>
 
     private var numMinijuego: Int = 0
     private var jugar: Boolean = false
-    private var jugador: Int by Delegates.notNull()
+    private var jugador: Int = 0
     private var ultimaPosicionJugador: Pair<Int, Int> = Pair(0, 0)
+
+    private var partidaCargada = 0
+
+
+    private val startForResultCargarPartida = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        // Este bloque de código se ejecutará cuando VistaSeleccionPartida envíe un resultado de vuelta.
+        // Si el resultado es correcto
+        if (result.resultCode == Activity.RESULT_OK) {
+            // Obtenemos el dato "selectedPartidaId" del Intent que ha vuelto como un Int
+            val partidaCargadaDevuelta = result.data?.getIntExtra("selectedPartidaId", 0)
+            // Establecemos la variable con la partida seleccionada.
+            partidaCargada = partidaCargadaDevuelta ?: 0
+            if (partidaCargada > 0) {
+
+                val partidaCargadaLong: Long = partidaCargada.toLong()
+                viewModel.cargarPartida(partidaCargadaLong)
+
+            }
+        }
+    }
+
+    private val startForResultGuardarPartidaExistente = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        // Este bloque de código se ejecutará cuando VistaSeleccionPartida envíe un resultado de vuelta.
+        // Si el resultado es correcto
+        if (result.resultCode == Activity.RESULT_OK) {
+            // Obtenemos el dato "selectedPartidaId" del Intent que ha vuelto como un Int
+            val partidaCargadaDevuelta = result.data?.getIntExtra("selectedPartidaId", 0)
+            // Establecemos la variable con la partida seleccionada.
+            partidaCargada = partidaCargadaDevuelta ?: 0
+            if (partidaCargada > 0) {
+
+                val partidaCargadaLong: Long = partidaCargada.toLong()
+                viewModel.guardarOActualizarPartida(partidaCargadaLong)
+
+            }
+        }
+    }
 
 
     /**
@@ -52,7 +93,9 @@ class VistaTableroFragment : Fragment() {
         btnLanzarDado = viewTablero.findViewById(R.id.btn_LanzarDado)
         txtJugadorActivo = viewTablero.findViewById(R.id.txt_UsuarioActivo)
         txtPuntosJugador = viewTablero.findViewById(R.id.txt_PuntosUsuario)
-        btnCambiarJugador = viewTablero.findViewById(R.id.btn_CambiarJugador)
+        btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
+        btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
+        btnGuardarPartidaExistente = viewTablero.findViewById(R.id.btn_GuardarPartidaExistente)
         // Obtiene una referencia al GridLayout
         val gridLayout = viewTablero.findViewById<GridLayout>(R.id.gridTablero)
 
@@ -102,7 +145,7 @@ class VistaTableroFragment : Fragment() {
                 juego5 = infoTablero.resultadoPruebaFinal
             )
 
-            txtPuntosJugador.text = "${viewModel.actualizarTextoPuntosJugador(jugador)}"
+            txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
             if (infoTablero.cambioJugador) {
                 viewModel.cambiarJugador()
@@ -129,6 +172,7 @@ class VistaTableroFragment : Fragment() {
 
         })
 
+        
         // Observa los cambios en la lista de jugadores
         viewModel.jugadores.observe(viewLifecycleOwner, Observer { jugadores ->
             jugadores.forEach { jugador ->
@@ -162,7 +206,7 @@ class VistaTableroFragment : Fragment() {
                     juego5 = info.resultadoPruebaFinal
                 )
 
-                txtPuntosJugador.text = "${viewModel.actualizarTextoPuntosJugador(jugador)}"
+                txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
             }
 
@@ -170,12 +214,19 @@ class VistaTableroFragment : Fragment() {
 
         viewModel.jugadorActual.observe(viewLifecycleOwner, Observer
         { nuevoJugador ->
+                jugador = nuevoJugador
+                txtJugadorActivo.text = "Jugador: $jugador"
+                txtPuntosJugador.text =
+                    "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
-            jugador = nuevoJugador
-            txtJugadorActivo.text = "Jugador: $jugador"
-            txtPuntosJugador.text = "${viewModel.actualizarTextoPuntosJugador(jugador)}"
+            viewModel.getPosicionJugadorLiveData(jugador).observe(viewLifecycleOwner, Observer { nuevaPosicion ->
+                actualizarPosicionJugadorUI(nuevaPosicion)
+
+            })
 
         })
+
+
         // Agrega el OnClickListener al botón para lanzar el dado
         btnLanzarDado.setOnClickListener {
             jugar = true
@@ -190,8 +241,30 @@ class VistaTableroFragment : Fragment() {
         }
 
 
-        btnCambiarJugador.setOnClickListener {
-            viewModel.cambiarJugador()
+        btnGuardarPartida.setOnClickListener {
+            viewModel.guardarPartida()
+        }
+
+        btnCargarPartida.setOnClickListener {
+
+
+            // Creamos un Intent para iniciar VistaSeleccionPartida.
+            val intent = Intent(requireContext(), VistaSeleccionPartida::class.java)
+
+            // Lanzamos la actividad con el launcher que espera un resultado.
+            startForResultCargarPartida.launch(intent)
+
+        }
+
+        btnGuardarPartidaExistente.setOnClickListener {
+
+
+            // Creamos un Intent para iniciar VistaSeleccionPartida.
+            val intent = Intent(requireContext(), VistaSeleccionPartida::class.java)
+
+            // Lanzamos la actividad con el launcher que espera un resultado.
+            startForResultGuardarPartidaExistente.launch(intent)
+
         }
     }
 
@@ -347,5 +420,7 @@ class VistaTableroFragment : Fragment() {
 
         }
     }
+
+
 
 }

@@ -1,9 +1,15 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero
 
+import android.content.Context
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.*
+import com.example.t8_ej01_persistenciadatossqlite.DatabaseHelper
+import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.Jugador
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.collections.List
 import kotlin.collections.find
 import kotlin.collections.forEach
@@ -32,13 +38,29 @@ class VistaTableroViewModel : ViewModel() {
     // Mapa que asocia ID de jugador con su LiveData de posición
     private val mapPosicionesJugadores = mutableMapOf<Int, MutableLiveData<Pair<Int, Int>>>()
 
+    private lateinit var databaseHelper: DatabaseHelper
+
+
+
     init {
         // Inicializar aquí la lista de jugadores
         _jugadores.value = listOf(
             Jugador(id = 1, posicion = Pair(0, 0), direccion = "DERECHA"),
             Jugador(id = 2, posicion = Pair(0, 0), direccion = "DERECHA")
             // Puedes agregar más jugadores según sea necesario
+
         )
+
+        // Establecer los primeros 4 juegos como completados para ambos jugadores
+        _jugadores.value?.forEach { jugador ->
+            jugador.agregarJuegoCompleto("1")
+            jugador.agregarJuegoCompleto("2")
+            jugador.agregarJuegoCompleto("3")
+            jugador.agregarJuegoCompleto("4")
+        }
+
+        // Inicializar DatabaseHelper con el contexto de la aplicación
+        databaseHelper = MainActivity.databaseHelper!!
     }
 
 
@@ -255,6 +277,84 @@ class VistaTableroViewModel : ViewModel() {
     // Enumeración para representar las direcciones posibles
     private enum class Direccion {
         DERECHA, ABAJO, IZQUIERDA, ARRIBA
+    }
+
+    fun guardarPartida() {
+        val jugador1 = _jugadores.value?.find { it.id == 1 } ?: return
+        val jugador2 = _jugadores.value?.find { it.id == 2 } ?: return
+        val jugadorActivo = _jugadorActual.value ?: return
+
+        Log.d("VistaTableroViewModel", "Guardando partida. Jugador1: $jugador1, Jugador2: $jugador2, Jugador Activo: $jugadorActivo")
+
+        databaseHelper.insertarPartida( jugador1, jugador2, jugadorActivo)
+    }
+
+    fun cargarPartida(partidaId: Long) {
+        Log.d("VistaTableroViewModel", "Cargando partida. ID: $partidaId")
+
+        val partidaInfo = databaseHelper.obtenerPartidaPorId(partidaId)
+        if (partidaInfo != null) {
+            val (_, jugador1, jugador2) = partidaInfo
+
+            Log.d("VistaTableroViewModel", "Partida cargada. Jugador1: $jugador1, Jugador2: $jugador2")
+
+            // Actualizar jugadores en el ViewModel
+            _jugadores.value = listOf(jugador1, jugador2)
+
+            // Establecer jugador activo
+            _jugadorActual.value = databaseHelper.obtenerJugadorActivoDePartida(partidaId)
+
+            // Actualizar el tablero con las posiciones de los jugadores
+            actualizarTableroConPosiciones()
+
+            Log.d("VistaTableroViewModel", "Partida cargada. Jugadoractual: $_jugadorActual.value")
+
+            // Aquí puedes actualizar otros elementos del ViewModel según sea necesario
+        } else {
+            Log.d("VistaTableroViewModel", "No se encontró la partida con ID: $partidaId")
+        }
+    }
+
+    private fun actualizarTableroConPosiciones() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val jugadores = _jugadores.value ?: return@launch
+            val tablero = _tablero.value ?: return@launch
+
+            jugadores.forEach { jugador ->
+                val posicion = jugador.posicion
+                if (posicion.first >= 0 && posicion.first < tablero.size &&
+                    posicion.second >= 0 && posicion.second < tablero[0].size
+                ) {
+                    // Actualiza la posición del jugador en el ViewModel
+                    actualizarPosicionJugador(jugador.id, jugador.posicion)
+                }
+            }
+        }
+    }
+
+    fun guardarOActualizarPartida(partidaId: Long) {
+
+
+        // Si hay una partida activa, actualízala; de lo contrario, guárdala como una nueva partida
+        if (partidaId != -1L) {
+            // Actualizar la partida existente
+            actualizarPartida(partidaId)
+            Log.d("VistaTableroViewModel", "Partida actualizada. ID: $partidaId")
+        } else {
+            // Guardar una nueva partida
+            guardarPartida()
+            Log.d("VistaTableroViewModel", "Nueva partida guardada.")
+        }
+    }
+
+    private fun actualizarPartida(partidaId: Long) {
+        val jugador1 = _jugadores.value?.find { it.id == 1 } ?: return
+        val jugador2 = _jugadores.value?.find { it.id == 2 } ?: return
+        val jugadorActivo = _jugadorActual.value ?: return
+
+        Log.d("VistaTableroViewModel", "Actualizando partida. Jugador1: $jugador1, Jugador2: $jugador2, Jugador Activo: $jugadorActivo")
+
+        databaseHelper.actualizarPartida(partidaId, jugador1, jugador2, jugadorActivo)
     }
 
 }

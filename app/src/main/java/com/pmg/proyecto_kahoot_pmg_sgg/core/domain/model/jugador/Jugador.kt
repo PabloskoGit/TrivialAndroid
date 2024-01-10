@@ -25,6 +25,10 @@ class Jugador(
             juegosCompletados.add(juego)
         }
     }
+    fun agregarJuegosCompletados(juegos: List<String>) {
+        juegosCompletados.addAll(juegos)
+    }
+
 
     fun haCompletadoPreguntas(vararg numerosPreguntas: Int): Boolean {
         return numerosPreguntas.all { juegosCompletados.contains(it.toString()) }
@@ -35,7 +39,7 @@ class Jugador(
     }
 
     fun mostrarJuegosCompletados(): String {
-        return "juegos Completados=${juegosCompletados.joinToString(", ")}"
+        return "${juegosCompletados.joinToString(", ")}"
     }
 
     override fun toString(): String {
