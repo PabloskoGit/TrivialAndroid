@@ -17,10 +17,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
-import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.app.utils.AlertaPreferencias
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
-import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils.NetworkUtils
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
 import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaSeleccionPartida.VistaSeleccionPartida
 
@@ -37,7 +35,7 @@ class VistaTableroFragment : Fragment() {
     private lateinit var txtPuntosJugador: TextView
     private lateinit var btnGuardarPartida: Button
     private lateinit var btnCargarPartida: Button
-    private lateinit var btnGuardarPartidaExistente: Button
+    private lateinit var btnBorrarPartida: Button
 
     private lateinit var botones: Array<Array<Button>>
 
@@ -47,6 +45,7 @@ class VistaTableroFragment : Fragment() {
     private var ultimaPosicionJugador: Pair<Int, Int> = Pair(0, 0)
 
     private var partidaCargada = 0
+    private var partidaBorrar = 0
 
 
     private val startForResultCargarPartida =
@@ -85,6 +84,27 @@ class VistaTableroFragment : Fragment() {
             }
         }
 
+    private val startForResultBorrarPartida =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // Este bloque de código se ejecutará cuando VistaSeleccionPartida envíe un resultado de vuelta.
+            // Si el resultado es correcto
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Obtenemos el dato "selectedPartidaId" del Intent que ha vuelto como un Int
+                val partidaCargadaDevuelta = result.data?.getIntExtra("selectedPartidaId", 0)
+                // Establecemos la variable con la partida seleccionada.
+                partidaBorrar = partidaCargadaDevuelta ?: 0
+                if (partidaBorrar == partidaCargada){
+
+                    confirmarYBorrarPartidaActual()
+
+                } else {
+
+                    confirmarYBorrarPartida()
+                }
+
+            }
+        }
+
 
     /**
      * Método llamado al crear la vista del fragmento.
@@ -102,7 +122,7 @@ class VistaTableroFragment : Fragment() {
         txtPuntosJugador = viewTablero.findViewById(R.id.txt_PuntosUsuario)
         btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
         btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
-        btnGuardarPartidaExistente = viewTablero.findViewById(R.id.btn_GuardarPartidaExistente)
+        btnBorrarPartida = viewTablero.findViewById(R.id.btn_BorrarPartida)
         // Obtiene una referencia al GridLayout
         val gridLayout = viewTablero.findViewById<GridLayout>(R.id.gridTablero)
 
@@ -274,13 +294,13 @@ class VistaTableroFragment : Fragment() {
 
         }
 
-        btnGuardarPartidaExistente.setOnClickListener {
+        btnBorrarPartida.setOnClickListener {
 
             // Creamos un Intent para iniciar VistaSeleccionPartida.
             val intent = Intent(requireContext(), VistaSeleccionPartida::class.java)
 
             // Lanzamos la actividad con el launcher que espera un resultado.
-            startForResultGuardarPartidaExistente.launch(intent)
+            startForResultBorrarPartida.launch(intent)
 
         }
 
@@ -343,6 +363,62 @@ class VistaTableroFragment : Fragment() {
 
         builder.create().show()
     }
+
+    fun confirmarYBorrarPartida() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Confirmar Borrado")
+        builder.setMessage("¿Estás seguro de que quieres borrar una partida?")
+
+        // Configurar el botón de confirmación
+        builder.setPositiveButton("Sí") { _, _ ->
+            // Llamar a la función de borrado
+
+            if (partidaBorrar > 0) {
+
+                val partidaBorrarLong: Long = partidaBorrar.toLong()
+                viewModel.borrarPartidaPorId(partidaBorrarLong)
+
+            }
+            partidaBorrar = 0
+        }
+
+        // Configurar el botón de cancelación
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        // Mostrar el cuadro de diálogo
+        builder.create().show()
+    }
+
+    fun confirmarYBorrarPartidaActual() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Confirmar Borrado")
+        builder.setMessage("¿Estás seguro de que quieres borrar la PARTIDA ACTUAL?")
+
+        // Configurar el botón de confirmación
+        builder.setPositiveButton("Sí") { _, _ ->
+            // Llamar a la función de borrado
+
+            if (partidaBorrar > 0) {
+
+                val partidaBorrarLong: Long = partidaBorrar.toLong()
+                viewModel.borrarPartidaPorId(partidaBorrarLong)
+
+            }
+            partidaBorrar = 0
+            partidaCargada = 0
+        }
+
+        // Configurar el botón de cancelación
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        // Mostrar el cuadro de diálogo
+        builder.create().show()
+    }
+
 
     /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
