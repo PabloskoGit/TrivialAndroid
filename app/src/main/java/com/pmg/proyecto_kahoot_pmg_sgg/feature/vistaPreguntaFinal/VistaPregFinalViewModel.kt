@@ -26,6 +26,7 @@ class VistaPregFinalViewModel : ViewModel(){
     fun onCreate() {
         viewModelScope.launch {
             val result = getPregFinalUseCase()
+            indiceOracion = (result.indices).random()
 
             if (!result.isNullOrEmpty()) {
                 repasoModel.value = result[indiceOracion]
@@ -57,34 +58,6 @@ class VistaPregFinalViewModel : ViewModel(){
 
             if (fallos == 1) {
                 juegoPerdido.value = true
-            }
-        }
-
-        boton.isEnabled = false
-
-        // Independientemente de la respuesta, avanza a la siguiente pregunta
-        // Programar una tarea para pasar a la siguiente pregunta después de 3 segundos
-        Handler(Looper.getMainLooper()).postDelayed({
-
-            boton.setBackgroundResource(R.drawable.background_botones_juego_design)
-            nextOracion()
-
-            // Restaurar color original
-            boton.isEnabled = true
-
-        }, 1500)
-    }
-
-
-    private fun nextOracion() {
-
-        viewModelScope.launch {
-            val result = getPregFinalUseCase()
-
-            if (!result.isNullOrEmpty() && indiceOracion < result.size - 1) {
-
-                indiceOracion++
-                repasoModel.value = result[indiceOracion]
             }
         }
     }

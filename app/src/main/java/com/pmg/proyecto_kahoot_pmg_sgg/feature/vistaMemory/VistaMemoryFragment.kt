@@ -5,6 +5,8 @@ import android.os.CountDownTimer
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.gridlayout.widget.GridLayout
@@ -66,6 +68,13 @@ class VistaMemoryFragment : Fragment() {
             tx_Tiempo = view.findViewById(R.id.tx_Tiempo)
 
         })
+
+        // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // No hace nada
+            }
+        })
     }
 
     private fun iniciarTemporizador() {
@@ -80,7 +89,7 @@ class VistaMemoryFragment : Fragment() {
 
             override fun onFinish() {
                 // El temporizador ha terminado, puedes realizar acciones cuando el tiempo se agota
-                perderJuego()
+                alertaDerrota()
             }
         }.start()
     }
@@ -145,6 +154,13 @@ class VistaMemoryFragment : Fragment() {
             primerBoton?.setBackgroundResource(getBackgroundResourceFromTag(primerBoton?.tag))
         } else {
             // Es el segundo clic, compara los tags
+            val primerTag = (primerBoton?.tag as? Int)
+            val tag = boton.tag as? Int
+
+            // Agrega logs para imprimir los valores de los tags
+            println("primerBoton?.tag: $primerTag")
+            println("boton.tag: $tag")
+            // Es el segundo clic, compara los tags
             if (primerBoton?.tag == boton.tag) {
                 // Los tags son iguales, establece el fondo según el tag
                 boton.setBackgroundResource(getBackgroundResourceFromTag(boton.tag))
@@ -157,7 +173,7 @@ class VistaMemoryFragment : Fragment() {
 
                 // Verificar si se alcanzaron los 8 puntos
                 if (puntos == 8) {
-                    ganarJuego()
+                    alertaVictoria()
                 }
             } else {
                 boton.setBackgroundResource(getBackgroundResourceFromTag(boton.tag))
@@ -231,7 +247,43 @@ class VistaMemoryFragment : Fragment() {
             "6" -> R.drawable.background_boton_tablero_usado
             "7" -> R.drawable.background_boton_tablero_usado
             "8" -> R.drawable.background_boton_tablero_usado
+            "9" -> R.drawable.background_boton_tablero_usado
+            "10" -> R.drawable.background_boton_tablero_usado
+            "11" -> R.drawable.background_boton_tablero_usado
+            "12" -> R.drawable.background_boton_tablero_usado
+            "13" -> R.drawable.background_boton_tablero_usado
+            "14" -> R.drawable.background_boton_tablero_usado
+            "15" -> R.drawable.background_boton_tablero_usado
+            "16" -> R.drawable.background_boton_tablero_usado
             else -> R.drawable.background_boton_tablero_nuevo
         }
+    }
+
+    private fun alertaVictoria() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("¡Victoria!")
+        builder.setMessage(
+            "¡Has ganado este minijuego! \n\nSe te añadira a tu contador de minijuegos y continuará tu turno." +
+                    " \n\nSi ya ganaste el minijuego anteriormente, se guardará tu victoria." +
+                    "\n\nAcepta para continuar."
+        )
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            ganarJuego()
+        }
+        builder.show()
+    }
+
+    private fun alertaDerrota() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("Derrota")
+        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            perderJuego()
+        }
+        builder.show()
     }
 }

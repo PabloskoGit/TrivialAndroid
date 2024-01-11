@@ -26,3 +26,4 @@
 /.gradle/file-system.probe
 /.idea/assetWizardSettings.xml
 /.idea/navEditor.xml
+/.local.properties
