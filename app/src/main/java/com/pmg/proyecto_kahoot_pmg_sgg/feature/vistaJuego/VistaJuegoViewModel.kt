@@ -72,8 +72,6 @@ class VistaJuegoViewModel : ViewModel() {
         }
 
     }
-
-
     private fun nextOracion() {
 
         viewModelScope.launch {
