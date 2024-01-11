@@ -88,6 +88,10 @@ class VistaAhorcadoFragment : Fragment() {
 
         }
 
+        viewModel.imagenAhorcado.observe(viewLifecycleOwner) { fallos ->
+            cargarImagenAhorcado(fallos)
+        }
+
         // Observa los cambios en el LiveData de shouldNavigateBack del viewModel. Si el valor es true, navega hacia atrás
         viewModel.juegoGanado.observe(viewLifecycleOwner) { juegoGanado ->
             if (juegoGanado) {

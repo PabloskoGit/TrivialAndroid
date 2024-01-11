@@ -245,7 +245,7 @@ class VistaTableroFragment : Fragment() {
                 jugador = nuevoJugador
                 txtJugadorActivo.text = "Jugador: $jugador"
                 txtPuntosJugador.text =
-                    "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+                    "Minijuegos Completados: \n${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
             viewModel.getPosicionJugadorLiveData(jugador).observe(viewLifecycleOwner, Observer { nuevaPosicion ->
                 actualizarPosicionJugadorUI(nuevaPosicion)
@@ -444,7 +444,7 @@ class VistaTableroFragment : Fragment() {
 
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (1) {
+        when (4) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón

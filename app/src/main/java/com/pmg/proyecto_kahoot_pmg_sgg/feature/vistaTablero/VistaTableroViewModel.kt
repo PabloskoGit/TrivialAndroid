@@ -51,14 +51,6 @@ class VistaTableroViewModel : ViewModel() {
 
         )
 
-        // Establecer los primeros 4 juegos como completados para ambos jugadores
-        _jugadores.value?.forEach { jugador ->
-            jugador.agregarJuegoCompleto("1")
-            jugador.agregarJuegoCompleto("2")
-            jugador.agregarJuegoCompleto("3")
-            jugador.agregarJuegoCompleto("4")
-        }
-
         // Inicializar DatabaseHelper con el contexto de la aplicación
         databaseHelper = MainActivity.databaseHelper!!
     }
@@ -212,9 +204,6 @@ class VistaTableroViewModel : ViewModel() {
             )  }
 
         _jugadorActual.postValue(1)
-
-
-
 
     }
 

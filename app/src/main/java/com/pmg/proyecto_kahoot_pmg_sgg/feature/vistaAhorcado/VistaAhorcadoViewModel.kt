@@ -37,10 +37,11 @@ class VistaAhorcadoViewModel : ViewModel() {
 
         viewModelScope.launch {
             val result = getAhorcadoUseCase()
-            indiceOracion = (result.indices).random()
 
             if (!result.isNullOrEmpty()) {
                 repasoModel.value = result[0]
+
+                indiceOracion = (0..repasoModel.value?.palabras?.size!!).random()
                 var huecosPalabra = repasoModel.value?.palabras?.get(indiceOracion)?.length!!
                 palabraMostrar.value = "_".repeat(huecosPalabra)
             }
