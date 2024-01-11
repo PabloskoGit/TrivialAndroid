@@ -7,7 +7,9 @@ import androidx.lifecycle.*
 import com.example.t8_ej01_persistenciadatossqlite.DatabaseHelper
 import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.Jugador
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.collections.List
@@ -344,6 +346,11 @@ class VistaTableroViewModel : ViewModel() {
         Log.d("VistaTableroViewModel", "Actualizando partida. Jugador1: $jugador1, Jugador2: $jugador2, Jugador Activo: $jugadorActivo")
 
         databaseHelper.actualizarPartida(partidaId, jugador1, jugador2, jugadorActivo)
+    }
+
+    fun obtenerUltimoIdPartidaDesdeBDAsync(): Long {
+        return databaseHelper.obtenerUltimoIdPartida()
+
     }
 
 }
