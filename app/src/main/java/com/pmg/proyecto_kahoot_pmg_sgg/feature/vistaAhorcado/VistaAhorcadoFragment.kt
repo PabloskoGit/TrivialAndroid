@@ -3,7 +3,9 @@ package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaAhorcado
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,6 +30,7 @@ class VistaAhorcadoFragment : Fragment() {
     private lateinit var palabraTextView: TextView
 
     private lateinit var botones: Array<Array<Button>>
+    private lateinit var imagenesAhorcado: Array<Int>
 
     private var jugadorActivo by Delegates.notNull<Int>()
 
@@ -63,6 +66,16 @@ class VistaAhorcadoFragment : Fragment() {
 
         viewModel.onCreate()
 
+        imagenesAhorcado = arrayOf(
+            R.drawable.horca_base,
+            R.drawable.horca_1,
+            R.drawable.horca_2,
+            R.drawable.horca_3,
+            R.drawable.horca_4,
+            R.drawable.horca_5,
+            R.drawable.horca_6
+        )
+
         jugadorActivo = args.Jugador
 
         viewModel.tablero.observe(viewLifecycleOwner, Observer { tableroNuevo ->
@@ -80,16 +93,23 @@ class VistaAhorcadoFragment : Fragment() {
         // Observa los cambios en el LiveData de shouldNavigateBack del viewModel. Si el valor es true, navega hacia atrás
         viewModel.juegoGanado.observe(viewLifecycleOwner) { juegoGanado ->
             if (juegoGanado) {
-                ganarJuego()
+                alertaVictoria()
             }
         }
 
         // Observa los cambios en el LiveData de shouldShowDialog del viewModel. Si el valor es true, muestra un diálogo
         viewModel.juegoPerdido.observe(viewLifecycleOwner) { juegoPerdido ->
             if (juegoPerdido) {
-                perderJuego()
+                alertaDerrota()
             }
         }
+
+        // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // No hace nada
+            }
+        })
 
     }
 
@@ -124,10 +144,12 @@ class VistaAhorcadoFragment : Fragment() {
                 // Agrega un listener de clic al botón (opcional, según la lógica de tu aplicación)
                 boton.setOnClickListener {
 
-                    if (viewModel.comprobarLetraAcertada(boton.text.toString().lowercase())){
+                    if (viewModel.comprobarLetraAcertada(boton.text.toString().lowercase())) {
                         boton.setBackgroundResource(R.drawable.background_boton_acierto)
+                        boton.isEnabled = false
                     } else {
                         boton.setBackgroundResource(R.drawable.background_boton_error)
+                        boton.isEnabled = false
                     }
                 }
 
@@ -147,10 +169,10 @@ class VistaAhorcadoFragment : Fragment() {
         findNavController().previousBackStackEntry?.savedStateHandle?.apply {
             set(
                 ConstantesNavegacion.infoTableroKey, InformacionTablero(
-                jugador = jugadorActivo,
+                    jugador = jugadorActivo,
                     resutadoAhorcado = true,
-                cambioJugador = false
-            )
+                    cambioJugador = false
+                )
             )
         }
 
@@ -164,15 +186,47 @@ class VistaAhorcadoFragment : Fragment() {
         findNavController().previousBackStackEntry?.savedStateHandle?.apply {
             set(
                 ConstantesNavegacion.infoTableroKey, InformacionTablero(
-                jugador = jugadorActivo,
+                    jugador = jugadorActivo,
                     resutadoAhorcado = false,
-                cambioJugador = true
-            )
+                    cambioJugador = true
+                )
             )
         }
 
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    private fun cargarImagenAhorcado(fallos: Int) {
+        val imagenAhorcado = view?.findViewById<ImageView>(R.id.iv_ahorcado)
+        imagenAhorcado?.setImageResource(imagenesAhorcado[fallos])
+    }
+
+    private fun alertaVictoria() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("¡Victoria!")
+        builder.setMessage(
+            "¡Has ganado este minijuego! \n\nSe te añadira a tu contador de minijuegos y continuará tu turno." +
+                    " \n\nSi ya ganaste el minijuego anteriormente, se guardará tu victoria." +
+                    "\n\nAcepta para continuar."
+        )
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            ganarJuego()
+        }
+        builder.show()
+    }
+
+    private fun alertaDerrota() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("Derrota")
+        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            perderJuego()
+        }
+        builder.show()
+    }
 
 }

@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.gridlayout.widget.GridLayout
@@ -13,9 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
-import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
-import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils.NetworkUtils
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
 import kotlin.properties.Delegates
 
@@ -69,6 +68,13 @@ class VistaMemoryFragment : Fragment() {
             tx_Tiempo = view.findViewById(R.id.tx_Tiempo)
 
         })
+
+        // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // No hace nada
+            }
+        })
     }
 
     private fun iniciarTemporizador() {
@@ -83,7 +89,7 @@ class VistaMemoryFragment : Fragment() {
 
             override fun onFinish() {
                 // El temporizador ha terminado, puedes realizar acciones cuando el tiempo se agota
-                perderJuego()
+                alertaDerrota()
             }
         }.start()
     }
@@ -160,7 +166,7 @@ class VistaMemoryFragment : Fragment() {
 
                 // Verificar si se alcanzaron los 8 puntos
                 if (puntos == 8) {
-                    ganarJuego()
+                    alertaVictoria()
                 }
             } else {
                 boton.setBackgroundResource(getBackgroundResourceFromTag(boton.tag))
@@ -236,5 +242,33 @@ class VistaMemoryFragment : Fragment() {
             "8" -> R.drawable.background_boton_tablero_usado
             else -> R.drawable.background_boton_tablero_nuevo
         }
+    }
+
+    private fun alertaVictoria() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("¡Victoria!")
+        builder.setMessage(
+            "¡Has ganado este minijuego! \n\nSe te añadira a tu contador de minijuegos y continuará tu turno." +
+                    " \n\nSi ya ganaste el minijuego anteriormente, se guardará tu victoria." +
+                    "\n\nAcepta para continuar."
+        )
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            ganarJuego()
+        }
+        builder.show()
+    }
+
+    private fun alertaDerrota() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("Derrota")
+        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            perderJuego()
+        }
+        builder.show()
     }
 }

@@ -1,18 +1,12 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.app
 
-import android.content.Context
 import android.media.MediaPlayer
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.t8_ej01_persistenciadatossqlite.DatabaseHelper
 import com.pmg.proyecto_kahoot_pmg_sgg.R
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils.NetworkUtils.isConnected
-
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,5 +1,8 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaAhorcado
 
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import androidx.lifecycle.*
 import com.pmg.proyecto_kahoot_pmg_sgg.core.data.ahorcado.model.PalabrasDTO
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.usecase.GetAhorcadoUseCase
@@ -20,6 +23,7 @@ class VistaAhorcadoViewModel : ViewModel() {
     private var fallos = 0
     private var aciertos = 0
     val palabraMostrar = MutableLiveData<String>()
+    val imagenAhorcado = MutableLiveData<Int>()
 
     val juegoGanado = MutableLiveData(false)
     val juegoPerdido = MutableLiveData(false)
@@ -31,10 +35,9 @@ class VistaAhorcadoViewModel : ViewModel() {
     // Obtiene la lista de palabras, y segun el indice, obtiene la palabra que quieras, y luego la divide en letras
     private fun getAhorcado() {
 
-        indiceOracion = (0..11).random()
-
         viewModelScope.launch {
             val result = getAhorcadoUseCase()
+            indiceOracion = (result.indices).random()
 
             if (!result.isNullOrEmpty()) {
                 repasoModel.value = result[0]
@@ -90,11 +93,16 @@ class VistaAhorcadoViewModel : ViewModel() {
 
         if (aciertos == palabraDividida.size) {
             juegoGanado.value = true
+
         } else if (fallos == 6) {
             juegoPerdido.value = true
         }
 
+        cambiarImagenAhorcado()
         return letrasEncontradas
+    }
+    private fun cambiarImagenAhorcado() {
+        imagenAhorcado.value = fallos
     }
 
 }

@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
 import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
+import com.pmg.proyecto_kahoot_pmg_sgg.app.utils.AlertaPreferencias
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils.NetworkUtils
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
@@ -140,6 +142,10 @@ class VistaTableroFragment : Fragment() {
 
         val infoTablero = args.informacionTablero
 
+        if (!AlertaPreferencias.wasDialogShown(requireContext())) {
+            alertaBienvenida()
+            AlertaPreferencias.setDialogShown(requireContext(), true)
+        }
 
         // Observa los cambios en el LiveData del tablero
         viewModel.tablero.observe(viewLifecycleOwner, Observer { tableroNuevo ->
@@ -194,18 +200,18 @@ class VistaTableroFragment : Fragment() {
 
         })
 
-        
         // Observa los cambios en la lista de jugadores
         viewModel.jugadores.observe(viewLifecycleOwner, Observer { jugadores ->
             jugadores.forEach { jugador ->
                 // Observa los cambios en la posición del jugador actual
-                viewModel.getPosicionJugadorLiveData(jugador.id).observe(viewLifecycleOwner, Observer { nuevaPosicion ->
-                    actualizarPosicionJugadorUI(nuevaPosicion)
-                    if (jugar) {
-                        inicioMiniJuego(numMinijuego)
-                        jugar = false
-                    }
-                })
+                viewModel.getPosicionJugadorLiveData(jugador.id)
+                    .observe(viewLifecycleOwner, Observer { nuevaPosicion ->
+                        actualizarPosicionJugadorUI(nuevaPosicion)
+                        if (jugar) {
+                            inicioMiniJuego(numMinijuego)
+                            jugar = false
+                        }
+                    })
             }
         })
 
@@ -265,8 +271,8 @@ class VistaTableroFragment : Fragment() {
                         // Genera un número aleatorio del 1 al 6
                         val numeroAleatorio = (1..6).random()
 
-                        // Muestra un AlertDialog con el número aleatorio
-                        mostrarNumeroAleatorioDialog(numeroAleatorio)
+            // Muestra un AlertDialog con el número aleatorio
+            //mostrarNumeroAleatorioDialog(numeroAleatorio)
 
                         // Mueve el jugador en el tablero según el número aleatorio
                         moverJugadorEnTablero(numeroAleatorio)
@@ -282,9 +288,6 @@ class VistaTableroFragment : Fragment() {
                 jugar = true
                 // Genera un número aleatorio del 1 al 6
                 val numeroAleatorio = (1..6).random()
-
-                // Muestra un AlertDialog con el número aleatorio
-                mostrarNumeroAleatorioDialog(numeroAleatorio)
 
                 // Mueve el jugador en el tablero según el número aleatorio
                 moverJugadorEnTablero(numeroAleatorio)
@@ -319,9 +322,17 @@ class VistaTableroFragment : Fragment() {
             startForResultGuardarPartidaExistente.launch(intent)
 
         }
+
+        // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // No hace nada
+            }
+        })
+
     }
 
-    private fun mostrarNumeroAleatorioDialog(numero: Int) {
+    /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setTitle("Número Aleatorio")
         alertDialogBuilder.setMessage("El número aleatorio es: $numero")
@@ -331,6 +342,21 @@ class VistaTableroFragment : Fragment() {
 
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
+    }*/
+
+    private fun alertaBienvenida() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("1 Vs 1")
+        builder.setMessage(
+            "Bienvenido al trivial. Tu mision es completar todos los minijuegos para ganar la partida." +
+                    "\n\nEn el tablero hay 4 minijuegos, y una vez completes todos, llegaras a la pregunta final. Se el primero en acertarla y ganaras la partida." +
+                    "\n\n¡Mucha suerte!\n\nAcepta para continuar."
+        )
+        builder.setPositiveButton("Aceptar") { _, _ ->
+            // Empieza la partida
+        }
+        builder.show()
     }
 
     /**
@@ -416,14 +442,12 @@ class VistaTableroFragment : Fragment() {
         viewModel.moverJugador(numeroCasillas)
     }
 
-
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (casilla) {
+        when (1) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaRepaso)
                 findNavController().navigate(
                     VistaTableroFragmentDirections.navegarVistaRepaso(
                         Jugador = jugador
@@ -433,33 +457,33 @@ class VistaTableroFragment : Fragment() {
 
             2 -> {
                 // Navega al fragmento de vistaMemoryView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaMenuCompletoView_to_vistaTableroView)
-                findNavController().navigate(VistaTableroFragmentDirections.navegarVistaMemory(
-                    Jugador = jugador
-                ))
+                findNavController().navigate(
+                    VistaTableroFragmentDirections.navegarVistaMemory(
+                        Jugador = jugador
+                    )
+                )
             }
 
             3 -> {
                 // Navega al fragmento de vistaJuegoView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaJuegoView)
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaJuegoView)
-                findNavController().navigate(VistaTableroFragmentDirections.navegarVistaJuego(
-                    Jugador = jugador
-                ))
+                findNavController().navigate(
+                    VistaTableroFragmentDirections.navegarVistaJuego(
+                        Jugador = jugador
+                    )
+                )
             }
 
             4 -> {
                 // Navega al fragmento de vistaAhorcadoView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaMenuCompletoView_to_vistaTableroView)
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaAhorcadoView)
-                findNavController().navigate(VistaTableroFragmentDirections.navegarAhorcadoVista(
-                    Jugador = jugador
-                ))
+                findNavController().navigate(
+                    VistaTableroFragmentDirections.navegarAhorcadoVista(
+                        Jugador = jugador
+                    )
+                )
             }
 
             5 -> {
                 // Navega al fragmento de vistaPregFinalView cuando se hace clic en el botón
-                //findNavController().navigate(R.id.action_vistaTableroView_to_vistaPregFinal2)
                 findNavController().navigate(
                     VistaTableroFragmentDirections.navegarVistaPreguntaFinal(
                         Jugador = jugador
@@ -473,7 +497,5 @@ class VistaTableroFragment : Fragment() {
 
         }
     }
-
-
 
 }

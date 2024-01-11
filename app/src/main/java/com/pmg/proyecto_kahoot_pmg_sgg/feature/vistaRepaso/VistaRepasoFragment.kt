@@ -5,14 +5,13 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
-import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
-import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils.NetworkUtils
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
 import kotlin.properties.Delegates
 
@@ -40,7 +39,7 @@ class VistaRepasoFragment : Fragment() {
         // Inicializar las vistas directamente
         preguntaTextView = view.findViewById(R.id.tv_mostrarDatos)
 
-        btn0= view.findViewById(R.id.btnRespuesta1)
+        btn0 = view.findViewById(R.id.btnRespuesta1)
         btn1 = view.findViewById(R.id.btnRespuesta2)
         btn2 = view.findViewById(R.id.btnRespuesta3)
         btn3 = view.findViewById(R.id.btnRespuesta4)
@@ -57,22 +56,42 @@ class VistaRepasoFragment : Fragment() {
         // Obtiene el jugador activo del argumento de navegación
         jugadorActivo = args.Jugador
 
-        btn0.setOnClickListener{
+        btn0.setOnClickListener {
+
+            btn0.isEnabled = false
+            btn1.isEnabled = false
+            btn2.isEnabled = false
+            btn3.isEnabled = false
 
             viewModel.comprobarRespuestaAcertada(0, btn0)
         }
 
-        btn1.setOnClickListener{
+        btn1.setOnClickListener {
+
+            btn0.isEnabled = false
+            btn1.isEnabled = false
+            btn2.isEnabled = false
+            btn3.isEnabled = false
 
             viewModel.comprobarRespuestaAcertada(1, btn1)
         }
 
-        btn2.setOnClickListener{
+        btn2.setOnClickListener {
+
+            btn0.isEnabled = false
+            btn1.isEnabled = false
+            btn2.isEnabled = false
+            btn3.isEnabled = false
 
             viewModel.comprobarRespuestaAcertada(2, btn2)
         }
 
-        btn3.setOnClickListener{
+        btn3.setOnClickListener {
+
+            btn0.isEnabled = false
+            btn1.isEnabled = false
+            btn2.isEnabled = false
+            btn3.isEnabled = false
 
             viewModel.comprobarRespuestaAcertada(3, btn3)
         }
@@ -89,32 +108,46 @@ class VistaRepasoFragment : Fragment() {
             btn2.text = pregunta?.respuestas?.get(2).toString()
             btn3.text = pregunta?.respuestas?.get(3).toString()
 
+            btn0.isEnabled = true
+            btn1.isEnabled = true
+            btn2.isEnabled = true
+            btn3.isEnabled = true
+
         }
 
         // Observa los cambios en el LiveData de shouldNavigateBack del viewModel. Si el valor es true, navega hacia atrás
         viewModel.juegoGanado.observe(viewLifecycleOwner) { juegoGanado ->
             if (juegoGanado) {
-                ganarJuego()
+                alertaVictoria()
             }
         }
 
         // Observa los cambios en el LiveData de shouldShowDialog del viewModel. Si el valor es true, muestra un diálogo
         viewModel.juegoPerdido.observe(viewLifecycleOwner) { juegoPerdido ->
             if (juegoPerdido) {
-                perderJuego()
+                alertaDerrota()
             }
         }
+
+        // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // No hace nada
+            }
+        })
     }
 
     private fun ganarJuego() {
         // Realizar acciones adicionales cuando se gana el juego
 
         findNavController().previousBackStackEntry?.savedStateHandle?.apply {
-            set(ConstantesNavegacion.infoTableroKey, InformacionTablero(
-                jugador = jugadorActivo,
-                resultadoRepaso = true,
-                cambioJugador = false
-            ))
+            set(
+                ConstantesNavegacion.infoTableroKey, InformacionTablero(
+                    jugador = jugadorActivo,
+                    resultadoRepaso = true,
+                    cambioJugador = false
+                )
+            )
         }
 
         findNavController().popBackStack(R.id.vistaTableroView, false)
@@ -125,14 +158,44 @@ class VistaRepasoFragment : Fragment() {
         // Por ejemplo, navegar hacia atrás
 
         findNavController().previousBackStackEntry?.savedStateHandle?.apply {
-            set(ConstantesNavegacion.infoTableroKey, InformacionTablero(
-                jugador = jugadorActivo,
-                resultadoRepaso = false,
-                cambioJugador = true
-            ))
+            set(
+                ConstantesNavegacion.infoTableroKey, InformacionTablero(
+                    jugador = jugadorActivo,
+                    resultadoRepaso = false,
+                    cambioJugador = true
+                )
+            )
         }
 
         findNavController().popBackStack(R.id.vistaTableroView, false)
+    }
+
+    private fun alertaVictoria() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("¡Victoria!")
+        builder.setMessage(
+            "¡Has ganado este minijuego! \n\nSe te añadira a tu contador de minijuegos y continuará tu turno." +
+                    " \n\nSi ya ganaste el minijuego anteriormente, se guardará tu victoria." +
+                    "\n\nAcepta para continuar."
+        )
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            ganarJuego()
+        }
+        builder.show()
+    }
+
+    private fun alertaDerrota() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(false)
+        builder.setTitle("Derrota")
+        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
+            perderJuego()
+        }
+        builder.show()
     }
 
 }
