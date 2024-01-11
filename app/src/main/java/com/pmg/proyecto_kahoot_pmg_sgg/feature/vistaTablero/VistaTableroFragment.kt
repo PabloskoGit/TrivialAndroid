@@ -48,42 +48,42 @@ class VistaTableroFragment : Fragment() {
 
     private var partidaCargada = 0
 
-    private var dialog: AlertDialog? = null
 
+    private val startForResultCargarPartida =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // Este bloque de código se ejecutará cuando VistaSeleccionPartida envíe un resultado de vuelta.
+            // Si el resultado es correcto
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Obtenemos el dato "selectedPartidaId" del Intent que ha vuelto como un Int
+                val partidaCargadaDevuelta = result.data?.getIntExtra("selectedPartidaId", 0)
+                // Establecemos la variable con la partida seleccionada.
+                partidaCargada = partidaCargadaDevuelta ?: 0
+                if (partidaCargada > 0) {
 
-    private val startForResultCargarPartida = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        // Este bloque de código se ejecutará cuando VistaSeleccionPartida envíe un resultado de vuelta.
-        // Si el resultado es correcto
-        if (result.resultCode == Activity.RESULT_OK) {
-            // Obtenemos el dato "selectedPartidaId" del Intent que ha vuelto como un Int
-            val partidaCargadaDevuelta = result.data?.getIntExtra("selectedPartidaId", 0)
-            // Establecemos la variable con la partida seleccionada.
-            partidaCargada = partidaCargadaDevuelta ?: 0
-            if (partidaCargada > 0) {
+                    val partidaCargadaLong: Long = partidaCargada.toLong()
+                    viewModel.cargarPartida(partidaCargadaLong)
 
-                val partidaCargadaLong: Long = partidaCargada.toLong()
-                viewModel.cargarPartida(partidaCargadaLong)
-
+                }
             }
         }
-    }
 
-    private val startForResultGuardarPartidaExistente = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        // Este bloque de código se ejecutará cuando VistaSeleccionPartida envíe un resultado de vuelta.
-        // Si el resultado es correcto
-        if (result.resultCode == Activity.RESULT_OK) {
-            // Obtenemos el dato "selectedPartidaId" del Intent que ha vuelto como un Int
-            val partidaCargadaDevuelta = result.data?.getIntExtra("selectedPartidaId", 0)
-            // Establecemos la variable con la partida seleccionada.
-            partidaCargada = partidaCargadaDevuelta ?: 0
-            if (partidaCargada > 0) {
+    private val startForResultGuardarPartidaExistente =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // Este bloque de código se ejecutará cuando VistaSeleccionPartida envíe un resultado de vuelta.
+            // Si el resultado es correcto
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Obtenemos el dato "selectedPartidaId" del Intent que ha vuelto como un Int
+                val partidaCargadaDevuelta = result.data?.getIntExtra("selectedPartidaId", 0)
+                // Establecemos la variable con la partida seleccionada.
+                partidaCargada = partidaCargadaDevuelta ?: 0
+                if (partidaCargada > 0) {
 
-                val partidaCargadaLong: Long = partidaCargada.toLong()
-                viewModel.guardarOActualizarPartida(partidaCargadaLong)
+                    val partidaCargadaLong: Long = partidaCargada.toLong()
+                    viewModel.guardarOActualizarPartida(partidaCargadaLong)
 
+                }
             }
         }
-    }
 
 
     /**
@@ -123,23 +123,6 @@ class VistaTableroFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!NetworkUtils.isConnected(requireContext())) {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Sin conexión a Internet")
-            builder.setMessage("Por favor, comprueba tu conexión a Internet y vuelve a intentarlo, si das a aceptar sin internet se cerrará la aplicación.")
-            builder.setCancelable(false)
-
-            builder.setPositiveButton("Aceptar") { _, _ ->
-                if (NetworkUtils.isConnected(requireContext())) {
-                    dialog?.dismiss()
-                } else {
-                    (context as? MainActivity)?.cerrarApp()
-                }
-            }
-
-            dialog = builder.create()
-            dialog?.show()
-        }
 
         val infoTablero = args.informacionTablero
 
@@ -174,7 +157,8 @@ class VistaTableroFragment : Fragment() {
                 juego5 = infoTablero.resultadoPruebaFinal
             )
 
-            txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+            txtPuntosJugador.text =
+                "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
             if (infoTablero.cambioJugador) {
                 viewModel.cambiarJugador()
@@ -235,7 +219,8 @@ class VistaTableroFragment : Fragment() {
                     juego5 = info.resultadoPruebaFinal
                 )
 
-                txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+                txtPuntosJugador.text =
+                    "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
             }
 
@@ -243,57 +228,29 @@ class VistaTableroFragment : Fragment() {
 
         viewModel.jugadorActual.observe(viewLifecycleOwner, Observer
         { nuevoJugador ->
-                jugador = nuevoJugador
-                txtJugadorActivo.text = "Jugador: $jugador"
-                txtPuntosJugador.text =
-                    "Minijuegos Completados: \n${viewModel.actualizarTextoPuntosJugador(jugador)}"
+            jugador = nuevoJugador
+            txtJugadorActivo.text = "Jugador: $jugador"
+            txtPuntosJugador.text =
+                "Minijuegos Completados: \n${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
-            viewModel.getPosicionJugadorLiveData(jugador).observe(viewLifecycleOwner, Observer { nuevaPosicion ->
-                actualizarPosicionJugadorUI(nuevaPosicion)
+            viewModel.getPosicionJugadorLiveData(jugador)
+                .observe(viewLifecycleOwner, Observer { nuevaPosicion ->
+                    actualizarPosicionJugadorUI(nuevaPosicion)
 
-            })
+                })
 
         })
 
 
         // Agrega el OnClickListener al botón para lanzar el dado
         btnLanzarDado.setOnClickListener {
-            if (!NetworkUtils.isConnected(requireContext())) {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Sin conexión a Internet")
-                builder.setMessage("Por favor, comprueba tu conexión a Internet y vuelve a intentarlo, si das a aceptar sin internet se cerrará la aplicación.")
-                builder.setCancelable(false)
 
-                builder.setPositiveButton("Aceptar") { _, _ ->
-                    if (NetworkUtils.isConnected(requireContext())) {
-                        dialog?.dismiss()
+            jugar = true
+            // Genera un número aleatorio del 1 al 6
+            val numeroAleatorio = (1..6).random()
 
-                        jugar = true
-                        // Genera un número aleatorio del 1 al 6
-                        val numeroAleatorio = (1..6).random()
-
-            // Muestra un AlertDialog con el número aleatorio
-            //mostrarNumeroAleatorioDialog(numeroAleatorio)
-
-                        // Mueve el jugador en el tablero según el número aleatorio
-                        moverJugadorEnTablero(numeroAleatorio)
-                    } else {
-                        (context as? MainActivity)?.cerrarApp()
-                    }
-                }
-
-                dialog = builder.create()
-                dialog?.show()
-            } else {
-
-                jugar = true
-                // Genera un número aleatorio del 1 al 6
-                val numeroAleatorio = (1..6).random()
-
-                // Mueve el jugador en el tablero según el número aleatorio
-                moverJugadorEnTablero(numeroAleatorio)
-
-            }
+            // Mueve el jugador en el tablero según el número aleatorio
+            moverJugadorEnTablero(numeroAleatorio)
 
         }
 
@@ -309,7 +266,6 @@ class VistaTableroFragment : Fragment() {
 
         btnCargarPartida.setOnClickListener {
 
-
             // Creamos un Intent para iniciar VistaSeleccionPartida.
             val intent = Intent(requireContext(), VistaSeleccionPartida::class.java)
 
@@ -320,7 +276,6 @@ class VistaTableroFragment : Fragment() {
 
         btnGuardarPartidaExistente.setOnClickListener {
 
-
             // Creamos un Intent para iniciar VistaSeleccionPartida.
             val intent = Intent(requireContext(), VistaSeleccionPartida::class.java)
 
@@ -330,11 +285,13 @@ class VistaTableroFragment : Fragment() {
         }
 
         // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // No hace nada
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // No hace nada
+                }
+            })
 
     }
 
@@ -499,7 +456,7 @@ class VistaTableroFragment : Fragment() {
 
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (2) {
+        when (4) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón

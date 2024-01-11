@@ -61,7 +61,6 @@ class VistaAhorcadoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewModel.onCreate()
 
         imagenesAhorcado = arrayOf(

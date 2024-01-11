@@ -17,7 +17,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     // Son como los valores estáticos en Java
     companion object {
         private const val DATABASE_NAME = "JuegosDatabase"
-        private const val DATABASE_VERSION = 5
+        private const val DATABASE_VERSION = 6
         private const val TABLE_PARTIDAS = "partidas"
         private const val KEY_ID = "id"
         private const val KEY_JUGADOR1_ID = "jugador1_id"

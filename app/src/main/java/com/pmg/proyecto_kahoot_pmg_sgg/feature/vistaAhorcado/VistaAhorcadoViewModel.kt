@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class VistaAhorcadoViewModel : ViewModel() {
 
-    val repasoModel = MutableLiveData<PalabrasDTO>()
+    private val repasoModel = MutableLiveData<PalabrasDTO>()
     var getAhorcadoUseCase = GetAhorcadoUseCase()
 
     private val _tablero = MutableLiveData<Array<Array<String>>>()
