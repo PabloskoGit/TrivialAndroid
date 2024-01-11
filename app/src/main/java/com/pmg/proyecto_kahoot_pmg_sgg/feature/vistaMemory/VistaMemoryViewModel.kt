@@ -28,4 +28,6 @@ class VistaMemoryViewModel : ViewModel() {
             _tablero.postValue(nuevoTablero)
         }
     }
+
+
 }

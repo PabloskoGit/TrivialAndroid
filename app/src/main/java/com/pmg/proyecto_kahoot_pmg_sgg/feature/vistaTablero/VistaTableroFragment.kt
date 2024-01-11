@@ -3,6 +3,7 @@ package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
@@ -298,8 +299,13 @@ class VistaTableroFragment : Fragment() {
 
 
         btnGuardarPartida.setOnClickListener {
-            viewModel.guardarPartida()
+            if (partidaCargada > 0) {
+                mostrarDialogSobrescribirNuevaPartida()
+            } else {
+                mostrarDialogNuevaPartida()
+            }
         }
+
 
         btnCargarPartida.setOnClickListener {
 
@@ -330,6 +336,55 @@ class VistaTableroFragment : Fragment() {
             }
         })
 
+    }
+
+    private fun mostrarDialogSobrescribirNuevaPartida() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Guardar Partida")
+        builder.setMessage("¿Desea sobrescribir la partida existente o crear una nueva?")
+
+        builder.setPositiveButton("Sobrescribir") { _, _ ->
+            // Lógica para sobrescribir la partida
+            val partidaCargadaLong: Long = partidaCargada.toLong()
+            viewModel.guardarOActualizarPartida(partidaCargadaLong)
+        }
+
+        builder.setNegativeButton("Nueva") { _, _ ->
+            // Lógica para crear una nueva partida
+            viewModel.guardarPartida()
+
+            val partidaCargadaLong = viewModel.obtenerUltimoIdPartidaDesdeBDAsync()
+            partidaCargada = partidaCargadaLong.toString().toInt()
+
+        }
+
+        builder.setNeutralButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
+    }
+
+    private fun mostrarDialogNuevaPartida() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Guardar Partida")
+        builder.setMessage("¿Desea crear una nueva partida?")
+
+        builder.setPositiveButton("Sí") { _, _ ->
+            // Lógica para crear una nueva partida
+            viewModel.guardarPartida()
+
+            // Actualizar el valor de partidaCargada
+            val partidaCargadaLong = viewModel.obtenerUltimoIdPartidaDesdeBDAsync()
+            Log.d("VistaTableroFragment", "partidaCargadaLong: $partidaCargadaLong")
+            partidaCargada = partidaCargadaLong.toString().toInt()
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
     }
 
     /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
@@ -444,7 +499,7 @@ class VistaTableroFragment : Fragment() {
 
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (4) {
+        when (2) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón

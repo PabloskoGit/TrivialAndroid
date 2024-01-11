@@ -154,6 +154,13 @@ class VistaMemoryFragment : Fragment() {
             primerBoton?.setBackgroundResource(getBackgroundResourceFromTag(primerBoton?.tag))
         } else {
             // Es el segundo clic, compara los tags
+            val primerTag = (primerBoton?.tag as? Int)
+            val tag = boton.tag as? Int
+
+            // Agrega logs para imprimir los valores de los tags
+            println("primerBoton?.tag: $primerTag")
+            println("boton.tag: $tag")
+            // Es el segundo clic, compara los tags
             if (primerBoton?.tag == boton.tag) {
                 // Los tags son iguales, establece el fondo según el tag
                 boton.setBackgroundResource(getBackgroundResourceFromTag(boton.tag))
@@ -240,6 +247,14 @@ class VistaMemoryFragment : Fragment() {
             "6" -> R.drawable.background_boton_tablero_usado
             "7" -> R.drawable.background_boton_tablero_usado
             "8" -> R.drawable.background_boton_tablero_usado
+            "9" -> R.drawable.background_boton_tablero_usado
+            "10" -> R.drawable.background_boton_tablero_usado
+            "11" -> R.drawable.background_boton_tablero_usado
+            "12" -> R.drawable.background_boton_tablero_usado
+            "13" -> R.drawable.background_boton_tablero_usado
+            "14" -> R.drawable.background_boton_tablero_usado
+            "15" -> R.drawable.background_boton_tablero_usado
+            "16" -> R.drawable.background_boton_tablero_usado
             else -> R.drawable.background_boton_tablero_nuevo
         }
     }

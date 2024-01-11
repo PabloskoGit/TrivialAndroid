@@ -274,6 +274,38 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+    fun obtenerUltimoIdPartida(): Long {
+        val db = readableDatabase
+        val selectQuery = "SELECT MAX($KEY_ID) FROM $TABLE_PARTIDAS"
+        val cursor: Cursor
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: SQLiteException) {
+            // Manejar la excepción según tus necesidades
+            Log.e("DatabaseHelper", "Error al obtener el último ID de partida: ${e.message}")
+            db.close()
+            return -1
+        }
+
+        var ultimoIdPartida: Long = -1
+
+        if (cursor.moveToFirst()) {
+            val ultimoIdIndex = cursor.getColumnIndex("MAX($KEY_ID)")
+            if (ultimoIdIndex != -1) {
+                ultimoIdPartida = cursor.getLong(ultimoIdIndex)
+            } else {
+                // La columna no existe en el cursor, manejar este caso según tus necesidades
+                // Puedes asignar un valor predeterminado, lanzar una excepción, etc.
+                Log.e("DatabaseHelper", "La columna MAX($KEY_ID) no se encontró en el cursor.")
+            }
+        }
+
+        cursor.close()
+        db.close()
+        return ultimoIdPartida
+    }
+
 }
 
 
