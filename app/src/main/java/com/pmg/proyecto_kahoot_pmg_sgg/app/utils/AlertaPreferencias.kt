@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 
 class AlertaPreferencias {
-
     companion object {
         // Guarda si el dialogo de alerta se ha mostrado
         fun setDialogShown(context: Context, shown: Boolean) {
