@@ -57,12 +57,8 @@ class VistaTableroFragment : Fragment() {
                 val partidaCargadaDevuelta = result.data?.getIntExtra("selectedPartidaId", 0)
                 // Establecemos la variable con la partida seleccionada.
                 partidaCargada = partidaCargadaDevuelta ?: 0
-                if (partidaCargada > 0) {
 
-                    val partidaCargadaLong: Long = partidaCargada.toLong()
-                    viewModel.cargarPartida(partidaCargadaLong)
-
-                }
+                confirmarYCargarPartida()
             }
         }
 
@@ -367,7 +363,7 @@ class VistaTableroFragment : Fragment() {
     fun confirmarYBorrarPartida() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Confirmar Borrado")
-        builder.setMessage("¿Estás seguro de que quieres borrar una partida?")
+        builder.setMessage("¿Estás seguro de que quieres borrar la partida $partidaBorrar?")
 
         // Configurar el botón de confirmación
         builder.setPositiveButton("Sí") { _, _ ->
@@ -418,6 +414,33 @@ class VistaTableroFragment : Fragment() {
         // Mostrar el cuadro de diálogo
         builder.create().show()
     }
+
+    fun confirmarYCargarPartida() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Confirmar Borrado")
+        builder.setMessage("¿Estás seguro de que quieres cargar la partida $partidaCargada?")
+
+        // Configurar el botón de confirmación
+        builder.setPositiveButton("Sí") { _, _ ->
+            // Llamar a la función de borrado
+
+            if (partidaCargada > 0) {
+
+                val partidaCargadaLong: Long = partidaCargada.toLong()
+                viewModel.cargarPartida(partidaCargadaLong)
+
+            }
+        }
+
+        // Configurar el botón de cancelación
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        // Mostrar el cuadro de diálogo
+        builder.create().show()
+    }
+
 
 
     /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
