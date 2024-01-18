@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.Proyecto_Kahoot_pmg_sgg" parent="Base.Theme.Proyecto_Kahoot_pmg_sgg" />
+
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

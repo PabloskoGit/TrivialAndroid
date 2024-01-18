@@ -313,25 +313,24 @@ class VistaTableroFragment : Fragment() {
 
     private fun mostrarDialogSobrescribirNuevaPartida() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Guardar Partida")
-        builder.setMessage("¿Desea sobrescribir la partida existente o crear una nueva?")
+        builder.setTitle(getString(R.string.dialogo_guardar_partida_titulo))
+        builder.setMessage(getString(R.string.dialogo_guardar_partida_mensaje))
 
-        builder.setPositiveButton("Sobrescribir") { _, _ ->
+        builder.setPositiveButton(getString(R.string.boton_sobrescribir)) { _, _ ->
             // Lógica para sobrescribir la partida
             val partidaCargadaLong: Long = partidaCargada.toLong()
             viewModel.guardarOActualizarPartida(partidaCargadaLong)
         }
 
-        builder.setNegativeButton("Nueva") { _, _ ->
+        builder.setNegativeButton(getString(R.string.boton_nueva)) { _, _ ->
             // Lógica para crear una nueva partida
             viewModel.guardarPartida()
 
             val partidaCargadaLong = viewModel.obtenerUltimoIdPartidaDesdeBDAsync()
             partidaCargada = partidaCargadaLong.toString().toInt()
-
         }
 
-        builder.setNeutralButton("Cancelar") { dialog, _ ->
+        builder.setNeutralButton(getString(R.string.boton_cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
 
@@ -340,10 +339,10 @@ class VistaTableroFragment : Fragment() {
 
     private fun mostrarDialogNuevaPartida() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Guardar Partida")
-        builder.setMessage("¿Desea crear una nueva partida?")
+        builder.setTitle(getString(R.string.dialogo_guardar_partida_titulo))
+        builder.setMessage(getString(R.string.dialogo_guardar_partida_nueva_mensaje))
 
-        builder.setPositiveButton("Sí") { _, _ ->
+        builder.setPositiveButton(getString(R.string.boton_si)) { _, _ ->
             // Lógica para crear una nueva partida
             viewModel.guardarPartida()
 
@@ -353,94 +352,75 @@ class VistaTableroFragment : Fragment() {
             partidaCargada = partidaCargadaLong.toString().toInt()
         }
 
-        builder.setNegativeButton("Cancelar") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.boton_cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
 
         builder.create().show()
     }
 
-    fun confirmarYBorrarPartida() {
+    private fun confirmarYBorrarPartida() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Confirmar Borrado")
-        builder.setMessage("¿Estás seguro de que quieres borrar la partida $partidaBorrar?")
+        builder.setTitle(getString(R.string.dialogo_confirmar_borrado_titulo))
+        builder.setMessage(getString(R.string.dialogo_confirmar_borrado_mensaje, partidaBorrar))
 
-        // Configurar el botón de confirmación
-        builder.setPositiveButton("Sí") { _, _ ->
+        builder.setPositiveButton(getString(R.string.boton_si)) { _, _ ->
             // Llamar a la función de borrado
-
             if (partidaBorrar > 0) {
-
                 val partidaBorrarLong: Long = partidaBorrar.toLong()
                 viewModel.borrarPartidaPorId(partidaBorrarLong)
-
             }
             partidaBorrar = 0
         }
 
-        // Configurar el botón de cancelación
-        builder.setNegativeButton("Cancelar") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.boton_cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
 
-        // Mostrar el cuadro de diálogo
         builder.create().show()
     }
 
-    fun confirmarYBorrarPartidaActual() {
+    private fun confirmarYBorrarPartidaActual() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Confirmar Borrado")
-        builder.setMessage("¿Estás seguro de que quieres borrar la PARTIDA ACTUAL?")
+        builder.setTitle(getString(R.string.dialogo_confirmar_borrado_titulo))
+        builder.setMessage(getString(R.string.dialogo_confirmar_borrado_actual_mensaje))
 
-        // Configurar el botón de confirmación
-        builder.setPositiveButton("Sí") { _, _ ->
+        builder.setPositiveButton(getString(R.string.boton_si)) { _, _ ->
             // Llamar a la función de borrado
-
             if (partidaBorrar > 0) {
-
                 val partidaBorrarLong: Long = partidaBorrar.toLong()
                 viewModel.borrarPartidaPorId(partidaBorrarLong)
-
             }
             partidaBorrar = 0
             partidaCargada = 0
         }
 
-        // Configurar el botón de cancelación
-        builder.setNegativeButton("Cancelar") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.boton_cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
 
-        // Mostrar el cuadro de diálogo
         builder.create().show()
     }
 
-    fun confirmarYCargarPartida() {
+    private fun confirmarYCargarPartida() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Confirmar Borrado")
-        builder.setMessage("¿Estás seguro de que quieres cargar la partida $partidaCargada?")
+        builder.setTitle(getString(R.string.dialogo_confirmar_cargar_partida_titulo))
+        builder.setMessage(getString(R.string.dialogo_confirmar_cargar_partida_mensaje, partidaCargada))
 
-        // Configurar el botón de confirmación
-        builder.setPositiveButton("Sí") { _, _ ->
-            // Llamar a la función de borrado
-
+        builder.setPositiveButton(getString(R.string.boton_si)) { _, _ ->
+            // Llamar a la función de carga de partida
             if (partidaCargada > 0) {
-
                 val partidaCargadaLong: Long = partidaCargada.toLong()
                 viewModel.cargarPartida(partidaCargadaLong)
-
             }
         }
 
-        // Configurar el botón de cancelación
-        builder.setNegativeButton("Cancelar") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.boton_cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
 
-        // Mostrar el cuadro de diálogo
         builder.create().show()
     }
-
 
 
     /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
@@ -458,13 +438,9 @@ class VistaTableroFragment : Fragment() {
     private fun alertaBienvenida() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle("1 Vs 1")
-        builder.setMessage(
-            "Bienvenido al trivial. Tu mision es completar todos los minijuegos para ganar la partida." +
-                    "\n\nEn el tablero hay 4 minijuegos, y una vez completes todos, llegaras a la pregunta final. Se el primero en acertarla y ganaras la partida." +
-                    "\n\n¡Mucha suerte!\n\nAcepta para continuar."
-        )
-        builder.setPositiveButton("Aceptar") { _, _ ->
+        builder.setTitle(getString(R.string.dialogo_bienvenida_titulo))
+        builder.setMessage(getString(R.string.dialogo_bienvenida_mensaje))
+        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
             // Empieza la partida
         }
         builder.show()
@@ -555,7 +531,7 @@ class VistaTableroFragment : Fragment() {
 
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (2) {
+        when (casilla) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón

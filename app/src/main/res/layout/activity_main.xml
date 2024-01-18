@@ -38,13 +38,6 @@
             android:text="QUIX" />
 
         <ImageView
-            android:id="@+id/btnimg_Casa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            app:srcCompat="@drawable/baseline_home_24" />
-
-        <ImageView
             android:id="@+id/btnimg_Ajustes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

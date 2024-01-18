@@ -205,14 +205,9 @@ class VistaAhorcadoFragment : Fragment() {
     private fun alertaVictoria() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle("¡Victoria!")
-        builder.setMessage(
-            "¡Has ganado este minijuego! \n\nSe te añadira a tu contador de minijuegos y continuará tu turno." +
-                    " \n\nSi ya ganaste el minijuego anteriormente, se guardará tu victoria." +
-                    "\n\nAcepta para continuar."
-        )
-        builder.setPositiveButton("Aceptar") { _, _ ->
-
+        builder.setTitle(getString(R.string.alerta_victoria_titulo))
+        builder.setMessage(getString(R.string.alerta_victoria_mensaje))
+        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
             ganarJuego()
         }
         builder.show()
@@ -221,13 +216,11 @@ class VistaAhorcadoFragment : Fragment() {
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle("Derrota")
-        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
-        builder.setPositiveButton("Aceptar") { _, _ ->
-
+        builder.setTitle(getString(R.string.alerta_derrota_titulo))
+        builder.setMessage(getString(R.string.alerta_derrota_mensaje))
+        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
             perderJuego()
         }
         builder.show()
     }
-
 }
