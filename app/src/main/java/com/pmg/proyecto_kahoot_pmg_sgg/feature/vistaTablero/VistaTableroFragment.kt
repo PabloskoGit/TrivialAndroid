@@ -35,6 +35,12 @@ class VistaTableroFragment : Fragment() {
     private lateinit var btnLanzarDado: Button
     private lateinit var txtJugadorActivo: TextView
     private lateinit var txtPuntosJugador: TextView
+
+    private lateinit var btnJuego1: Button
+    private lateinit var btnJuego2: Button
+    private lateinit var btnJuego3: Button
+    private lateinit var btnJuego4: Button
+
     private lateinit var btnGuardarPartida: Button
     private lateinit var btnCargarPartida: Button
     private lateinit var btnGuardarPartidaExistente: Button
@@ -100,6 +106,12 @@ class VistaTableroFragment : Fragment() {
         btnLanzarDado = viewTablero.findViewById(R.id.btn_LanzarDado)
         txtJugadorActivo = viewTablero.findViewById(R.id.txt_UsuarioActivo)
         txtPuntosJugador = viewTablero.findViewById(R.id.txt_PuntosUsuario)
+
+        btnJuego1 = viewTablero.findViewById(R.id.btnJuego1)
+        btnJuego2 = viewTablero.findViewById(R.id.btnJuego2)
+        btnJuego3 = viewTablero.findViewById(R.id.btnJuego3)
+        btnJuego4 = viewTablero.findViewById(R.id.btnJuego4)
+
         btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
         btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
         btnGuardarPartidaExistente = viewTablero.findViewById(R.id.btn_GuardarPartidaExistente)
@@ -174,7 +186,25 @@ class VistaTableroFragment : Fragment() {
                 juego5 = infoTablero.resultadoPruebaFinal
             )
 
-            txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+            //txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+            txtPuntosJugador.text = "Minijuegos Completados"
+
+            val juegosCompletados = viewModel.getJuegosCompletados(infoTablero.jugador)
+            val botones = listOf(btnJuego1, btnJuego2, btnJuego3, btnJuego4)
+
+            for (i in botones.indices) {
+                when {
+                    i < juegosCompletados.size && juegosCompletados[i] == (i + 1).toString() -> {
+                        botones[i].setBackgroundResource(R.drawable.background_boton_acierto)
+                    }
+                    else -> {
+                        botones[i].setBackgroundResource(R.drawable.background_botones_juego_design)
+                    }
+                }
+            }
+
+
+
 
             if (infoTablero.cambioJugador) {
                 viewModel.cambiarJugador()
@@ -184,19 +214,7 @@ class VistaTableroFragment : Fragment() {
 
             if (victoria) {
 
-                // Crea un AlertDialog
-                val alertDialogBuilder = AlertDialog.Builder(requireContext())
-
-                // Configura el mensaje del diálogo
-                alertDialogBuilder.setMessage("¡Jugador $jugador ha ganado!")
-
-                // Configura el botón "OK" del diálogo
-                alertDialogBuilder.setPositiveButton("OK") { _, _ ->
-                    viewModel.restablecerPartida()
-                }
-
-                // Muestra el diálogo
-                alertDialogBuilder.create().show()
+                alertaVictoria()
             }
 
         })
@@ -250,7 +268,6 @@ class VistaTableroFragment : Fragment() {
 
             viewModel.getPosicionJugadorLiveData(jugador).observe(viewLifecycleOwner, Observer { nuevaPosicion ->
                 actualizarPosicionJugadorUI(nuevaPosicion)
-
             })
 
         })
@@ -387,6 +404,28 @@ class VistaTableroFragment : Fragment() {
         builder.create().show()
     }
 
+    private fun alertaVictoria() {
+        val builder = AlertDialog.Builder(requireContext())
+
+        val inflate = layoutInflater
+        val dialogView = inflate.inflate(R.layout.vista_victoria_layout,null)
+
+        // Botón para ir al menú principal
+        dialogView.findViewById<Button>(R.id.btnMenuPrincipal).setOnClickListener{
+           // findNavController().navigate(R.id.vistaInicioMenu)
+        }
+        // Botón para salir y destruir la aplicación
+        dialogView.findViewById<Button>(R.id.btnSalir).setOnClickListener{
+            (context as? MainActivity)?.cerrarApp()
+        }
+        dialogView.findViewById<TextView>(R.id.tvJugador).text = "¡Ganador el Jugador $jugador!"
+
+        builder.setView(dialogView)
+        builder.setCancelable(false)
+
+        builder.show()
+    }
+
     /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setTitle("Número Aleatorio")
@@ -499,7 +538,7 @@ class VistaTableroFragment : Fragment() {
 
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (2) {
+        when (casilla) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón
