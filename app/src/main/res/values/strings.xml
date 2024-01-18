@@ -22,4 +22,70 @@
     <string name="hintAhorcado">Introduce una letra</string>
     <string name="btnComprobar">Comprobar</string>
 
+    <string name="reglas">Reglas</string>
+    <string name="creadores">Sobre la aplicacion</string>
+    <string name="musica">Quitar/Poner Musica</string>
+
+    <string-array name="opciones_array">
+        <item>Reglas</item>
+        <item>Creadores</item>
+        <item>Poner/Quitar Música</item>
+    </string-array>
+
+    <string name="opciones_dialog_titulo">Opciones</string>
+
+    <string name="musica_desactivada">Música desactivada</string>
+    <string name="musica_activada">Música activada</string>
+
+    <string name="dialogo_opcion1_titulo">Diálogo de Opción 1</string>
+    <string name="dialogo_opcion1_mensaje">Mensaje de Opción 1</string>
+    <string name="dialogo_opcion2_titulo">Diálogo de Opción 2</string>
+    <string name="dialogo_opcion2_mensaje">Mensaje de Opción 2</string>
+
+    <string name="boton_aceptar">Aceptar</string>
+    <string name="boton_cancelar">Cancelar</string>
+
+    <string name="salir_titulo">Salir</string>
+    <string name="salir_mensaje">¿Estás seguro de que quieres salir de la aplicación?</string>
+
+    <string name="boton_si">Sí</string>
+    <string name="boton_no">No</string>
+
+    <string name="sin_conexion_titulo">No hay conexión a internet</string>
+    <string name="sin_conexion_mensaje">Por favor, conéctate a internet para poder seguir jugando a nuestro juego. \n\nSi no, la app se cerrará.</string>
+    <string name="perdiendo_conexion_titulo">Se está perdiendo la conexión a internet</string>
+    <string name="perdiendo_conexion_mensaje">Por favor, conéctate a internet para poder jugar</string>
+    <string name="perdida_conexion_titulo">Se ha perdido la conexión a internet</string>
+    <string name="perdida_conexion_mensaje">Por favor, conéctate a internet para poder jugar</string>
+    <string name="boton_salir">Salir</string>
+
+    <string name="alerta_victoria_titulo">¡Victoria!</string>
+    <string name="alerta_victoria_mensaje">¡Has ganado este minijuego! \n\nSe te añadirá a tu contador de minijuegos y continuará tu turno." +
+        " \n\nSi ya ganaste el minijuego anteriormente, se guardará tu victoria." +
+        "\n\nAcepta para continuar.</string>
+
+    <string name="alerta_derrota_titulo">Derrota</string>
+    <string name="alerta_derrota_mensaje">Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.</string>
+
+    <string name="dialogo_guardar_partida_titulo">Guardar Partida</string>
+    <string name="dialogo_guardar_partida_mensaje">¿Desea sobrescribir la partida existente o crear una nueva?</string>
+    <string name="boton_sobrescribir">Sobrescribir</string>
+    <string name="boton_nueva">Nueva</string>
+
+    <string name="dialogo_guardar_partida_nueva_mensaje">¿Desea crear una nueva partida?</string>
+
+
+    <string name="dialogo_confirmar_borrado_titulo">Confirmar Borrado</string>
+    <string name="dialogo_confirmar_borrado_mensaje">¿Estás seguro de que quieres borrar la partida %1$d?</string>
+    <string name="dialogo_confirmar_borrado_actual_mensaje">¿Estás seguro de que quieres borrar la PARTIDA ACTUAL?</string>
+
+    <string name="dialogo_confirmar_cargar_partida_titulo">Confirmar Borrado</string>
+    <string name="dialogo_confirmar_cargar_partida_mensaje">¿Estás seguro de que quieres cargar la partida %1$d?</string>
+
+    <string name="dialogo_bienvenida_titulo">1 Vs 1</string>
+    <string name="dialogo_bienvenida_mensaje">Bienvenido al trivial. Tu misión es completar todos los minijuegos para ganar la partida.
+    \n\nEn el tablero hay 4 minijuegos, y una vez completes todos, llegarás a la pregunta final.
+    Se el primero en acertarla y ganarás la partida.
+    \n\n¡Mucha suerte!\n\nAcepta para continuar.</string>
+
 </resources>

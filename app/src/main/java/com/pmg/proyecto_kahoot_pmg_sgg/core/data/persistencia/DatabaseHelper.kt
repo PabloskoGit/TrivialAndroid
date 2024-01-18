@@ -17,7 +17,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     // Son como los valores estáticos en Java
     companion object {
         private const val DATABASE_NAME = "JuegosDatabase"
-        private const val DATABASE_VERSION = 6
+        private const val DATABASE_VERSION = 7
         private const val TABLE_PARTIDAS = "partidas"
         private const val KEY_ID = "id"
         private const val KEY_JUGADOR1_ID = "jugador1_id"
@@ -304,6 +304,22 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         db.close()
         return ultimoIdPartida
+    }
+
+    fun borrarPartidaPorId(partidaId: Long): Boolean {
+        val db = writableDatabase
+
+        try {
+            // Utiliza el método delete para borrar la partida por su ID
+            db.delete(TABLE_PARTIDAS, "$KEY_ID=?", arrayOf(partidaId.toString()))
+            db.close()
+            return true
+        } catch (e: SQLiteException) {
+            // Manejar la excepción según tus necesidades
+            Log.e("DatabaseHelper", "Error al borrar la partida por ID: ${e.message}")
+            db.close()
+            return false
+        }
     }
 
 }

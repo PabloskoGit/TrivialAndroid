@@ -65,12 +65,12 @@
 
 
             <Button
-                android:id="@+id/btn_GuardarPartidaExistente"
+                android:id="@+id/btn_BorrarPartida"
                 android:layout_width="92dp"
                 android:layout_height="49dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/background_botones_juego_design"
-                android:text="Sobreescribir"
+                android:text="Borrar Partida"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="@+id/txt_PuntosUsuario"
                 app:layout_constraintStart_toStartOf="@+id/txt_PuntosUsuario"
@@ -84,9 +84,9 @@
                 android:background="@drawable/background_botones_juego_design"
                 android:text="Cargar Partida"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_GuardarPartidaExistente"
-                app:layout_constraintStart_toEndOf="@+id/btn_GuardarPartidaExistente"
-                app:layout_constraintTop_toTopOf="@+id/btn_GuardarPartidaExistente" />
+                app:layout_constraintBottom_toBottomOf="@+id/btn_BorrarPartida"
+                app:layout_constraintStart_toEndOf="@+id/btn_BorrarPartida"
+                app:layout_constraintTop_toTopOf="@+id/btn_BorrarPartida" />
 
             <Button
                 android:id="@+id/btn_GuardarPartida"
@@ -96,9 +96,9 @@
                 android:background="@drawable/background_botones_juego_design"
                 android:text="Guardar Partida"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_GuardarPartidaExistente"
-                app:layout_constraintEnd_toStartOf="@+id/btn_GuardarPartidaExistente"
-                app:layout_constraintTop_toTopOf="@+id/btn_GuardarPartidaExistente" />
+                app:layout_constraintBottom_toBottomOf="@+id/btn_BorrarPartida"
+                app:layout_constraintEnd_toStartOf="@+id/btn_BorrarPartida"
+                app:layout_constraintTop_toTopOf="@+id/btn_BorrarPartida" />
 
             <Button
                 android:id="@+id/btn_LanzarDado"

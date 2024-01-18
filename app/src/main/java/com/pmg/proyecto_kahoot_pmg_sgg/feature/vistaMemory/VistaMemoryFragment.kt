@@ -1,5 +1,6 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaMemory
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.*
@@ -17,7 +18,6 @@ import com.pmg.proyecto_kahoot_pmg_sgg.R
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
 import kotlin.properties.Delegates
-
 class VistaMemoryFragment : Fragment() {
 
     private val args: VistaMemoryFragmentArgs by navArgs()
@@ -33,6 +33,7 @@ class VistaMemoryFragment : Fragment() {
     private lateinit var tx_Tiempo: TextView
     private var jugadorActivo by Delegates.notNull<Int>()
 
+    private var contadorTags = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,7 +113,16 @@ class VistaMemoryFragment : Fragment() {
                 val boton = Button(requireContext())
 
                 // Establece el texto del botón según el contenido del tablero
-                boton.text = tablero[i][j]
+                boton.tag = tablero[i][j]
+
+                contadorTags ++
+
+                if (contadorTags <= 8){
+                    boton.text = tablero[i][j] + "text"
+                } else {
+                    boton.text = tablero[i][j] + "img"
+                }
+
 
                 // Establece el fondo de los botones
                 boton.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
@@ -143,6 +153,7 @@ class VistaMemoryFragment : Fragment() {
         }
     }
 
+    // En tu Fragmento, en la función onBotonClicked
     private fun onBotonClicked(boton: Button) {
         // Verifica si ya hay un primer botón clicado
         if (primerBoton == null) {
@@ -151,52 +162,56 @@ class VistaMemoryFragment : Fragment() {
             // Desactiva el primer botón clicado
             primerBoton?.isEnabled = false
             // Muestra la imagen asociada al primer botón
-            primerBoton?.setBackgroundResource(getBackgroundResourceFromTag(primerBoton?.tag))
+            primerBoton?.setBackgroundResource(getBackgroundResourceFromTag(primerBoton?.text))
         } else {
-            // Es el segundo clic, compara los tags
-            val primerTag = (primerBoton?.tag as? Int)
-            val tag = boton.tag as? Int
+            // Es el segundo clic, compara los tags solo si ambos botones pertenecen a la misma mitad
+            if (esMismaMitad(primerBoton, boton)) {
+                val primerTag = (primerBoton?.tag as? String)
+                val tag = boton.tag as? String
 
-            // Agrega logs para imprimir los valores de los tags
-            println("primerBoton?.tag: $primerTag")
-            println("boton.tag: $tag")
-            // Es el segundo clic, compara los tags
-            if (primerBoton?.tag == boton.tag) {
-                // Los tags son iguales, establece el fondo según el tag
-                boton.setBackgroundResource(getBackgroundResourceFromTag(boton.tag))
-                // Desactiva ambos botones si los tags son iguales
-                primerBoton?.isEnabled = false
-                boton.isEnabled = false
+                // Es el segundo clic, compara los tags
+                if (primerBoton?.tag == boton.tag) {
+                    // Los tags son iguales, establece el fondo según el tag
+                    boton.setBackgroundResource(getBackgroundResourceFromTag(boton.text))
+                    // Desactiva ambos botones si los tags son iguales
+                    primerBoton?.isEnabled = false
+                    boton.isEnabled = false
 
-                // Incrementar puntos
-                puntos++
+                    // Incrementar puntos
+                    puntos++
 
-                // Verificar si se alcanzaron los 8 puntos
-                if (puntos == 8) {
-                    alertaVictoria()
+                    // Verificar si se alcanzaron los 8 puntos
+                    if (puntos == 8) {
+                        alertaVictoria()
+                    }
+                } else {
+                    boton.setBackgroundResource(getBackgroundResourceFromTag(boton.text))
+                    boton.isEnabled = false
+                    Thread.sleep(500)
+                    // Los tags no son iguales, vuelve a activar el primer botón
+                    primerBoton?.isEnabled = true
+                    // Posterga la reversión del fondo después de 5 segundos
+
+                    // Revierte el fondo del primer botón
+                    primerBoton?.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
+                    // Revierte el fondo del segundo botón
+                    boton.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
+                    // Vuelve a habilitar ambos botones
+
+                    primerBoton?.isEnabled = true
+                    boton.isEnabled = true
                 }
-            } else {
-                boton.setBackgroundResource(getBackgroundResourceFromTag(boton.tag))
-                boton.isEnabled = false
-                Thread.sleep(500)
-                // Los tags no son iguales, vuelve a activar el primer botón
-                primerBoton?.isEnabled = true
-                // Posterga la reversión del fondo después de 5 segundos
 
-                // Revierte el fondo del primer botón
-                primerBoton?.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
-                // Revierte el fondo del segundo botón
-                boton.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
-                // Vuelve a habilitar ambos botones
-
-                primerBoton?.isEnabled = true
-                boton.isEnabled = true
-
+                // Restablece el primer botón a null para permitir futuros clics
+                primerBoton = null
             }
-
-            // Restablece el primer botón a null para permitir futuros clics
-            primerBoton = null
         }
+    }
+
+    // Función para determinar si dos botones pertenecen a la misma mitad del tablero
+    private fun esMismaMitad(boton1: Button?, boton2: Button?): Boolean {
+        return (boton1 != null && boton2 != null &&
+                (boton1.top <= (boton1.height * 2) || boton2.top <= (boton2.height * 2)))
     }
 
 
@@ -237,24 +252,24 @@ class VistaMemoryFragment : Fragment() {
 
 
     // Función para obtener el recurso de fondo según el tag
-    private fun getBackgroundResourceFromTag(tag: Any?): Int {
-        return when (tag) {
-            "1" -> R.drawable.background_boton_tablero_usado
-            "2" -> R.drawable.background_boton_tablero_usado
-            "3" -> R.drawable.background_boton_tablero_usado
-            "4" -> R.drawable.background_boton_tablero_usado
-            "5" -> R.drawable.background_boton_tablero_usado
-            "6" -> R.drawable.background_boton_tablero_usado
-            "7" -> R.drawable.background_boton_tablero_usado
-            "8" -> R.drawable.background_boton_tablero_usado
-            "9" -> R.drawable.background_boton_tablero_usado
-            "10" -> R.drawable.background_boton_tablero_usado
-            "11" -> R.drawable.background_boton_tablero_usado
-            "12" -> R.drawable.background_boton_tablero_usado
-            "13" -> R.drawable.background_boton_tablero_usado
-            "14" -> R.drawable.background_boton_tablero_usado
-            "15" -> R.drawable.background_boton_tablero_usado
-            "16" -> R.drawable.background_boton_tablero_usado
+    private fun getBackgroundResourceFromTag(text: Any?): Int {
+        return when (text) {
+            "1text" -> R.drawable.background_boton_tablero_usado
+            "2text" -> R.drawable.background_boton_tablero_usado
+            "3text" -> R.drawable.background_boton_tablero_usado
+            "4text" -> R.drawable.background_boton_tablero_usado
+            "5text" -> R.drawable.background_boton_tablero_usado
+            "6text" -> R.drawable.background_boton_tablero_usado
+            "7text" -> R.drawable.background_boton_tablero_usado
+            "8text" -> R.drawable.background_boton_tablero_usado
+            "1img" -> R.drawable.background_boton_tablero_usado
+            "2img" -> R.drawable.background_boton_tablero_usado
+            "3img" -> R.drawable.background_boton_tablero_usado
+            "4img" -> R.drawable.background_boton_tablero_usado
+            "5img" -> R.drawable.background_boton_tablero_usado
+            "6img" -> R.drawable.background_boton_tablero_usado
+            "7img" -> R.drawable.background_boton_tablero_usado
+            "8img" -> R.drawable.background_boton_tablero_usado
             else -> R.drawable.background_boton_tablero_nuevo
         }
     }
@@ -262,14 +277,9 @@ class VistaMemoryFragment : Fragment() {
     private fun alertaVictoria() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle("¡Victoria!")
-        builder.setMessage(
-            "¡Has ganado este minijuego! \n\nSe te añadira a tu contador de minijuegos y continuará tu turno." +
-                    " \n\nSi ya ganaste el minijuego anteriormente, se guardará tu victoria." +
-                    "\n\nAcepta para continuar."
-        )
-        builder.setPositiveButton("Aceptar") { _, _ ->
-
+        builder.setTitle(getString(R.string.alerta_victoria_titulo))
+        builder.setMessage(getString(R.string.alerta_victoria_mensaje))
+        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
             ganarJuego()
         }
         builder.show()
@@ -278,10 +288,9 @@ class VistaMemoryFragment : Fragment() {
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle("Derrota")
-        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
-        builder.setPositiveButton("Aceptar") { _, _ ->
-
+        builder.setTitle(getString(R.string.alerta_derrota_titulo))
+        builder.setMessage(getString(R.string.alerta_derrota_mensaje))
+        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
             perderJuego()
         }
         builder.show()

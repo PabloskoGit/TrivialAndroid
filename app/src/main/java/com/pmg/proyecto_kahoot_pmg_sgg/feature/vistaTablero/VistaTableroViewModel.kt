@@ -353,4 +353,12 @@ class VistaTableroViewModel : ViewModel() {
 
     }
 
+    fun borrarPartidaPorId(partidaId: Long) {
+        var borradoExitoso = false
+        borradoExitoso = databaseHelper.borrarPartidaPorId(partidaId)
+
+
+
+    }
+
 }
