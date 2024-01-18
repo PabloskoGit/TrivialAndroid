@@ -176,13 +176,9 @@ class VistaPregFinalFragment : Fragment() {
     private fun alertaVictoria() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle("¡Victoria!")
-        builder.setMessage(
-            "¡Has ganado la partida! \n\nHas sido el primero en completar todos los minijuegos. ¡Enhorabuena!" +
-                    "\n\nAcepta para continuar."
-        )
-        builder.setPositiveButton("Aceptar") { _, _ ->
-
+        builder.setTitle(getString(R.string.alerta_victoria_titulo))
+        builder.setMessage(getString(R.string.alerta_victoria_mensaje))
+        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
             ganarJuego()
         }
         builder.show()
@@ -191,10 +187,9 @@ class VistaPregFinalFragment : Fragment() {
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle("Derrota")
-        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
-        builder.setPositiveButton("Aceptar") { _, _ ->
-
+        builder.setTitle(getString(R.string.alerta_derrota_titulo))
+        builder.setMessage(getString(R.string.alerta_derrota_mensaje))
+        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
             perderJuego()
         }
         builder.show()
