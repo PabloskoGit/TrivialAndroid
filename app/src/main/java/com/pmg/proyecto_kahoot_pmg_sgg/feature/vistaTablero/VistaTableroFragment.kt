@@ -41,6 +41,9 @@ class VistaTableroFragment : Fragment() {
     private lateinit var btnJuego3: Button
     private lateinit var btnJuego4: Button
 
+    private lateinit var botonesJuegoInterfaz : List<Button>
+
+
     private lateinit var btnGuardarPartida: Button
     private lateinit var btnCargarPartida: Button
     private lateinit var btnGuardarPartidaExistente: Button
@@ -111,6 +114,8 @@ class VistaTableroFragment : Fragment() {
         btnJuego2 = viewTablero.findViewById(R.id.btnJuego2)
         btnJuego3 = viewTablero.findViewById(R.id.btnJuego3)
         btnJuego4 = viewTablero.findViewById(R.id.btnJuego4)
+
+        botonesJuegoInterfaz = listOf(btnJuego1, btnJuego2, btnJuego3, btnJuego4)
 
         btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
         btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
@@ -190,21 +195,16 @@ class VistaTableroFragment : Fragment() {
             txtPuntosJugador.text = "Minijuegos Completados"
 
             val juegosCompletados = viewModel.getJuegosCompletados(infoTablero.jugador)
-            val botones = listOf(btnJuego1, btnJuego2, btnJuego3, btnJuego4)
 
-            for (i in botones.indices) {
-                when {
-                    i < juegosCompletados.size && juegosCompletados[i] == (i + 1).toString() -> {
-                        botones[i].setBackgroundResource(R.drawable.background_boton_acierto)
-                    }
-                    else -> {
-                        botones[i].setBackgroundResource(R.drawable.background_botones_juego_design)
-                    }
+            for (i in botonesJuegoInterfaz.indices) {
+                val valorEsperado = (i + 1).toString()
+
+                if (valorEsperado in juegosCompletados) {
+                    botonesJuegoInterfaz[i].setBackgroundResource(R.drawable.background_boton_acierto)
+                } else {
+                    botonesJuegoInterfaz[i].setBackgroundResource(R.drawable.background_botones_juego_design)
                 }
             }
-
-
-
 
             if (infoTablero.cambioJugador) {
                 viewModel.cambiarJugador()
@@ -213,7 +213,6 @@ class VistaTableroFragment : Fragment() {
             val victoria = viewModel.obtenerJugadorVictoria()
 
             if (victoria) {
-
                 alertaVictoria()
             }
 
@@ -231,6 +230,8 @@ class VistaTableroFragment : Fragment() {
                             jugar = false
                         }
                     })
+
+
             }
         })
 
@@ -253,7 +254,7 @@ class VistaTableroFragment : Fragment() {
                     juego5 = info.resultadoPruebaFinal
                 )
 
-                txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+                //txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
             }
 
@@ -538,7 +539,7 @@ class VistaTableroFragment : Fragment() {
 
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (1) {
+        when (casilla) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón
