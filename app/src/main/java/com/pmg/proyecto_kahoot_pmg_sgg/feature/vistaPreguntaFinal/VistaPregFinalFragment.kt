@@ -119,7 +119,7 @@ class VistaPregFinalFragment : Fragment() {
         // Observa los cambios en el LiveData de shouldNavigateBack del viewModel. Si el valor es true, navega hacia atrás
         viewModel.juegoGanado.observe(viewLifecycleOwner) { juegoGanado ->
             if (juegoGanado) {
-                alertaVictoria()
+                ganarJuego()
             }
         }
 
@@ -173,23 +173,13 @@ class VistaPregFinalFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
-    private fun alertaVictoria() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setCancelable(false)
-        builder.setTitle(getString(R.string.alerta_victoria_titulo))
-        builder.setMessage(getString(R.string.alerta_victoria_mensaje))
-        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
-            ganarJuego()
-        }
-        builder.show()
-    }
-
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle(getString(R.string.alerta_derrota_titulo))
-        builder.setMessage(getString(R.string.alerta_derrota_mensaje))
-        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
+        builder.setTitle("Derrota")
+        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
+        builder.setPositiveButton("Aceptar") { _, _ ->
+
             perderJuego()
         }
         builder.show()
