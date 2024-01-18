@@ -41,7 +41,7 @@ class VistaAhorcadoViewModel : ViewModel() {
             if (!result.isNullOrEmpty()) {
                 repasoModel.value = result[0]
 
-                indiceOracion = (0..repasoModel.value?.palabras?.size!!).random()
+                indiceOracion = (0..<11).random()
                 var huecosPalabra = repasoModel.value?.palabras?.get(indiceOracion)?.length!!
                 palabraMostrar.value = "_".repeat(huecosPalabra)
             }
