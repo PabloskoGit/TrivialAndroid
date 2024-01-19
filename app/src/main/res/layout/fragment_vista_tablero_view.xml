@@ -65,40 +65,28 @@
 
 
             <Button
-                android:id="@+id/btn_BorrarPartida"
-                android:layout_width="92dp"
-                android:layout_height="49dp"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/background_botones_juego_design"
-                android:text="Borrar Partida"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/linLay_juegosCompletados"
-                app:layout_constraintStart_toStartOf="@+id/linLay_juegosCompletados"
-                app:layout_constraintTop_toBottomOf="@+id/linLay_juegosCompletados" />
-
-            <Button
                 android:id="@+id/btn_CargarPartida"
-                android:layout_width="92dp"
-                android:layout_height="49dp"
+                android:layout_width="90dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:background="@drawable/background_botones_juego_design"
                 android:text="Cargar Partida"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_BorrarPartida"
-                app:layout_constraintStart_toEndOf="@+id/btn_BorrarPartida"
-                app:layout_constraintTop_toTopOf="@+id/btn_BorrarPartida" />
+                app:layout_constraintBottom_toBottomOf="@+id/btn_GuardarPartida"
+                app:layout_constraintStart_toEndOf="@+id/btn_borrar_partida"
+                app:layout_constraintTop_toTopOf="@+id/btn_GuardarPartida" />
 
             <Button
                 android:id="@+id/btn_GuardarPartida"
                 android:layout_width="90dp"
                 android:layout_height="50dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="32dp"
                 android:background="@drawable/background_botones_juego_design"
                 android:text="Guardar Partida"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_BorrarPartida"
-                app:layout_constraintEnd_toStartOf="@+id/btn_BorrarPartida"
-                app:layout_constraintTop_toTopOf="@+id/btn_BorrarPartida" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linLay_juegosCompletados" />
 
             <Button
                 android:id="@+id/btn_LanzarDado"
@@ -137,7 +125,7 @@
 
             <LinearLayout
                 android:id="@+id/linLay_juegosCompletados"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
@@ -155,51 +143,72 @@
                     android:gravity="center"
                     android:textSize="20sp" />
 
+                <ImageView
+                    android:id="@+id/imagen_dado"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/dado_uno" />
+
                 <androidx.gridlayout.widget.GridLayout
                     android:id="@+id/gridBotonesJuegos"
-                    android:layout_width="match_parent"
+                    android:layout_width="110dp"
                     android:layout_height="match_parent">
 
                     <Button
                         android:id="@+id/btnJuego1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="3dp"
                         android:layout_marginBottom="3dp"
-                        android:background="@drawable/background_botones_juego_design"
+                        android:background="@drawable/respuestas_design"
                         android:text="1"
                         app:layout_column="0"
                         app:layout_row="0" />
 
                     <Button
                         android:id="@+id/btnJuego2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_botones_juego_design"
+                        android:background="@drawable/respuestas_design"
                         android:text="2"
                         app:layout_column="1"
                         app:layout_row="0" />
 
                     <Button
                         android:id="@+id/btnJuego3"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_botones_juego_design"
+                        android:background="@drawable/respuestas_design"
                         android:text="3"
                         app:layout_column="0"
                         app:layout_row="1" />
 
                     <Button
                         android:id="@+id/btnJuego4"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_botones_juego_design"
+                        android:background="@drawable/respuestas_design"
                         android:text="4"
                         app:layout_column="1"
                         app:layout_row="1" />
                 </androidx.gridlayout.widget.GridLayout>
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_borrar_partida"
+                android:layout_width="90dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/background_botones_juego_design"
+                android:text="Borrar Partida"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_GuardarPartida"
+                app:layout_constraintStart_toEndOf="@+id/btn_GuardarPartida"
+                app:layout_constraintTop_toTopOf="@+id/btn_GuardarPartida"
+                app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
