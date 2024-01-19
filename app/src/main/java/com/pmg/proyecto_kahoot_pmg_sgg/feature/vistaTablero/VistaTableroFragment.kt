@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.OnBackPressedCallback
@@ -23,6 +24,11 @@ import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils.NetworkUtils
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
 import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaSeleccionPartida.VistaSeleccionPartida
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Fragmento que representa la vista del tablero del juego.
@@ -42,11 +48,11 @@ class VistaTableroFragment : Fragment() {
     private lateinit var btnJuego4: Button
 
     private lateinit var botonesJuegoInterfaz : List<Button>
-
+    private lateinit var arrayDados : Array<Int>
 
     private lateinit var btnGuardarPartida: Button
     private lateinit var btnCargarPartida: Button
-    private lateinit var btnGuardarPartidaExistente: Button
+
 
     private lateinit var botones: Array<Array<Button>>
 
@@ -119,7 +125,7 @@ class VistaTableroFragment : Fragment() {
 
         btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
         btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
-        btnGuardarPartidaExistente = viewTablero.findViewById(R.id.btn_GuardarPartidaExistente)
+
         // Obtiene una referencia al GridLayout
         val gridLayout = viewTablero.findViewById<GridLayout>(R.id.gridTablero)
 
@@ -195,6 +201,7 @@ class VistaTableroFragment : Fragment() {
             txtPuntosJugador.text = "Minijuegos Completados"
 
             val juegosCompletados = viewModel.getJuegosCompletados(infoTablero.jugador)
+            val botones = listOf(btnJuego1, btnJuego2, btnJuego3, btnJuego4)
 
             for (i in botonesJuegoInterfaz.indices) {
                 val valorEsperado = (i + 1).toString()
@@ -211,8 +218,8 @@ class VistaTableroFragment : Fragment() {
             }
 
             val victoria = viewModel.obtenerJugadorVictoria()
-
             if (victoria) {
+
                 alertaVictoria()
             }
 
@@ -290,9 +297,6 @@ class VistaTableroFragment : Fragment() {
                         // Genera un número aleatorio del 1 al 6
                         val numeroAleatorio = (1..6).random()
 
-            // Muestra un AlertDialog con el número aleatorio
-            //mostrarNumeroAleatorioDialog(numeroAleatorio)
-
                         // Mueve el jugador en el tablero según el número aleatorio
                         moverJugadorEnTablero(numeroAleatorio)
                     } else {
@@ -308,13 +312,13 @@ class VistaTableroFragment : Fragment() {
                 // Genera un número aleatorio del 1 al 6
                 val numeroAleatorio = (1..6).random()
 
-                // Mueve el jugador en el tablero según el número aleatorio
+                // Muestra el dado en el tablero
+                mostrarDado(numeroAleatorio)
+                // Mueve el jugador en el tablero según el número aleatorio, pero espera 1 segundo antes de hacerlo
                 moverJugadorEnTablero(numeroAleatorio)
 
             }
-
         }
-
 
         btnGuardarPartida.setOnClickListener {
             if (partidaCargada > 0) {
@@ -324,7 +328,6 @@ class VistaTableroFragment : Fragment() {
             }
         }
 
-
         btnCargarPartida.setOnClickListener {
 
 
@@ -333,17 +336,6 @@ class VistaTableroFragment : Fragment() {
 
             // Lanzamos la actividad con el launcher que espera un resultado.
             startForResultCargarPartida.launch(intent)
-
-        }
-
-        btnGuardarPartidaExistente.setOnClickListener {
-
-
-            // Creamos un Intent para iniciar VistaSeleccionPartida.
-            val intent = Intent(requireContext(), VistaSeleccionPartida::class.java)
-
-            // Lanzamos la actividad con el launcher que espera un resultado.
-            startForResultGuardarPartidaExistente.launch(intent)
 
         }
 
@@ -427,18 +419,6 @@ class VistaTableroFragment : Fragment() {
         builder.show()
     }
 
-    /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
-        val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setTitle("Número Aleatorio")
-        alertDialogBuilder.setMessage("El número aleatorio es: $numero")
-        alertDialogBuilder.setPositiveButton("Aceptar") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
-    }*/
-
     private fun alertaBienvenida() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
@@ -509,7 +489,7 @@ class VistaTableroFragment : Fragment() {
         val ultimaFila = ultimaPosicionJugador.first
         val ultimaColumna = ultimaPosicionJugador.second
 
-        botones[ultimaFila][ultimaColumna].setBackgroundResource(R.drawable.background_boton_tablero_usado)
+        botones[ultimaFila][ultimaColumna].setBackgroundResource(R.drawable.background_jugador1)
 
         // Actualiza la última posición del jugador
         ultimaPosicionJugador = nuevaPosicion
@@ -523,7 +503,7 @@ class VistaTableroFragment : Fragment() {
             botones[nuevaPosicion.first][nuevaPosicion.second].setBackgroundResource(R.drawable.background_jugador1y2)
         } else {
             // Pinta el botón de negro en la nueva posición del jugador
-            botones[nuevaPosicion.first][nuevaPosicion.second].setBackgroundResource(R.drawable.background_boton_tablero_usado)
+            botones[nuevaPosicion.first][nuevaPosicion.second].setBackgroundResource(R.drawable.background_jugador2)
         }
 
     }
@@ -535,6 +515,22 @@ class VistaTableroFragment : Fragment() {
     private fun moverJugadorEnTablero(numeroCasillas: Int) {
         // Llama a la función del ViewModel para mover al jugador
         viewModel.moverJugador(numeroCasillas)
+    }
+
+    private fun mostrarDado(dado : Int){
+
+         arrayDados = arrayOf(
+            R.drawable.dado_uno,
+            R.drawable.dado_dos,
+            R.drawable.dado_tres,
+            R.drawable.dado_cuatro,
+            R.drawable.dado_cinco,
+            R.drawable.dado_seis
+        )
+
+        val imagenDado = view?.findViewById<ImageView>(R.id.imagen_dado)
+        imagenDado?.setImageResource(arrayDados[dado])
+
     }
 
     private fun inicioMiniJuego(casilla: Int) {
