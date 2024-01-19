@@ -52,6 +52,8 @@ class VistaTableroViewModel : ViewModel() {
             // Puedes agregar más jugadores según sea necesario
 
         )
+        // Quiero que el jugador 1 tenga los juegos 1, 2, 3 y 4 completados
+        //_jugadores.value?.get(0)?.agregarJuegosCompletados(listOf("1", "2", "3", "4"))
 
         // Inicializar DatabaseHelper con el contexto de la aplicación
         databaseHelper = MainActivity.databaseHelper!!
@@ -229,6 +231,20 @@ class VistaTableroViewModel : ViewModel() {
 
         // Verifica que el jugador no sea nulo y retorna su estado de victoria
         return jugadorActual?.obtenerVictoria() ?: false
+    }
+
+    fun getJuegosCompletados(jugadorId: Int): List<String> {
+        // Obtén el jugador correspondiente al jugadorId
+        val jugador = _jugadores.value?.find { it.id == jugadorId }
+
+        // Verifica que el jugador no sea nulo
+        jugador?.let {
+            // Retorna la lista de juegos completados del jugador
+            return jugador.obtenerJuegosCompletados()
+        }
+
+        // Retorna una lista vacía si el jugador es nulo
+        return listOf()
     }
 
     fun obtenerPosicionesTodosJugadores(): List<Pair<Int, Int>> {

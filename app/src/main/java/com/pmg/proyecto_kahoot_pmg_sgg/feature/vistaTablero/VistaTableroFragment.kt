@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.OnBackPressedCallback
@@ -17,8 +18,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
+import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.app.utils.AlertaPreferencias
 import com.pmg.proyecto_kahoot_pmg_sgg.core.common.ConstantesNavegacion
+import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils.NetworkUtils
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
 import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaSeleccionPartida.VistaSeleccionPartida
 
@@ -33,9 +36,19 @@ class VistaTableroFragment : Fragment() {
     private lateinit var btnLanzarDado: Button
     private lateinit var txtJugadorActivo: TextView
     private lateinit var txtPuntosJugador: TextView
+
+    private lateinit var btnJuego1: Button
+    private lateinit var btnJuego2: Button
+    private lateinit var btnJuego3: Button
+    private lateinit var btnJuego4: Button
+
+    private lateinit var botonesJuegoInterfaz : List<Button>
+    private lateinit var arrayDados : Array<Int>
+
     private lateinit var btnGuardarPartida: Button
     private lateinit var btnCargarPartida: Button
     private lateinit var btnBorrarPartida: Button
+
 
     private lateinit var botones: Array<Array<Button>>
 
@@ -47,6 +60,7 @@ class VistaTableroFragment : Fragment() {
     private var partidaCargada = 0
     private var partidaBorrar = 0
 
+    private var dialog: AlertDialog? = null
 
     private val startForResultCargarPartida =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -116,6 +130,14 @@ class VistaTableroFragment : Fragment() {
         btnLanzarDado = viewTablero.findViewById(R.id.btn_LanzarDado)
         txtJugadorActivo = viewTablero.findViewById(R.id.txt_UsuarioActivo)
         txtPuntosJugador = viewTablero.findViewById(R.id.txt_PuntosUsuario)
+
+        btnJuego1 = viewTablero.findViewById(R.id.btnJuego1)
+        btnJuego2 = viewTablero.findViewById(R.id.btnJuego2)
+        btnJuego3 = viewTablero.findViewById(R.id.btnJuego3)
+        btnJuego4 = viewTablero.findViewById(R.id.btnJuego4)
+
+        botonesJuegoInterfaz = listOf(btnJuego1, btnJuego2, btnJuego3, btnJuego4)
+
         btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
         btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
         btnBorrarPartida = viewTablero.findViewById(R.id.btn_BorrarPartida)
@@ -173,8 +195,20 @@ class VistaTableroFragment : Fragment() {
                 juego5 = infoTablero.resultadoPruebaFinal
             )
 
-            txtPuntosJugador.text =
-                "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+            //txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+            txtPuntosJugador.text = "Minijuegos Completados"
+
+            val juegosCompletados = viewModel.getJuegosCompletados(infoTablero.jugador)
+
+            for (i in botonesJuegoInterfaz.indices) {
+                val valorEsperado = (i + 1).toString()
+
+                if (valorEsperado in juegosCompletados) {
+                    botonesJuegoInterfaz[i].setBackgroundResource(R.drawable.background_boton_acierto)
+                } else {
+                    botonesJuegoInterfaz[i].setBackgroundResource(R.drawable.background_botones_juego_design)
+                }
+            }
 
             if (infoTablero.cambioJugador) {
                 viewModel.cambiarJugador()
@@ -184,19 +218,7 @@ class VistaTableroFragment : Fragment() {
 
             if (victoria) {
 
-                // Crea un AlertDialog
-                val alertDialogBuilder = AlertDialog.Builder(requireContext())
-
-                // Configura el mensaje del diálogo
-                alertDialogBuilder.setMessage("¡Jugador $jugador ha ganado!")
-
-                // Configura el botón "OK" del diálogo
-                alertDialogBuilder.setPositiveButton("OK") { _, _ ->
-                    viewModel.restablecerPartida()
-                }
-
-                // Muestra el diálogo
-                alertDialogBuilder.create().show()
+                alertaVictoria()
             }
 
         })
@@ -213,6 +235,8 @@ class VistaTableroFragment : Fragment() {
                             jugar = false
                         }
                     })
+
+
             }
         })
 
@@ -235,8 +259,7 @@ class VistaTableroFragment : Fragment() {
                     juego5 = info.resultadoPruebaFinal
                 )
 
-                txtPuntosJugador.text =
-                    "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
+                //txtPuntosJugador.text = "juegos Completados=${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
             }
 
@@ -244,32 +267,57 @@ class VistaTableroFragment : Fragment() {
 
         viewModel.jugadorActual.observe(viewLifecycleOwner, Observer
         { nuevoJugador ->
-            jugador = nuevoJugador
-            txtJugadorActivo.text = "Jugador: $jugador"
-            txtPuntosJugador.text =
-                "Minijuegos Completados: \n${viewModel.actualizarTextoPuntosJugador(jugador)}"
+                jugador = nuevoJugador
+                txtJugadorActivo.text = "Jugador: $jugador"
+                txtPuntosJugador.text =
+                    "Minijuegos Completados: \n${viewModel.actualizarTextoPuntosJugador(jugador)}"
 
-            viewModel.getPosicionJugadorLiveData(jugador)
-                .observe(viewLifecycleOwner, Observer { nuevaPosicion ->
-                    actualizarPosicionJugadorUI(nuevaPosicion)
-
-                })
+            viewModel.getPosicionJugadorLiveData(jugador).observe(viewLifecycleOwner, Observer { nuevaPosicion ->
+                actualizarPosicionJugadorUI(nuevaPosicion)
+            })
 
         })
 
 
         // Agrega el OnClickListener al botón para lanzar el dado
         btnLanzarDado.setOnClickListener {
+            if (!NetworkUtils.isConnected(requireContext())) {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Sin conexión a Internet")
+                builder.setMessage("Por favor, comprueba tu conexión a Internet y vuelve a intentarlo, si das a aceptar sin internet se cerrará la aplicación.")
+                builder.setCancelable(false)
 
-            jugar = true
-            // Genera un número aleatorio del 1 al 6
-            val numeroAleatorio = (1..6).random()
+                builder.setPositiveButton("Aceptar") { _, _ ->
+                    if (NetworkUtils.isConnected(requireContext())) {
+                        dialog?.dismiss()
 
-            // Mueve el jugador en el tablero según el número aleatorio
-            moverJugadorEnTablero(numeroAleatorio)
+                        jugar = true
+                        // Genera un número aleatorio del 1 al 6
+                        val numeroAleatorio = (1..6).random()
+
+                        // Mueve el jugador en el tablero según el número aleatorio
+                        moverJugadorEnTablero(numeroAleatorio)
+                    } else {
+                        (context as? MainActivity)?.cerrarApp()
+                    }
+                }
+
+                dialog = builder.create()
+                dialog?.show()
+            } else {
+
+                jugar = true
+                var numeroAleatorio = (1..6).random()
+
+                // Muestra el dado en el tablero
+                mostrarDado(numeroAleatorio)
+                // Mueve el jugador en el tablero según el número aleatorio, pero espera 1 segundo antes de hacerlo
+                //Thread.sleep(1000)
+                moverJugadorEnTablero(numeroAleatorio)
+
+            }
 
         }
-
 
         btnGuardarPartida.setOnClickListener {
             if (partidaCargada > 0) {
@@ -278,7 +326,6 @@ class VistaTableroFragment : Fragment() {
                 mostrarDialogNuevaPartida()
             }
         }
-
 
         btnCargarPartida.setOnClickListener {
 
@@ -328,6 +375,7 @@ class VistaTableroFragment : Fragment() {
 
             val partidaCargadaLong = viewModel.obtenerUltimoIdPartidaDesdeBDAsync()
             partidaCargada = partidaCargadaLong.toString().toInt()
+
         }
 
         builder.setNeutralButton(getString(R.string.boton_cancelar)) { dialog, _ ->
@@ -380,6 +428,28 @@ class VistaTableroFragment : Fragment() {
         builder.create().show()
     }
 
+    private fun alertaVictoria() {
+        val builder = AlertDialog.Builder(requireContext())
+
+        val inflate = layoutInflater
+        val dialogView = inflate.inflate(R.layout.vista_victoria_layout,null)
+
+        // Botón para ir al menú principal
+        dialogView.findViewById<Button>(R.id.btnMenuPrincipal).setOnClickListener{
+            // findNavController().navigate(R.id.vistaInicioMenu)
+        }
+        // Botón para salir y destruir la aplicación
+        dialogView.findViewById<Button>(R.id.btnSalir).setOnClickListener{
+            (context as? MainActivity)?.cerrarApp()
+        }
+        dialogView.findViewById<TextView>(R.id.tvJugador).text = "¡Ganador el Jugador $jugador!"
+
+        builder.setView(dialogView)
+        builder.setCancelable(false)
+
+        builder.show()
+    }
+
     private fun confirmarYBorrarPartidaActual() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.dialogo_confirmar_borrado_titulo))
@@ -421,19 +491,6 @@ class VistaTableroFragment : Fragment() {
 
         builder.create().show()
     }
-
-
-    /*private fun mostrarNumeroAleatorioDialog(numero: Int) {
-        val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setTitle("Número Aleatorio")
-        alertDialogBuilder.setMessage("El número aleatorio es: $numero")
-        alertDialogBuilder.setPositiveButton("Aceptar") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
-    }*/
 
     private fun alertaBienvenida() {
         val builder = AlertDialog.Builder(requireContext())
@@ -501,7 +558,7 @@ class VistaTableroFragment : Fragment() {
         val ultimaFila = ultimaPosicionJugador.first
         val ultimaColumna = ultimaPosicionJugador.second
 
-        botones[ultimaFila][ultimaColumna].setBackgroundResource(R.drawable.background_boton_tablero_usado)
+        botones[ultimaFila][ultimaColumna].setBackgroundResource(R.drawable.background_jugador1)
 
         // Actualiza la última posición del jugador
         ultimaPosicionJugador = nuevaPosicion
@@ -515,7 +572,7 @@ class VistaTableroFragment : Fragment() {
             botones[nuevaPosicion.first][nuevaPosicion.second].setBackgroundResource(R.drawable.background_jugador1y2)
         } else {
             // Pinta el botón de negro en la nueva posición del jugador
-            botones[nuevaPosicion.first][nuevaPosicion.second].setBackgroundResource(R.drawable.background_boton_tablero_usado)
+            botones[nuevaPosicion.first][nuevaPosicion.second].setBackgroundResource(R.drawable.background_jugador2)
         }
 
     }
@@ -527,6 +584,22 @@ class VistaTableroFragment : Fragment() {
     private fun moverJugadorEnTablero(numeroCasillas: Int) {
         // Llama a la función del ViewModel para mover al jugador
         viewModel.moverJugador(numeroCasillas)
+    }
+
+    private fun mostrarDado(dado : Int){
+
+         arrayDados = arrayOf(
+            R.drawable.dado_uno,
+            R.drawable.dado_dos,
+            R.drawable.dado_tres,
+            R.drawable.dado_cuatro,
+            R.drawable.dado_cinco,
+            R.drawable.dado_seis
+        )
+
+        val imagenDado = view?.findViewById<ImageView>(R.id.imagen_dado)
+        imagenDado?.setImageResource(arrayDados[dado])
+
     }
 
     private fun inicioMiniJuego(casilla: Int) {
