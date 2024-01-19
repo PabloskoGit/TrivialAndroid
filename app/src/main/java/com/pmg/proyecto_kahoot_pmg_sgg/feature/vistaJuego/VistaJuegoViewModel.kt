@@ -26,7 +26,7 @@ class VistaJuegoViewModel : ViewModel() {
     fun onCreate() {
         viewModelScope.launch {
             val result = getPreguntaUseCase()
-            indicePregunta = (result.indices).random()
+            indicePregunta = (result.indices - 5).random()
 
             if (!result.isNullOrEmpty()) {
                 preguntaDTOModel.value = result[indicePregunta]
