@@ -52,6 +52,7 @@ class VistaTableroFragment : Fragment() {
 
     private lateinit var btnGuardarPartida: Button
     private lateinit var btnCargarPartida: Button
+    private lateinit var btnBorrarPartida: Button
 
 
     private lateinit var botones: Array<Array<Button>>
@@ -125,6 +126,7 @@ class VistaTableroFragment : Fragment() {
 
         btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
         btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
+        btnBorrarPartida = viewTablero.findViewById(R.id.btn_borrar_partida)
 
         // Obtiene una referencia al GridLayout
         val gridLayout = viewTablero.findViewById<GridLayout>(R.id.gridTablero)
@@ -201,7 +203,6 @@ class VistaTableroFragment : Fragment() {
             txtPuntosJugador.text = "Minijuegos Completados"
 
             val juegosCompletados = viewModel.getJuegosCompletados(infoTablero.jugador)
-            val botones = listOf(btnJuego1, btnJuego2, btnJuego3, btnJuego4)
 
             for (i in botonesJuegoInterfaz.indices) {
                 val valorEsperado = (i + 1).toString()
@@ -309,12 +310,26 @@ class VistaTableroFragment : Fragment() {
             } else {
 
                 jugar = true
-                // Genera un número aleatorio del 1 al 6
-                val numeroAleatorio = (1..6).random()
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    for (i in 0..10){
+                        delay(100) // Espera 100ms entre frame para simular el lanzamiento del dado
+
+                        var numeroAleatorio = (1..6).random()
+
+                        withContext(Dispatchers.Main){
+                            mostrarDado(numeroAleatorio)
+                        }
+                    }
+
+                }
+
+                var numeroAleatorio = (1..6).random()
 
                 // Muestra el dado en el tablero
                 mostrarDado(numeroAleatorio)
                 // Mueve el jugador en el tablero según el número aleatorio, pero espera 1 segundo antes de hacerlo
+                //Thread.sleep(1000)
                 moverJugadorEnTablero(numeroAleatorio)
 
             }

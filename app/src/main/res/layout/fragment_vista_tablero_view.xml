@@ -137,7 +137,7 @@
 
                 <TextView
                     android:id="@+id/txt_PuntosUsuario"
-                    android:layout_width="136dp"
+                    android:layout_width="124dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/respuestas_design"
                     android:gravity="center"
