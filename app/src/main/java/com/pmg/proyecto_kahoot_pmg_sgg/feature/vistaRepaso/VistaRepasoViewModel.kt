@@ -24,6 +24,7 @@ class VistaRepasoViewModel : ViewModel() {
     fun onCreate() {
         viewModelScope.launch {
             val result = getRepasoUseCase()
+            indiceOracion = (result.indices - 5).random()
 
             if (!result.isNullOrEmpty()) {
                 repasoModel.value = result[indiceOracion]

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Proyecto_Kahoot_pmg_sgg</string>
+    <string name="app_name">QuickZ</string>
     <string name="boton_JuegoLocal">Juego 1 vs 1</string>
     <string name="boton_JuegoMultijugador">Juego Multijugador</string>
     <string name="boton_Ajustes">Ajustes</string>

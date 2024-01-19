@@ -141,6 +141,7 @@ class VistaTableroFragment : Fragment() {
         btnGuardarPartida = viewTablero.findViewById(R.id.btn_GuardarPartida)
         btnCargarPartida = viewTablero.findViewById(R.id.btn_CargarPartida)
         btnBorrarPartida = viewTablero.findViewById(R.id.btn_BorrarPartida)
+
         // Obtiene una referencia al GridLayout
         val gridLayout = viewTablero.findViewById<GridLayout>(R.id.gridTablero)
 
@@ -281,41 +282,15 @@ class VistaTableroFragment : Fragment() {
 
         // Agrega el OnClickListener al botón para lanzar el dado
         btnLanzarDado.setOnClickListener {
-            if (!NetworkUtils.isConnected(requireContext())) {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Sin conexión a Internet")
-                builder.setMessage("Por favor, comprueba tu conexión a Internet y vuelve a intentarlo, si das a aceptar sin internet se cerrará la aplicación.")
-                builder.setCancelable(false)
 
-                builder.setPositiveButton("Aceptar") { _, _ ->
-                    if (NetworkUtils.isConnected(requireContext())) {
-                        dialog?.dismiss()
+            jugar = true
+            var numeroAleatorio = (1..5).random()
 
-                        jugar = true
-                        // Genera un número aleatorio del 1 al 6
-                        val numeroAleatorio = (1..6).random()
-
-                        // Mueve el jugador en el tablero según el número aleatorio
-                        moverJugadorEnTablero(numeroAleatorio)
-                    } else {
-                        (context as? MainActivity)?.cerrarApp()
-                    }
-                }
-
-                dialog = builder.create()
-                dialog?.show()
-            } else {
-
-                jugar = true
-                var numeroAleatorio = (1..6).random()
-
-                // Muestra el dado en el tablero
-                mostrarDado(numeroAleatorio)
-                // Mueve el jugador en el tablero según el número aleatorio, pero espera 1 segundo antes de hacerlo
-                //Thread.sleep(1000)
-                moverJugadorEnTablero(numeroAleatorio)
-
-            }
+            // Muestra el dado en el tablero
+            mostrarDado(numeroAleatorio)
+            // Mueve el jugador en el tablero según el número aleatorio, pero espera 1 segundo antes de hacerlo
+            //Thread.sleep(1000)
+            moverJugadorEnTablero(numeroAleatorio)
 
         }
 
