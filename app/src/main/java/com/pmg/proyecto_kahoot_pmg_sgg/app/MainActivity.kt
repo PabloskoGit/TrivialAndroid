@@ -1,14 +1,11 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.app
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -20,11 +17,8 @@ import com.pmg.proyecto_kahoot_pmg_sgg.app.utils.AlertaPreferencias
 import com.pmg.proyecto_kahoot_pmg_sgg.app.utils.NetworkConnectivityObserver
 import com.pmg.proyecto_kahoot_pmg_sgg.core.network.ConnectivityObserver
 import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaInicioJuego.VistaMenuCompletoFragment
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
@@ -177,8 +171,8 @@ class MainActivity : AppCompatActivity() {
         builder.setTitle(R.string.opciones_dialog_titulo)
             .setItems(opciones) { _, which ->
                 when (which) {
-                    0 -> mostrarDialogOpcion1()
-                    1 -> mostrarDialogOpcion2()
+                    0 -> mostrarDialogReglas()
+                    1 -> mostrarDialogCreadores()
                     2 -> {
                         if (reproducirMusica) {
                             reproducirMusica = false
@@ -212,38 +206,28 @@ class MainActivity : AppCompatActivity() {
         window?.setGravity(Gravity.CENTER)
     }
 
-    private fun mostrarDialogOpcion1() {
+    private fun mostrarDialogReglas() {
         val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle(R.string.dialogo_opcion1_titulo)
-            .setMessage(R.string.dialogo_opcion1_mensaje)
+        builder.setTitle(R.string.titulo_reglas)
+            .setMessage(R.string.mensaje_reglas)
 
         builder.setPositiveButton(R.string.boton_aceptar) { _, _ ->
             // Acciones al hacer clic en Aceptar
-            Toast.makeText(this, R.string.boton_aceptar, Toast.LENGTH_SHORT).show()
         }
 
-        builder.setNegativeButton(R.string.boton_cancelar) { _, _ ->
-            // Acciones al hacer clic en Cancelar
-            Toast.makeText(this, R.string.boton_cancelar, Toast.LENGTH_SHORT).show()
-        }
 
         builder.show()
     }
 
-    private fun mostrarDialogOpcion2() {
+    private fun mostrarDialogCreadores() {
         val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle(R.string.dialogo_opcion2_titulo)
-            .setMessage(R.string.dialogo_opcion2_mensaje)
+        builder.setTitle(R.string.titulo_creadores)
+            .setMessage(R.string.mensaje_creadores)
 
         builder.setPositiveButton(R.string.boton_aceptar) { _, _ ->
             // Acciones al hacer clic en Aceptar
-            Toast.makeText(this, R.string.boton_aceptar, Toast.LENGTH_SHORT).show()
         }
 
-        builder.setNegativeButton(R.string.boton_cancelar) { _, _ ->
-            // Acciones al hacer clic en Cancelar
-            Toast.makeText(this, R.string.boton_cancelar, Toast.LENGTH_SHORT).show()
-        }
 
         builder.show()
     }

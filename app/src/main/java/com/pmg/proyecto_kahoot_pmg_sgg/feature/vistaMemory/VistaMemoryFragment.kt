@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.gridlayout.widget.GridLayout
@@ -122,10 +124,15 @@ class VistaMemoryFragment : Fragment() {
                 } else {
                     boton.text = tablero[i][j] + "img"
                 }
+                // Obtén el color transparente predefinido
+                val colorTransparente = ContextCompat.getColor(requireContext(), android.R.color.transparent)
+
+                // Establece el color del texto del botón como transparente
+                boton.setTextColor(colorTransparente)
 
 
                 // Establece el fondo de los botones
-                boton.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
+                //boton.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
 
                 // Configura los parámetros de diseño del botón
                 val params = GridLayout.LayoutParams()
@@ -139,6 +146,9 @@ class VistaMemoryFragment : Fragment() {
                 // Asigna el tag al botón y lo agrega a la lista de tags asignados
                 boton.tag = tablero[i][j]
                 assignedTags.add(tablero[i][j])
+
+                // Muestra la imagen asociada al primer botón
+                boton.setBackgroundResource(getBackgroundResourceFromTag(boton.text))
 
                 // Agrega un listener de clic al botón (opcional, según la lógica de tu aplicación)
                 boton.setOnClickListener {
@@ -162,7 +172,7 @@ class VistaMemoryFragment : Fragment() {
             // Desactiva el primer botón clicado
             primerBoton?.isEnabled = false
             // Muestra la imagen asociada al primer botón
-            primerBoton?.setBackgroundResource(getBackgroundResourceFromTag(primerBoton?.text))
+            //primerBoton?.setBackgroundResource(getBackgroundResourceFromTag(primerBoton?.text))
         } else {
             // Es el segundo clic, compara los tags solo si ambos botones pertenecen a la misma mitad
             if (esMismaMitad(primerBoton, boton)) {
@@ -177,6 +187,9 @@ class VistaMemoryFragment : Fragment() {
                     primerBoton?.isEnabled = false
                     boton.isEnabled = false
 
+                    primerBoton?.isVisible = false
+                    boton.isVisible = false
+
                     // Incrementar puntos
                     puntos++
 
@@ -187,15 +200,15 @@ class VistaMemoryFragment : Fragment() {
                 } else {
                     boton.setBackgroundResource(getBackgroundResourceFromTag(boton.text))
                     boton.isEnabled = false
-                    Thread.sleep(500)
+                    //Thread.sleep(500)
                     // Los tags no son iguales, vuelve a activar el primer botón
                     primerBoton?.isEnabled = true
                     // Posterga la reversión del fondo después de 5 segundos
 
                     // Revierte el fondo del primer botón
-                    primerBoton?.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
+                    //primerBoton?.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
                     // Revierte el fondo del segundo botón
-                    boton.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
+                    //boton.setBackgroundResource(R.drawable.background_boton_tablero_nuevo)
                     // Vuelve a habilitar ambos botones
 
                     primerBoton?.isEnabled = true
@@ -254,7 +267,7 @@ class VistaMemoryFragment : Fragment() {
     // Función para obtener el recurso de fondo según el tag
     private fun getBackgroundResourceFromTag(text: Any?): Int {
         return when (text) {
-            "1text" -> R.drawable.background_boton_tablero_usado
+            "1text" -> R.drawable.juego_colectivo
             "2text" -> R.drawable.background_boton_tablero_usado
             "3text" -> R.drawable.background_boton_tablero_usado
             "4text" -> R.drawable.background_boton_tablero_usado

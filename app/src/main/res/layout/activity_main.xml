@@ -11,36 +11,38 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/main_graph"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:navGraph="@navigation/main_graph" />
 
     <LinearLayout
-        android:layout_width="397dp"
+        android:layout_width="0dp"
         android:layout_height="35dp"
         android:orientation="horizontal"
+        android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="119dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginBottom="432dp"
-            android:gravity="center"
-            android:text="QUIX" />
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="326dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/banner_quickz"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageView
             android:id="@+id/btnimg_Ajustes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="11dp"
             app:srcCompat="@drawable/baseline_settings_24" />
     </LinearLayout>
