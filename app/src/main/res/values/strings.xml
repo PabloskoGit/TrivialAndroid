@@ -37,10 +37,50 @@
     <string name="musica_desactivada">Música desactivada</string>
     <string name="musica_activada">Música activada</string>
 
-    <string name="dialogo_opcion1_titulo">Diálogo de Opción 1</string>
-    <string name="dialogo_opcion1_mensaje">Mensaje de Opción 1</string>
-    <string name="dialogo_opcion2_titulo">Diálogo de Opción 2</string>
-    <string name="dialogo_opcion2_mensaje">Mensaje de Opción 2</string>
+    <string name="titulo_reglas">Reglas</string>
+    <string name="mensaje_reglas">
+    Normas del Juego:\n
+    \n
+    Bienvenido al emocionante mundo del Trivial Challenge! En este juego de estrategia y conocimientos, tu misión es recorrer el tablero, enfrentarte a diversos desafíos y completar los minijuegos para ganar a tu rival. Aquí tienes una visión general de cómo se desarrolla el juego:\n
+    \n
+    1. Recorrido del Tablero:\n
+       - Avanza por el tablero cayendo en casillas numeradas.\n
+       - Cada número representa un minijuego único que debes superar.\n
+    \n
+    2. Minijuegos Principales:\n
+       - Hay cuatro minijuegos principales, cada uno con su propio desafío único:\n
+         a. Repaso:\n
+            - Debes responder 5 preguntas de forma correcta para ganar.\n
+            - Preguntas generales y de baja dificultad.\n
+         b. Unir Conceptos:\n
+            - Une las casillas con palabras a las imágenes correspondientes.\n
+            - Completa la tarea antes de que se acabe el tiempo para ganar.\n
+         c. Test:\n
+            - Responde 5 preguntas tipo test.\n
+            - Indica la palabra que falta en la expresión mostrada.\n
+         d. Ahorcado:\n
+            - Adivina la palabra descubriendo letras sin cometer 6 fallos.\n
+    \n
+    3. Pregunta Final:\n
+       - Si completas los cuatro minijuegos principales, llegarás a la pregunta final.\n
+       - Debes responder correctamente para ganar la partida.\n
+       - ¡Cuidado! Es la pregunta más difícil del juego con 4 posibles respuestas.\n
+    \n
+    Recuerda, cada victoria te acerca más al trofeo y al honor. ¡Buena suerte en tu travesía por el Trivial Challenge!\n
+</string>
+
+    <string name="titulo_creadores">Creadores</string>
+    <string name="mensaje_creadores">    ¡Nos complace anunciar el lanzamiento de nuestra nueva aplicación de quiz creada por Sergio García y Pablo Mata! Ha sido un emocionante viaje de desarrollo y dedicación, y estamos emocionados de compartir esta experiencia contigo.\n
+    \n
+    La aplicación Quickz es más que una aplicación, es una creación que refleja nuestro compromiso y pasión por brindar entretenimiento de calidad. Hemos invertido tiempo, esfuerzo y creatividad para llevar a cabo un proyecto que esperamos que disfrutes tanto como nosotros al crearlo.\n
+    \n
+    En esta aplicación, te traemos un juego de quiz emocionante. Cada detalle ha sido cuidadosamente diseñado para proporcionar una experiencia envolvente y educativa.\n
+    \n
+    ¡Descarga el juego ahora y sumérgete en el mundo de Quickz! ¡Que la diversión y el conocimiento comiencen!\n
+    \n
+    Atentamente,\n
+    Sergio García y Pablo Mata
+</string>
 
     <string name="boton_aceptar">Aceptar</string>
     <string name="boton_cancelar">Cancelar</string>

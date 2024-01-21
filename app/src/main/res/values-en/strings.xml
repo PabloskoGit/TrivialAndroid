@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuickZ</string>
+    <string name="boton_JuegoLocal">1 vs 1 Game</string>
+    <string name="boton_JuegoMultijugador">Multiplayer Game</string>
+    <string name="boton_Ajustes">Settings</string>
+    <string name="boton_Salir">Exit</string>
+    <string name="boton_LanzarDado">Roll Dice</string>
+
+    <!-- GameView -->
+    <string name="btnResp">Answer</string>
+    <string name="btnResp1">Answer 1</string>
+    <string name="btnResp2">Answer 2</string>
+    <string name="btnResp3">Answer 3</string>
+
+    <string name="modoJuego">Guess 5 questions to win</string>
+    <string name="modoJuegoMemory">Discover all pairs to win</string>
+    <string name="modoJuegoFinal">Guess the final question to win</string>
+    <string name="ahorcado">Guess the word to win</string>
+    <string name="tvPreg">Question</string>
+
+    <string name="hintAhorcado">Enter a letter</string>
+    <string name="btnComprobar">Check</string>
+
+    <string name="reglas">Rules</string>
+    <string name="creadores">About the application</string>
+    <string name="musica">Turn On/Off Music</string>
+
+    <string-array name="opciones_array">
+        <item>Rules</item>
+        <item>Creators</item>
+        <item>Turn On/Off Music</item>
+    </string-array>
+    <string name="opciones_dialog_titulo">Options</string>
+
+    <string name="musica_desactivada">Music turned off</string>
+    <string name="musica_activada">Music turned on</string>
+
+    <string name="titulo_reglas">Rules</string>
+    <string name="mensaje_reglas">
+    Game Rules:\n
+    \n
+    Welcome to the exciting world of Trivial Challenge! In this game of strategy and knowledge, your mission is to traverse the board, face various challenges, and complete mini-games to defeat your opponent. Here s an overview of how the game unfolds:\n
+    \n
+    1. Board Movement:\n
+       - Advance on the board landing on numbered tiles.\n
+       - Each number represents a unique mini-game that you must overcome.\n
+    \n
+    2. Main Mini-Games:\n
+       - There are four main mini-games, each with its own unique challenge:\n
+         a. Review:\n
+            - Answer 5 questions correctly to win.\n
+            - General and low-difficulty questions.\n
+         b. Match Concepts:\n
+            - Connect tiles with words to corresponding images.\n
+            - Complete the task before time runs out to win.\n
+         c. Test:\n
+            - Answer 5 multiple-choice questions.\n
+            - Identify the missing word in the displayed expression.\n
+         d. Hangman:\n
+            - Guess the word by uncovering letters without making 6 mistakes.\n
+    \n
+    3. Final Question:\n
+       - If you complete the four main mini-games, you will reach the final question.\n
+       - You must answer correctly to win the game.\n
+       - Beware! It s the toughest question in the game with 4 possible answers.\n
+    \n
+    Remember, each victory brings you closer to the trophy and honor. Good luck on your journey through the Trivial Challenge!\n
+</string>
+
+    <string name="titulo_creadores">Creators</string>
+    <string name="mensaje_creadores">We are pleased to announce the launch of our new quiz application created by Sergio García and Pablo Mata! It has been an exciting journey of development and dedication, and we are thrilled to share this experience with you.\n
+\n
+The Quickz app is more than just an application; it is a creation that reflects our commitment and passion for providing quality entertainment. We have invested time, effort, and creativity to bring forth a project that we hope you enjoy as much as we did creating it.\n
+\n
+In this application, we bring you an exciting quiz game. Every detail has been carefully designed to provide an engaging and educational experience.\n
+\n
+Download the game now and immerse yourself in the world of Quickz! Let the fun and knowledge begin!\n
+\n
+Sincerely,\n
+Sergio García and Pablo Mata
+</string>
+
+    <string name="boton_aceptar">Accept</string>
+    <string name="boton_cancelar">Cancel</string>
+
+    <string name="salir_titulo">Exit</string>
+    <string name="salir_mensaje">Are you sure you want to exit the application?</string>
+
+    <string name="boton_si">Yes</string>
+    <string name="boton_no">No</string>
+
+    <string name="sin_conexion_titulo">No Internet Connection</string>
+    <string name="sin_conexion_mensaje">Please connect to the internet to continue playing our game. \n\nOtherwise, the app will close.</string>
+    <string name="perdiendo_conexion_titulo">Losing Internet Connection</string>
+    <string name="perdiendo_conexion_mensaje">Please connect to the internet to play.</string>
+    <string name="perdida_conexion_titulo">Lost Internet Connection</string>
+    <string name="perdida_conexion_mensaje">Please connect to the internet to play.</string>
+    <string name="boton_salir">Exit</string>
+
+    <string name="alerta_victoria_titulo">Victory!</string>
+    <string name="alerta_victoria_mensaje">You have won this mini-game! \n\nIt will be added to your mini-game counter, and your turn will continue." +
+    " \n\nIf you already won the mini-game before, your victory will be saved." +
+    "\n\nAccept to continue.</string>
+
+    <string name="alerta_derrota_titulo">Defeat</string>
+    <string name="alerta_derrota_mensaje">You have lost...\nTurn for the next player.\n\nAccept to continue.</string>
+
+    <string name="dialogo_guardar_partida_titulo">Save Game</string>
+    <string name="dialogo_guardar_partida_mensaje">Do you want to overwrite the existing game or create a new one?</string>
+    <string name="boton_sobrescribir">Overwrite</string>
+    <string name="boton_nueva">New</string>
+
+    <string name="dialogo_guardar_partida_nueva_mensaje">Do you want to create a new game?</string>
+
+    <string name="dialogo_confirmar_borrado_titulo">Confirm Deletion</string>
+    <string name="dialogo_confirmar_borrado_mensaje">Are you sure you want to delete game %1$d?</string>
+    <string name="dialogo_confirmar_borrado_actual_mensaje">Are you sure you want to delete the CURRENT GAME?</string>
+
+    <string name="dialogo_confirmar_cargar_partida_titulo">Confirm Loading</string>
+    <string name="dialogo_confirmar_cargar_partida_mensaje">Are you sure you want to load game %1$d?</string>
+
+    <string name="dialogo_bienvenida_titulo">1 Vs 1</string>
+    <string name="dialogo_bienvenida_mensaje">Welcome to the trivia game. Your mission is to complete all mini-games to win the match.
+\n\nOn the board, there are 4 mini-games, and once you complete all of them, you will reach the final question.
+Be the first to answer it correctly, and you will win the game.
+\n\nGood luck!\n\nAccept to continue.</string>
+
+</resources>
