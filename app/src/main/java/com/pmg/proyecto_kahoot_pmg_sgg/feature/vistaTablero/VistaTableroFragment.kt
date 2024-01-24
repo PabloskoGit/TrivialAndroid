@@ -371,8 +371,7 @@ class VistaTableroFragment : Fragment() {
 
             // Actualizar el valor de partidaCargada
             val partidaCargadaLong = viewModel.obtenerUltimoIdPartidaDesdeBDAsync()
-            Log.d("VistaTableroFragment", "partidaCargadaLong: $partidaCargadaLong")
-            partidaCargada = partidaCargadaLong.toString().toInt()
+             partidaCargada = partidaCargadaLong.toString().toInt()
         }
 
         builder.setNegativeButton(getString(R.string.boton_cancelar)) { dialog, _ ->
@@ -579,7 +578,7 @@ class VistaTableroFragment : Fragment() {
 
     private fun inicioMiniJuego(casilla: Int) {
 
-        when (casilla) {
+        when (2) {
 
             1 -> {
                 // Navega al fragmento de vistaRepasoView cuando se hace clic en el botón

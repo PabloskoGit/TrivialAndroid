@@ -1,22 +1,15 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaInicioJuego
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.view.menu.MenuBuilder
-import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.t8_ej01_persistenciadatossqlite.DatabaseHelper
 import com.pmg.proyecto_kahoot_pmg_sgg.R
 import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
@@ -117,38 +110,28 @@ class VistaMenuCompletoFragment : Fragment() {
         }
         builder.show()
     }
-    private fun mostrarDialogOpcion1() {
+    private fun mostrarDialogReglas() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(R.string.dialogo_opcion1_titulo)
-            .setMessage(R.string.dialogo_opcion1_mensaje)
+        builder.setTitle(R.string.titulo_reglas)
+            .setMessage(R.string.mensaje_reglas)
 
         builder.setPositiveButton(R.string.boton_aceptar) { _, _ ->
             // Acciones al hacer clic en Aceptar
-            Toast.makeText(requireContext(), R.string.boton_aceptar, Toast.LENGTH_SHORT).show()
         }
 
-        builder.setNegativeButton(R.string.boton_cancelar) { _, _ ->
-            // Acciones al hacer clic en Cancelar
-            Toast.makeText(requireContext(), R.string.boton_cancelar, Toast.LENGTH_SHORT).show()
-        }
 
         builder.show()
     }
 
-    private fun mostrarDialogOpcion2() {
+    private fun mostrarDialogCreadores() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(R.string.dialogo_opcion2_titulo)
-            .setMessage(R.string.dialogo_opcion2_mensaje)
+        builder.setTitle(R.string.titulo_creadores)
+            .setMessage(R.string.mensaje_creadores)
 
         builder.setPositiveButton(R.string.boton_aceptar) { _, _ ->
             // Acciones al hacer clic en Aceptar
-            Toast.makeText(requireContext(), R.string.boton_aceptar, Toast.LENGTH_SHORT).show()
         }
 
-        builder.setNegativeButton(R.string.boton_cancelar) { _, _ ->
-            // Acciones al hacer clic en Cancelar
-            Toast.makeText(requireContext(), R.string.boton_cancelar, Toast.LENGTH_SHORT).show()
-        }
 
         builder.show()
     }
@@ -173,8 +156,8 @@ class VistaMenuCompletoFragment : Fragment() {
         builder.setTitle(R.string.opciones_dialog_titulo)
             .setItems(opciones) { _, which ->
                 when (which) {
-                    0 -> mostrarDialogOpcion1()
-                    1 -> mostrarDialogOpcion2()
+                    0 -> mostrarDialogReglas()
+                    1 -> mostrarDialogCreadores()
                     2 -> {
                         if (reproducirMusica) {
                             reproducirMusica = false
