@@ -1,6 +1,5 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaMemory
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.*
@@ -9,7 +8,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.gridlayout.widget.GridLayout
@@ -81,7 +79,7 @@ class VistaMemoryFragment : Fragment() {
     }
 
     private fun iniciarTemporizador() {
-        timer = object : CountDownTimer(60000, 1000) { // 60000 milisegundos = 60 segundos
+        timer = object : CountDownTimer(6660000, 1000) { // 60000 milisegundos = 60 segundos
             override fun onTick(millisUntilFinished: Long) {
                 // Actualizar el temporizador en la interfaz de usuario (si es necesario)
                 val tiempoRestante = millisUntilFinished / 1000
@@ -121,6 +119,7 @@ class VistaMemoryFragment : Fragment() {
 
                 if (contadorTags <= 8){
                     boton.text = tablero[i][j] + "text"
+                    //boton.setBackgroundResource()
                 } else {
                     boton.text = tablero[i][j] + "img"
                 }
@@ -187,8 +186,8 @@ class VistaMemoryFragment : Fragment() {
                     primerBoton?.isEnabled = false
                     boton.isEnabled = false
 
-                    primerBoton?.isVisible = false
-                    boton.isVisible = false
+                    primerBoton?.visibility = View.INVISIBLE
+                    boton.visibility = View.INVISIBLE
 
                     // Incrementar puntos
                     puntos++
@@ -267,22 +266,22 @@ class VistaMemoryFragment : Fragment() {
     // Función para obtener el recurso de fondo según el tag
     private fun getBackgroundResourceFromTag(text: Any?): Int {
         return when (text) {
-            "1text" -> R.drawable.juego_colectivo
-            "2text" -> R.drawable.background_boton_tablero_usado
-            "3text" -> R.drawable.background_boton_tablero_usado
+            "1text" -> R.drawable.memory_basket_text
+            "2text" -> R.drawable.memory_boxeo_text
+            "3text" -> R.drawable.memory_esgrima_text
             "4text" -> R.drawable.background_boton_tablero_usado
             "5text" -> R.drawable.background_boton_tablero_usado
             "6text" -> R.drawable.background_boton_tablero_usado
             "7text" -> R.drawable.background_boton_tablero_usado
             "8text" -> R.drawable.background_boton_tablero_usado
-            "1img" -> R.drawable.background_boton_tablero_usado
-            "2img" -> R.drawable.background_boton_tablero_usado
-            "3img" -> R.drawable.background_boton_tablero_usado
-            "4img" -> R.drawable.background_boton_tablero_usado
-            "5img" -> R.drawable.background_boton_tablero_usado
-            "6img" -> R.drawable.background_boton_tablero_usado
-            "7img" -> R.drawable.background_boton_tablero_usado
-            "8img" -> R.drawable.background_boton_tablero_usado
+            "1img" -> R.drawable.memory_basket
+            "2img" -> R.drawable.memory_boxeo
+            "3img" -> R.drawable.memory_esgrima
+            "4img" -> R.drawable.memory_futbol
+            "5img" -> R.drawable.memory_golf
+            "6img" -> R.drawable.memory_tenis
+            "7img" -> R.drawable.memory_volley
+            "8img" -> R.drawable.memory_natacion
             else -> R.drawable.background_boton_tablero_nuevo
         }
     }
