@@ -79,7 +79,7 @@ class VistaMemoryFragment : Fragment() {
     }
 
     private fun iniciarTemporizador() {
-        timer = object : CountDownTimer(6660000, 1000) { // 60000 milisegundos = 60 segundos
+        timer = object : CountDownTimer(40000, 1000) { // 60000 milisegundos = 60 segundos
             override fun onTick(millisUntilFinished: Long) {
                 // Actualizar el temporizador en la interfaz de usuario (si es necesario)
                 val tiempoRestante = millisUntilFinished / 1000
@@ -269,11 +269,11 @@ class VistaMemoryFragment : Fragment() {
             "1text" -> R.drawable.memory_basket_text
             "2text" -> R.drawable.memory_boxeo_text
             "3text" -> R.drawable.memory_esgrima_text
-            "4text" -> R.drawable.background_boton_tablero_usado
-            "5text" -> R.drawable.background_boton_tablero_usado
-            "6text" -> R.drawable.background_boton_tablero_usado
-            "7text" -> R.drawable.background_boton_tablero_usado
-            "8text" -> R.drawable.background_boton_tablero_usado
+            "4text" -> R.drawable.memory_futbol_text
+            "5text" -> R.drawable.memory_golf_text
+            "6text" -> R.drawable.memory_tenis_text
+            "7text" -> R.drawable.memory_volley_text
+            "8text" -> R.drawable.memory_natacion_text
             "1img" -> R.drawable.memory_basket
             "2img" -> R.drawable.memory_boxeo
             "3img" -> R.drawable.memory_esgrima
