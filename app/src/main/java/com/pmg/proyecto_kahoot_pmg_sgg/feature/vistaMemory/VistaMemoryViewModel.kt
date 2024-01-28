@@ -9,7 +9,7 @@ class VistaMemoryViewModel : ViewModel() {
     private val _tablero = MutableLiveData<Array<Array<String>>>()
     val tablero: LiveData<Array<Array<String>>> get() = _tablero
 
-    val mapaTags = mutableMapOf<String, String>()
+    private val mapaTags = mutableMapOf<String, String>()
     // En la función crearTablero de tu ViewModel
 
     // En la función crearTablero de tu ViewModel

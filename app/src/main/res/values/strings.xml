@@ -14,6 +14,7 @@
     <string name="btnResp3">Respuesta3</string>
 
     <string name="modoJuego">Acierta 5 preguntas para ganar</string>
+    <string name="modoJuegoRepaso">Completa el hueco para ganar</string>
     <string name="modoJuegoMemory">Descubre todas las parejas para ganar</string>
     <string name="modoJuegoFinal">Acierta la pregunta final para ganar</string>
     <string name="ahorcado">Adivina la palabra para ganar</string>

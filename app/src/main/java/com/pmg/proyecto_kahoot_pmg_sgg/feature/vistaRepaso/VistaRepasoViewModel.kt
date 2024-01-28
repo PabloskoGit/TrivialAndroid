@@ -24,9 +24,9 @@ class VistaRepasoViewModel : ViewModel() {
     fun onCreate() {
         viewModelScope.launch {
             val result = getRepasoUseCase()
-            indiceOracion = (result.indices - 5).random()
+            indiceOracion = (result.indices - 2).random()
 
-            if (!result.isNullOrEmpty()) {
+            if (result.isNotEmpty()) {
                 repasoModel.value = result[indiceOracion]
             }
         }
@@ -45,7 +45,7 @@ class VistaRepasoViewModel : ViewModel() {
             aciertos++
             boton.setBackgroundResource(R.drawable.background_boton_acierto)
 
-            if (aciertos == 5) {
+            if (aciertos == 1) {
                 juegoGanado.value = true
             } else {
                 // Independientemente de la respuesta, avanza a la siguiente pregunta
@@ -75,7 +75,7 @@ class VistaRepasoViewModel : ViewModel() {
         viewModelScope.launch {
             val result = getRepasoUseCase()
 
-            if (!result.isNullOrEmpty() && indiceOracion < result.size - 1) {
+            if (result.isNotEmpty()) {
 
                 indiceOracion++
                 repasoModel.value = result[indiceOracion]

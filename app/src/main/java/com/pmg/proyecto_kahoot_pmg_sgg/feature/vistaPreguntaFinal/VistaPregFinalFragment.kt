@@ -173,17 +173,6 @@ class VistaPregFinalFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
-    private fun alertaVictoria() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setCancelable(false)
-        builder.setTitle(getString(R.string.alerta_victoria_titulo))
-        builder.setMessage(getString(R.string.alerta_victoria_mensaje))
-        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
-            ganarJuego()
-        }
-        builder.show()
-    }
-
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)

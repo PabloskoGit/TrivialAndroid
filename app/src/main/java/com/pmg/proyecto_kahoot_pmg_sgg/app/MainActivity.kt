@@ -11,12 +11,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.t8_ej01_persistenciadatossqlite.DatabaseHelper
+import com.pmg.proyecto_kahoot_pmg_sgg.core.data.persistencia.DatabaseHelper
 import com.pmg.proyecto_kahoot_pmg_sgg.R
 import com.pmg.proyecto_kahoot_pmg_sgg.app.utils.AlertaPreferencias
 import com.pmg.proyecto_kahoot_pmg_sgg.app.utils.NetworkConnectivityObserver
 import com.pmg.proyecto_kahoot_pmg_sgg.core.network.ConnectivityObserver
-import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaInicioJuego.VistaMenuCompletoFragment
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -29,10 +28,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var btnImgAjustes: ImageView
 
-    val vistaMenuCompletoFragment = VistaMenuCompletoFragment()
-
-
-
     companion object{
         var databaseHelper = null as DatabaseHelper?
         var mediaPlayer: MediaPlayer? = null
@@ -40,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         var reproducirMusica = true
         const val PREFS_NAME = "MyPrefsFileMusicaActiva3"
         const val MUSICA_ACTIVA_KEY = "musicaActiva"
-        const val PONER_MUSICA_KEY = "musicaPonerMusica"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -164,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         }.launchIn(lifecycleScope)
     }
 
-    fun verAjustes(){
+    private fun verAjustes(){
         val opciones = resources.getStringArray(R.array.opciones_array)
 
         val builder = android.app.AlertDialog.Builder(this)
@@ -231,11 +225,11 @@ class MainActivity : AppCompatActivity() {
 
         builder.show()
     }
-    fun iniciarReproduccion() {
+    private fun iniciarReproduccion() {
         mediaPlayer?.start()
     }
 
-    fun detenerReproduccion() {
+    private fun detenerReproduccion() {
         mediaPlayer?.stop()
         mediaPlayer?.prepare()
         mediaPlayer?.seekTo(0)

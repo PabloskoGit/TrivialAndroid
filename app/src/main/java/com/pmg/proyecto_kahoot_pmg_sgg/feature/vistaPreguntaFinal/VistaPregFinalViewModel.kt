@@ -1,7 +1,5 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaPreguntaFinal
 
-import android.os.Handler
-import android.os.Looper
 import android.widget.Button
 import androidx.lifecycle.*
 import com.pmg.proyecto_kahoot_pmg_sgg.R
@@ -28,7 +26,7 @@ class VistaPregFinalViewModel : ViewModel(){
             val result = getPregFinalUseCase()
             indiceOracion = (result.indices - 1).random()
 
-            if (!result.isNullOrEmpty()) {
+            if (result.isNotEmpty()) {
                 repasoModel.value = result[indiceOracion]
             }
         }

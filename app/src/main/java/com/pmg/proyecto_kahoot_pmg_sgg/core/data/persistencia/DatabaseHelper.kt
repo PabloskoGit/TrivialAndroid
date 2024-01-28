@@ -1,4 +1,4 @@
-package com.example.t8_ej01_persistenciadatossqlite
+package com.pmg.proyecto_kahoot_pmg_sgg.core.data.persistencia
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.Patida.Partida
+import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.partida.Partida
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.Jugador
 
 // Clase DatabaseHelper que extiende SQLiteOpenHelper para manejar la base de datos de la aplicación.
@@ -103,16 +103,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             val jugador2 = crearJugadorDesdeCursor(cursor, false)
 
             // Obtén el índice de la columna KEY_JUGADOR_ACTIVO
-            val jugadorActivoColumnIndex = cursor.getColumnIndex(KEY_JUGADOR_ACTIVO)
+//            val jugadorActivoColumnIndex = cursor.getColumnIndex(KEY_JUGADOR_ACTIVO)
 
-            // Verifica si la columna KEY_JUGADOR_ACTIVO está presente en el cursor
-            val jugadorActivo = if (jugadorActivoColumnIndex != -1) {
-                cursor.getInt(jugadorActivoColumnIndex)
-            } else {
-                // Manejar el caso en el que la columna no está presente
-                // Puedes asignar un valor predeterminado o lanzar una excepción según tus necesidades
-                -1 // O cualquier otro valor predeterminado
-            }
+//            // Verifica si la columna KEY_JUGADOR_ACTIVO está presente en el cursor
+//            val jugadorActivo = if (jugadorActivoColumnIndex != -1) {
+//                cursor.getInt(jugadorActivoColumnIndex)
+//            } else {
+//                // Manejar el caso en el que la columna no está presente
+//                // Puedes asignar un valor predeterminado o lanzar una excepción según tus necesidades
+//                -1 // O cualquier otro valor predeterminado
+//            }
 
             // Crea la tripleta con la información de la partida
             partidaInfo = Triple(partidaId, jugador1, jugador2)
@@ -218,8 +218,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 if (partidaIdColumnIndex != -1) {
                     val partidaId = cursor.getLong(partidaIdColumnIndex)
 
-                    val juegosCompletadosJugador1ColumnIndex = cursor.getColumnIndex(KEY_JUEGOS_COMPLETADOS_JUGADOR1)
-                    val juegosCompletadosJugador2ColumnIndex = cursor.getColumnIndex(KEY_JUEGOS_COMPLETADOS_JUGADOR2)
+                    val juegosCompletadosJugador1ColumnIndex = cursor.getColumnIndex(
+                        KEY_JUEGOS_COMPLETADOS_JUGADOR1
+                    )
+                    val juegosCompletadosJugador2ColumnIndex = cursor.getColumnIndex(
+                        KEY_JUEGOS_COMPLETADOS_JUGADOR2
+                    )
 
                     // Verificar si las columnas existen en el cursor antes de intentar obtener su valor
                     if (juegosCompletadosJugador1ColumnIndex != -1 && juegosCompletadosJugador2ColumnIndex != -1) {
@@ -309,16 +313,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun borrarPartidaPorId(partidaId: Long): Boolean {
         val db = writableDatabase
 
-        try {
+        return try {
             // Utiliza el método delete para borrar la partida por su ID
             db.delete(TABLE_PARTIDAS, "$KEY_ID=?", arrayOf(partidaId.toString()))
             db.close()
-            return true
+            true
         } catch (e: SQLiteException) {
             // Manejar la excepción según tus necesidades
             Log.e("DatabaseHelper", "Error al borrar la partida por ID: ${e.message}")
             db.close()
-            return false
+            false
         }
     }
 

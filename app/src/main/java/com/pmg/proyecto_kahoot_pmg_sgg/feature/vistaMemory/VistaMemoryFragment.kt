@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.gridlayout.widget.GridLayout
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
@@ -62,13 +61,13 @@ class VistaMemoryFragment : Fragment() {
         jugadorActivo = args.Jugador
 
         // Puedes realizar acciones adicionales después de que la vista se haya creado.
-        viewModel.tablero.observe(viewLifecycleOwner, Observer { tableroNuevo ->
+        viewModel.tablero.observe(viewLifecycleOwner) { tableroNuevo ->
             // Actualiza la interfaz de usuario con el nuevo tablero
             actualizarTableroUI(tableroNuevo)
             iniciarTemporizador()
             tx_Tiempo = view.findViewById(R.id.tx_Tiempo)
 
-        })
+        }
 
         // Agrega el OnBackPressedCallback al fragmento para evitar que se cierre la aplicación al pulsar el botón "Atrás"
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -175,8 +174,6 @@ class VistaMemoryFragment : Fragment() {
         } else {
             // Es el segundo clic, compara los tags solo si ambos botones pertenecen a la misma mitad
             if (esMismaMitad(primerBoton, boton)) {
-                val primerTag = (primerBoton?.tag as? String)
-                val tag = boton.tag as? String
 
                 // Es el segundo clic, compara los tags
                 if (primerBoton?.tag == boton.tag) {

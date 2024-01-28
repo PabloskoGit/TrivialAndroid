@@ -6,8 +6,8 @@ class Jugador(
     var direccion: String
 ) {
 
-    val juegosCompletados = mutableListOf<String>()
-    var victoria: Boolean = false
+    private val juegosCompletados = mutableListOf<String>()
+    private var victoria: Boolean = false
 
     fun esVictoria(ganado: Boolean) {
         // Verifica si el juego ya está en la lista antes de agregarlo
