@@ -11,14 +11,41 @@ import kotlinx.coroutines.launch
 
 class VistaPregFinalViewModel : ViewModel(){
 
+    /**
+     * LiveData que contiene el modelo de la Pregunta Final.
+     * Se actualiza con la información de la pregunta actual.
+     */
     val repasoModel = MutableLiveData<PreguntaFinalDTO>()
+
+    /**
+     * Caso de uso utilizado para obtener información sobre la Pregunta Final.
+     */
     var getPregFinalUseCase = GetPregFinalUseCase()
 
+    /**
+     * Índice de la pregunta actual en el modelo de la Pregunta Final.
+     * Se utiliza para navegar entre diferentes preguntas.
+     */
     private var indiceOracion = 0
+
+    /**
+     * Número de respuestas correctas en el juego de la Pregunta Final.
+     */
     private var aciertos = 0
+
+    /**
+     * Número de respuestas incorrectas en el juego de la Pregunta Final.
+     */
     private var fallos = 0
 
+    /**
+     * LiveData que indica si el jugador ha ganado el juego de la Pregunta Final.
+     */
     val juegoGanado = MutableLiveData(false)
+
+    /**
+     * LiveData que indica si el jugador ha perdido el juego de la Pregunta Final.
+     */
     val juegoPerdido = MutableLiveData(false)
 
     fun onCreate() {
@@ -32,6 +59,14 @@ class VistaPregFinalViewModel : ViewModel(){
         }
     }
 
+    /**
+     * Comprueba si la respuesta seleccionada es correcta.
+     * Actualiza la interfaz gráfica al resaltar el botón con un fondo específico.
+     * Además, incrementa los contadores de aciertos y fallos, y notifica sobre el resultado del juego.
+     *
+     * @param numRespuesta Índice de la respuesta seleccionada.
+     * @param boton Botón que representa la respuesta seleccionada.
+     */
     fun comprobarRespuestaAcertada(numRespuesta: Int, boton: Button) {
 
         val respuestaSeleccionada = getListaRespuestas()?.get(numRespuesta)
@@ -60,11 +95,20 @@ class VistaPregFinalViewModel : ViewModel(){
         }
     }
 
-    // Obtiene la lista de preguntas
+    /**
+     * Obtiene la lista de respuestas del modelo de repaso actual.
+     *
+     * @return Lista de respuestas o null si el modelo de repaso es nulo.
+     */
     private fun getListaRespuestas(): List<String>? {
         return repasoModel.value?.respuestas
     }
-    // Obtiene el numero de respuesta correcta
+
+    /**
+     * Obtiene el índice de la respuesta correcta del modelo de repaso actual.
+     *
+     * @return Índice de la respuesta correcta o null si el modelo de repaso es nulo.
+     */
     private fun getRespuestaCorrecta(): Int? {
         return repasoModel.value?.correcta
     }

@@ -20,19 +20,33 @@ import kotlin.collections.set
  */
 class VistaTableroViewModel : ViewModel() {
 
-
+    /**
+     * LiveData que representa el tablero del juego.
+     */
     private val _tablero = MutableLiveData<Array<Array<String>>>()
     val tablero: LiveData<Array<Array<String>>> get() = _tablero
 
+    /**
+     * LiveData que representa la lista de jugadores en el juego.
+     */
     private val _jugadores = MutableLiveData<List<Jugador>>()
     val jugadores: LiveData<List<Jugador>> get() = _jugadores
 
+    /**
+     * LiveData que representa el jugador actual.
+     */
     private val _jugadorActual = MutableLiveData<Int>()
     val jugadorActual: LiveData<Int> get() = _jugadorActual
 
+    /**
+     * Identificador del jugador activo.
+     */
     var jugador: Int = 1
 
-    // Mapa que asocia ID de jugador con su LiveData de posición
+    /**
+     * Mapa mutable que asocia el ID de un jugador con su LiveData de posición.
+     * La clave es el ID del jugador, y el valor es un LiveData que contiene la posición (par de coordenadas) del jugador.
+     */
     private val mapPosicionesJugadores = mutableMapOf<Int, MutableLiveData<Pair<Int, Int>>>()
 
     private var databaseHelper: DatabaseHelper
@@ -55,9 +69,18 @@ class VistaTableroViewModel : ViewModel() {
     }
 
 
+    /**
+     * Crea un nuevo tablero para el juego con las dimensiones especificadas.
+     *
+     * @param filas Número de filas en el tablero.
+     * @param columnas Número de columnas en el tablero.
+     */
     fun crearTablero(filas: Int, columnas: Int) {
         _jugadorActual.postValue(jugador)
+
+        // Utilizar un coroutine para realizar operaciones en segundo plano
         viewModelScope.launch(Dispatchers.Default) {
+            // Crear un nuevo tablero bidimensional utilizando expresiones lambda
             val nuevoTablero = Array(filas) { i ->
                 Array(columnas) { j ->
                     if (i == 0 || i == filas - 1 || j == 0 || j == columnas - 1) {
@@ -73,6 +96,11 @@ class VistaTableroViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Mueve al jugador actual en el tablero según el número de casillas y direccion especificado.
+     *
+     * @param numeroCasillas Número de casillas que el jugador debe avanzar.
+     */
     fun moverJugador(numeroCasillas: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             val jugadorActual = _jugadores.value?.find { it.id == _jugadorActual.value }
@@ -135,30 +163,65 @@ class VistaTableroViewModel : ViewModel() {
         }
     }
 
+
+    /**
+     * Cambia al siguiente jugador en la lista de jugadores.
+     * Actualiza el valor de `_jugadorActual` en el ViewModel.
+     */
     fun cambiarJugador() {
+        // Obtener el jugador actual del LiveData
         _jugadorActual.value?.let { jugadorActual ->
+
+            // Calcular el nuevo jugador (circular, volviendo al primer jugador después del último)
             val nuevoJugador = (jugadorActual % (_jugadores.value?.size ?: 2)) + 1
+
+            // Actualizar el valor de `_jugadorActual` en el ViewModel con el nuevo jugador
             _jugadorActual.postValue(nuevoJugador)
+
+            // Actualizar la variable global 'jugador' con el nuevo jugador
             jugador = nuevoJugador
         }
     }
 
 
-    // Método para obtener el LiveData de posición de un jugador
+    /**
+     * Obtiene o crea un LiveData para la posición del jugador especificado.
+     *
+     * @param jugadorId Identificador único del jugador.
+     * @return MutableLiveData que contiene la posición actual del jugador (Par de coordenadas).
+     */
     fun getPosicionJugadorLiveData(jugadorId: Int): MutableLiveData<Pair<Int, Int>> {
         if (!mapPosicionesJugadores.containsKey(jugadorId)) {
             // Si el MutableLiveData no existe, créalo y agréguelo al mapa
             mapPosicionesJugadores[jugadorId] = MutableLiveData()
         }
+        // Devolver el MutableLiveData correspondiente al jugador
         return mapPosicionesJugadores[jugadorId]!!
     }
 
-    // Método para actualizar la posición de un jugador
+
+    /**
+     * Actualiza la posición del jugador con el identificador especificado en el LiveData correspondiente.
+     *
+     * @param jugadorId Identificador único del jugador.
+     * @param nuevaPosicion Nueva posición del jugador (Par de coordenadas).
+     */
     private fun actualizarPosicionJugador(jugadorId: Int, nuevaPosicion: Pair<Int, Int>) {
         // Obtén el MutableLiveData del jugador y actualiza su valor
         getPosicionJugadorLiveData(jugadorId).postValue(nuevaPosicion)
     }
 
+
+    /**
+     * Actualiza los juegos completados y verifica la victoria del jugador con el identificador especificado.
+     *
+     * @param jugadorId Identificador único del jugador.
+     * @param juego1 Estado del juego 1 (completado o no).
+     * @param juego2 Estado del juego 2 (completado o no).
+     * @param juego3 Estado del juego 3 (completado o no).
+     * @param juego4 Estado del juego 4 (completado o no).
+     * @param juego5 Estado del juego 5 (completado o no).
+     */
     fun actualizarPuntosJugador(
         jugadorId: Int,
         juego1: Boolean,
@@ -203,6 +266,12 @@ class VistaTableroViewModel : ViewModel() {
         // Retorna un texto por defecto si el jugador es nulo
         return "Jugador no encontrado"
     }
+
+    /**
+     * Obtiene el estado de victoria del jugador actual.
+     *
+     * @return `true` si el jugador ha ganado, `false` de lo contrario.
+     */
     fun obtenerJugadorVictoria(): Boolean {
         // Obtén el jugador actual
         val jugadorActual = _jugadores.value?.find { it.id == _jugadorActual.value }
@@ -211,6 +280,13 @@ class VistaTableroViewModel : ViewModel() {
         return jugadorActual?.obtenerVictoria() ?: false
     }
 
+
+    /**
+     * Obtiene la lista de juegos completados por el jugador con el identificador especificado.
+     *
+     * @param jugadorId Identificador único del jugador.
+     * @return Lista de juegos completados por el jugador, o una lista vacía si el jugador no existe.
+     */
     fun getJuegosCompletados(jugadorId: Int): List<String> {
         // Obtén el jugador correspondiente al jugadorId
         val jugador = _jugadores.value?.find { it.id == jugadorId }
@@ -225,6 +301,12 @@ class VistaTableroViewModel : ViewModel() {
         return listOf()
     }
 
+
+    /**
+     * Obtiene las posiciones actuales de todos los jugadores.
+     *
+     * @return Lista de pares de coordenadas que representan las posiciones de los jugadores.
+     */
     fun obtenerPosicionesTodosJugadores(): List<Pair<Int, Int>> {
         val posiciones = mutableListOf<Pair<Int, Int>>()
         jugadores.value?.forEach { jugador ->
@@ -237,29 +319,40 @@ class VistaTableroViewModel : ViewModel() {
         return posiciones
     }
 
-    // Enumeración para representar las direcciones posibles
+    /**
+     * Enumerado que representa las direcciones posibles en las que un jugador puede moverse.
+     */
     private enum class Direccion {
         DERECHA, ABAJO, IZQUIERDA, ARRIBA
     }
 
+    /**
+     * Guarda la partida actual en la base de datos.
+     * Se obtienen los jugadores y el jugador activo para almacenarlos en la base de datos.
+     * Se registra un mensaje de depuración con información sobre los jugadores y el jugador activo.
+     */
     fun guardarPartida() {
+        // Obtener los jugadores y el jugador activo del LiveData
         val jugador1 = _jugadores.value?.find { it.id == 1 } ?: return
         val jugador2 = _jugadores.value?.find { it.id == 2 } ?: return
         val jugadorActivo = _jugadorActual.value ?: return
 
-        Log.d("VistaTableroViewModel", "Guardando partida. Jugador1: $jugador1, Jugador2: $jugador2, Jugador Activo: $jugadorActivo")
-
+        // Llamar a la función de la base de datos para insertar la partida
         databaseHelper.insertarPartida( jugador1, jugador2, jugadorActivo)
     }
 
+    /**
+     * Carga una partida desde la base de datos utilizando el ID de la partida especificado.
+     * Actualiza los jugadores, el jugador activo y el tablero en el ViewModel.
+     * Registra mensajes de depuración para seguir el proceso de carga.
+     *
+     * @param partidaId ID de la partida a cargar.
+     */
     fun cargarPartida(partidaId: Long) {
-        Log.d("VistaTableroViewModel", "Cargando partida. ID: $partidaId")
 
         val partidaInfo = databaseHelper.obtenerPartidaPorId(partidaId)
         if (partidaInfo != null) {
             val (_, jugador1, jugador2) = partidaInfo
-
-            Log.d("VistaTableroViewModel", "Partida cargada. Jugador1: $jugador1, Jugador2: $jugador2")
 
             // Actualizar jugadores en el ViewModel
             _jugadores.value = listOf(jugador1, jugador2)
@@ -278,13 +371,22 @@ class VistaTableroViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Actualiza el tablero del juego con las posiciones actuales de los jugadores en el ViewModel.
+     * Se verifica que las posiciones estén dentro de los límites del tablero antes de realizar la actualización.
+     */
     private fun actualizarTableroConPosiciones() {
         viewModelScope.launch(Dispatchers.Default) {
+
+            // Obtener la lista de jugadores y el tablero del LiveData
             val jugadores = _jugadores.value ?: return@launch
             val tablero = _tablero.value ?: return@launch
 
             jugadores.forEach { jugador ->
+                // Obtener la posición actual del jugador
                 val posicion = jugador.posicion
+
+                // Verificar que la posición esté dentro de los límites del tablero
                 if (posicion.first >= 0 && posicion.first < tablero.size &&
                     posicion.second >= 0 && posicion.second < tablero[0].size
                 ) {
@@ -295,6 +397,11 @@ class VistaTableroViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Guarda o actualiza una partida en la base de datos.
+     *
+     * @param partidaId ID de la partida a actualizar. Si es -1, se guarda como una nueva partida.
+     */
     fun guardarOActualizarPartida(partidaId: Long) {
 
 
@@ -310,21 +417,39 @@ class VistaTableroViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Actualiza una partida existente en la base de datos con los jugadores y el jugador activo actuales.
+     *
+     * @param partidaId ID de la partida a actualizar.
+     */
     private fun actualizarPartida(partidaId: Long) {
+
+        // Obtener los jugadores y el jugador activo del LiveData
         val jugador1 = _jugadores.value?.find { it.id == 1 } ?: return
         val jugador2 = _jugadores.value?.find { it.id == 2 } ?: return
         val jugadorActivo = _jugadorActual.value ?: return
 
         Log.d("VistaTableroViewModel", "Actualizando partida. Jugador1: $jugador1, Jugador2: $jugador2, Jugador Activo: $jugadorActivo")
 
+        // Llamar a la función de la base de datos para actualizar la partida
         databaseHelper.actualizarPartida(partidaId, jugador1, jugador2, jugadorActivo)
     }
 
+    /**
+     * Obtiene de forma asíncrona el último ID de partida almacenado en la base de datos.
+     *
+     * @return El último ID de partida, o -1 si no hay partidas registradas.
+     */
     fun obtenerUltimoIdPartidaDesdeBDAsync(): Long {
         return databaseHelper.obtenerUltimoIdPartida()
 
     }
 
+    /**
+     * Borra una partida de la base de datos utilizando su ID.
+     *
+     * @param partidaId ID de la partida a borrar.
+     */
     fun borrarPartidaPorId(partidaId: Long) {
         databaseHelper.borrarPartidaPorId(partidaId)
     }

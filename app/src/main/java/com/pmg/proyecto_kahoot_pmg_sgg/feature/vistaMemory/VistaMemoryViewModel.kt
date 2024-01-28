@@ -6,6 +6,29 @@ import kotlinx.coroutines.launch
 
 class VistaMemoryViewModel : ViewModel() {
 
+    /**
+     * LiveData que contiene la representación del tablero de juego.
+     * Cada elemento de la matriz contiene el contenido de una casilla en el tablero.
+     * Puede ser observado para actualizar la interfaz de usuario cuando cambia el tablero.
+     */
+    private val _tablero = MutableLiveData<Array<Array<String>>>()
+    val tablero: LiveData<Array<Array<String>>> get() = _tablero
+
+    /**
+     * Mapa que asocia los tags de las casillas del tablero con su contenido.
+     * Se utiliza para almacenar la relación entre el tag de una casilla y el contenido que representa.
+     * Puede ser útil para realizar consultas sobre el contenido de una casilla específica en el tablero.
+     */
+    private val mapaTags = mutableMapOf<String, String>()
+
+    /**
+     * Crea un nuevo tablero de juego con el número especificado de filas y columnas.
+     * Cada mitad del tablero contiene números del 1 al 8 en posiciones aleatorias.
+     * La representación del tablero se almacena en [_tablero].
+     *
+     * @param filas Número de filas en el tablero.
+     * @param columnas Número de columnas en el tablero.
+     */
     private val _tablero = MutableLiveData<Array<Array<String>>>()
     val tablero: LiveData<Array<Array<String>>> get() = _tablero
 

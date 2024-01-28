@@ -24,11 +24,22 @@ class VistaAhorcadoFragment : Fragment() {
     private val args: VistaAhorcadoFragmentArgs by navArgs()
 
     private val viewModel: VistaAhorcadoViewModel by viewModels()
+
     private lateinit var palabraTextView: TextView
 
+    /**
+     * Matriz de botones que representa el tablero del juego.
+     */
     private lateinit var botones: Array<Array<Button>>
+
+    /**
+     * Arreglo de recursos de imágenes para las etapas del juego del ahorcado.
+     */
     private lateinit var imagenesAhorcado: Array<Int>
 
+    /**
+     * Identificador del jugador activo en el juego.
+     */
     private var jugadorActivo by Delegates.notNull<Int>()
 
     override fun onCreateView(
@@ -113,6 +124,11 @@ class VistaAhorcadoFragment : Fragment() {
 
     }
 
+    /**
+     * Actualiza la interfaz de usuario con el tablero proporcionado.
+     *
+     * @param tablero Tablero actualizado del juego.
+     */
     private fun actualizarTableroUI(tablero: Array<Array<String>>) {
         // Obtiene una referencia al GridLayout
         val gridLayout = view?.findViewById<GridLayout>(R.id.gridLetras)
@@ -163,6 +179,10 @@ class VistaAhorcadoFragment : Fragment() {
         }
     }
 
+    /**
+     * Ejecuta acciones adicionales cuando se gana el juego del ahorcado.
+     * Actualiza la información del tablero y realiza la navegación de regreso.
+     */
     private fun ganarJuego() {
         // Realizar acciones adicionales cuando se gana el juego
 
@@ -179,6 +199,10 @@ class VistaAhorcadoFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Ejecuta acciones adicionales cuando se pierde el juego del ahorcado.
+     * Actualiza la información del tablero y realiza la navegación de regreso.
+     */
     private fun perderJuego() {
         // Realizar acciones adicionales cuando se pierde el juego
         // Por ejemplo, navegar hacia atrás
@@ -196,11 +220,19 @@ class VistaAhorcadoFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Carga la imagen correspondiente al número de fallos en el juego del ahorcado.
+     *
+     * @param fallos Número de fallos en el juego.
+     */
     private fun cargarImagenAhorcado(fallos: Int) {
         val imagenAhorcado = view?.findViewById<ImageView>(R.id.iv_ahorcado)
         imagenAhorcado?.setImageResource(imagenesAhorcado[fallos])
     }
 
+    /**
+     * Muestra una alerta indicando la victoria en el juego y realiza acciones adicionales al ganar.
+     */
     private fun alertaVictoria() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
@@ -212,6 +244,9 @@ class VistaAhorcadoFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Muestra una alerta indicando la derrota en el juego y realiza acciones adicionales al perder.
+     */
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)

@@ -29,6 +29,9 @@ class VistaJuegoFragment : Fragment() {
     private lateinit var btn2: Button
     private lateinit var btn3: Button
 
+    /**
+     * Variable que almacena el número del jugador activo.
+     */
     private var jugadorActivo by Delegates.notNull<Int>()
 
     override fun onCreateView(
@@ -140,6 +143,9 @@ class VistaJuegoFragment : Fragment() {
 
     }
 
+    /**
+     * Función para realizar acciones adicionales cuando se gana el juego.
+     */
     private fun ganarJuego() {
         // Realizar acciones adicionales cuando se gana el juego
 
@@ -154,6 +160,9 @@ class VistaJuegoFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Función para realizar acciones adicionales cuando se pierde el juego.
+     */
     private fun perderJuego() {
         // Realizar acciones adicionales cuando se pierde el juego
         // Por ejemplo, navegar hacia atrás
@@ -169,6 +178,9 @@ class VistaJuegoFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Muestra una alerta de victoria con opciones adicionales.
+     */
     private fun alertaVictoria() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
@@ -180,6 +192,9 @@ class VistaJuegoFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Muestra una alerta de derrota con opciones adicionales.
+     */
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)

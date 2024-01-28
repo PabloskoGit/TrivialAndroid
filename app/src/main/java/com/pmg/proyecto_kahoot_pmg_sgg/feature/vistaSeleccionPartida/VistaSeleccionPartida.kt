@@ -32,7 +32,7 @@ class VistaSeleccionPartida : AppCompatActivity() {
         recyclerView.adapter = adapter
 
 
-// Establecemos un listener que reaccionará cuando se haga clic en un ítem del RecyclerView.
+        // Establecemos un listener que reaccionará cuando se haga clic en un ítem del RecyclerView.
         recyclerView.addOnItemTouchListener(
             RecyclerItemClickListener(
                 this,

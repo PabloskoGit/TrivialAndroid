@@ -129,4 +129,7 @@
     Se el primero en acertarla y ganarás la partida.
     \n\n¡Mucha suerte!\n\nAcepta para continuar.</string>
 
+    <string name="guardar_partida">Guardar Partida</string>
+    <string name="borrar_partida">Borrar Partida</string>
+    <string name="cargar_partida">Cargar Partida</string>
 </resources>

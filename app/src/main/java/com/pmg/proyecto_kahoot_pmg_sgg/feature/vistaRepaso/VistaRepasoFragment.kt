@@ -20,6 +20,7 @@ class VistaRepasoFragment : Fragment() {
     private val args: VistaRepasoFragmentArgs by navArgs()
 
     private val viewModel: VistaRepasoViewModel by viewModels()
+
     private lateinit var preguntaTextView: TextView
 
     private lateinit var btn0: Button
@@ -27,6 +28,10 @@ class VistaRepasoFragment : Fragment() {
     private lateinit var btn2: Button
     private lateinit var btn3: Button
 
+    /**
+     * Variable que representa al jugador activo en el juego.
+     * Se inicializa utilizando la propiedad by Delegates.notNull().
+     */
     private var jugadorActivo by Delegates.notNull<Int>()
 
     override fun onCreateView(
@@ -137,6 +142,11 @@ class VistaRepasoFragment : Fragment() {
         })
     }
 
+    /**
+     * Realiza acciones adicionales cuando se gana el juego.
+     * Notifica a la vista anterior sobre la información del tablero y el resultado del repaso.
+     * Luego, retrocede en la pila del fragmento de navegación actual.
+     */
     private fun ganarJuego() {
         // Realizar acciones adicionales cuando se gana el juego
 
@@ -153,6 +163,11 @@ class VistaRepasoFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Realiza acciones adicionales cuando se pierde el juego.
+     * Notifica a la vista anterior sobre la información del tablero y que hubo un cambio de jugador.
+     * Luego, retrocede en la pila del fragmento de navegación actual.
+     */
     private fun perderJuego() {
         // Realizar acciones adicionales cuando se pierde el juego
         // Por ejemplo, navegar hacia atrás
@@ -170,6 +185,10 @@ class VistaRepasoFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Muestra un cuadro de diálogo de alerta indicando la victoria en el juego.
+     * Al hacer clic en el botón de aceptar, se ejecuta la función para ganar el juego.
+     */
     private fun alertaVictoria() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
@@ -181,6 +200,10 @@ class VistaRepasoFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Muestra un cuadro de diálogo de alerta indicando la derrota en el juego.
+     * Al hacer clic en el botón de aceptar, se ejecuta la función para perder el juego.
+     */
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
