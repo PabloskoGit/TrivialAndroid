@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var btnImgAjustes: ImageView
 
-    companion object{
+    companion object {
         var databaseHelper = null as DatabaseHelper?
         var mediaPlayer: MediaPlayer? = null
         lateinit var sharedPref: SharedPreferences
@@ -41,8 +41,61 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Observar la conectividad de la red si no hay conexión a internet mostrar una alerta
-        checkConnection()
+        // Si se entra a la app sin conexion a internet muestra un dialogo que pide salir de la app
+        if (!NetworkConnectivityObserver.isConnected(this)) {
+            dialog = AlertDialog.Builder(this)
+                .setTitle(getString(R.string.sin_conexion_titulo))
+                .setMessage(getString(R.string.sin_conexion_mensaje))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.boton_salir)) { _, _ ->
+                    cerrarApp()
+                }
+                .show()
+        }
+
+        // Observar la conectividad de la red; si no hay conexión a internet, mostrar una alerta
+        connectivityObserver = NetworkConnectivityObserver(applicationContext)
+        connectivityObserver.observe().onEach {
+
+            when (it) {
+                ConnectivityObserver.Status.AVAILABLE -> {
+                    dialog?.dismiss()
+                }
+
+                ConnectivityObserver.Status.UNAVAILABLE -> {
+                    dialog = AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.sin_conexion_titulo))
+                        .setMessage(getString(R.string.sin_conexion_mensaje))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.boton_salir)) { _, _ ->
+                            cerrarApp()
+                        }
+                        .show()
+                }
+
+                ConnectivityObserver.Status.LOSING -> {
+                    dialog = AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.perdiendo_conexion_titulo))
+                        .setMessage(getString(R.string.perdiendo_conexion_mensaje))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.boton_salir)) { _, _ ->
+                            cerrarApp()
+                        }
+                        .show()
+                }
+
+                ConnectivityObserver.Status.LOST -> {
+                    dialog = AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.perdida_conexion_titulo))
+                        .setMessage(getString(R.string.perdida_conexion_mensaje))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.boton_salir)) { _, _ ->
+                            cerrarApp()
+                        }
+                        .show()
+                }
+            }
+        }.launchIn(lifecycleScope)
 
         btnImgAjustes = findViewById(R.id.btnimg_Ajustes)
 
@@ -51,7 +104,6 @@ class MainActivity : AppCompatActivity() {
         reproducirMusica = sharedPref.getBoolean(MUSICA_ACTIVA_KEY, true)
 
         // Acceso a las preferencias compartidas
-
 
 
         // Alerta de bienvenida solo 1 vez por ejecucion de la app
@@ -70,10 +122,10 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-       // Reproducir la música en bucle
+        // Reproducir la música en bucle
         mediaPlayer?.isLooping = true
 
-        btnImgAjustes.setOnClickListener{
+        btnImgAjustes.setOnClickListener {
             verAjustes()
         }
 
@@ -113,52 +165,11 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-
-
     private fun checkConnection() {
-        // Observar la conectividad de la red; si no hay conexión a internet, mostrar una alerta
-        connectivityObserver = NetworkConnectivityObserver(applicationContext)
-        connectivityObserver.observe().onEach {
 
-            when (it) {
-                ConnectivityObserver.Status.AVAILABLE -> {
-                    dialog?.dismiss()
-                }
-                ConnectivityObserver.Status.UNAVAILABLE -> {
-                    dialog = AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.sin_conexion_titulo))
-                        .setMessage(getString(R.string.sin_conexion_mensaje))
-                        .setCancelable(false)
-                        .setPositiveButton(getString(R.string.boton_salir)) { _, _ ->
-                            cerrarApp()
-                        }
-                        .show()
-                }
-                ConnectivityObserver.Status.LOSING -> {
-                    dialog = AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.perdiendo_conexion_titulo))
-                        .setMessage(getString(R.string.perdiendo_conexion_mensaje))
-                        .setCancelable(false)
-                        .setPositiveButton(getString(R.string.boton_salir)) { _, _ ->
-                            cerrarApp()
-                        }
-                        .show()
-                }
-                ConnectivityObserver.Status.LOST -> {
-                    dialog = AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.perdida_conexion_titulo))
-                        .setMessage(getString(R.string.perdida_conexion_mensaje))
-                        .setCancelable(false)
-                        .setPositiveButton(getString(R.string.boton_salir)) { _, _ ->
-                            cerrarApp()
-                        }
-                        .show()
-                }
-            }
-        }.launchIn(lifecycleScope)
     }
 
-    private fun verAjustes(){
+    private fun verAjustes() {
         val opciones = resources.getStringArray(R.array.opciones_array)
 
         val builder = android.app.AlertDialog.Builder(this)
@@ -171,20 +182,22 @@ class MainActivity : AppCompatActivity() {
                         if (reproducirMusica) {
                             reproducirMusica = false
                             detenerReproduccion()
-                            with (sharedPref.edit()) {
+                            with(sharedPref.edit()) {
                                 putBoolean(MUSICA_ACTIVA_KEY, reproducirMusica)
                                 apply() // Aplica los cambios
                             }
-                            Toast.makeText(this, R.string.musica_desactivada, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, R.string.musica_desactivada, Toast.LENGTH_SHORT)
+                                .show()
 
                         } else {
                             reproducirMusica = true
                             iniciarReproduccion()
-                            with (sharedPref.edit()) {
+                            with(sharedPref.edit()) {
                                 putBoolean(MUSICA_ACTIVA_KEY, reproducirMusica)
                                 apply() // Aplica los cambios
                             }
-                            Toast.makeText(this, R.string.musica_activada, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, R.string.musica_activada, Toast.LENGTH_SHORT)
+                                .show()
                         }
 
                     }
@@ -225,6 +238,7 @@ class MainActivity : AppCompatActivity() {
 
         builder.show()
     }
+
     private fun iniciarReproduccion() {
         mediaPlayer?.start()
     }
