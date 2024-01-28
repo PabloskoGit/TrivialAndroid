@@ -199,6 +199,7 @@ class VistaTableroViewModel : ViewModel() {
         return mapPosicionesJugadores[jugadorId]!!
     }
 
+
     /**
      * Actualiza la posición del jugador con el identificador especificado en el LiveData correspondiente.
      *
@@ -279,6 +280,7 @@ class VistaTableroViewModel : ViewModel() {
         return jugadorActual?.obtenerVictoria() ?: false
     }
 
+
     /**
      * Obtiene la lista de juegos completados por el jugador con el identificador especificado.
      *
@@ -298,6 +300,7 @@ class VistaTableroViewModel : ViewModel() {
         // Retorna una lista vacía si el jugador es nulo
         return listOf()
     }
+
 
     /**
      * Obtiene las posiciones actuales de todos los jugadores.

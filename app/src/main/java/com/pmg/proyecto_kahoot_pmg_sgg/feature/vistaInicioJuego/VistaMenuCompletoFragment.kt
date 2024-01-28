@@ -24,7 +24,7 @@ class VistaMenuCompletoFragment : Fragment() {
 
     private var mediaPlayer: MediaPlayer? = null
 
-    /**
+   /**
      * Variable para indicar si se debe reproducir música.
      */
     private var reproducirMusica by Delegates.notNull<Boolean>()
@@ -93,7 +93,7 @@ class VistaMenuCompletoFragment : Fragment() {
             }
         })
     }
-
+    
     /**
      * Muestra un cuadro de diálogo para confirmar la salida de la aplicación.
      */
@@ -111,7 +111,7 @@ class VistaMenuCompletoFragment : Fragment() {
         }
         builder.show()
     }
-
+    
     /**
      * Muestra un cuadro de diálogo con las reglas del juego.
      */
@@ -127,7 +127,7 @@ class VistaMenuCompletoFragment : Fragment() {
 
         builder.show()
     }
-
+    
     /**
      * Muestra un cuadro de diálogo con información sobre los creadores del juego.
      */
@@ -144,12 +144,14 @@ class VistaMenuCompletoFragment : Fragment() {
         builder.show()
     }
 
+
     /**
      * Inicia la reproducción del audio asociado al juego.
      */
     private fun iniciarReproduccion() {
         mediaPlayer?.start()
     }
+
 
     /**
      * Detiene la reproducción del audio asociado al juego y lo reinicia al principio.

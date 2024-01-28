@@ -169,6 +169,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     /**
      * Muestra un diálogo con las opciones del juego.
      * Las opciones incluyen reglas, creadores y activar/desactivar la música.
@@ -233,6 +234,7 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
+
     /**
      * Muestra un diálogo con la información de los creadores del juego.
      */
@@ -249,12 +251,14 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
+
     /**
      * Inicia la reproducción de la música del juego.
      */
     private fun iniciarReproduccion() {
         mediaPlayer?.start()
     }
+
 
     /**
      * Detiene la reproducción de la música, prepara el reproductor y lo reinicia a la posición inicial.

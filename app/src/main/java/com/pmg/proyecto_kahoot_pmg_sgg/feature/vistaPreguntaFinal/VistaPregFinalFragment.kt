@@ -186,6 +186,7 @@ class VistaPregFinalFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+
     /**
      * Función llamada cuando el jugador pierde el juego de la Pregunta Final.
      * Realiza acciones adicionales y navega de regreso al fragmento anterior.
@@ -193,10 +194,9 @@ class VistaPregFinalFragment : Fragment() {
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
-        builder.setTitle("Derrota")
-        builder.setMessage("Has perdido...\nTurno para el siguiente jugador.\n\nAcepta para continuar.")
-        builder.setPositiveButton("Aceptar") { _, _ ->
-
+        builder.setTitle(getString(R.string.alerta_derrota_titulo))
+        builder.setMessage(getString(R.string.alerta_derrota_mensaje))
+        builder.setPositiveButton(getString(R.string.boton_aceptar)) { _, _ ->
             perderJuego()
         }
         builder.show()

@@ -29,6 +29,14 @@ class VistaMemoryViewModel : ViewModel() {
      * @param filas Número de filas en el tablero.
      * @param columnas Número de columnas en el tablero.
      */
+    private val _tablero = MutableLiveData<Array<Array<String>>>()
+    val tablero: LiveData<Array<Array<String>>> get() = _tablero
+
+    private val mapaTags = mutableMapOf<String, String>()
+    // En la función crearTablero de tu ViewModel
+
+    // En la función crearTablero de tu ViewModel
+// En la función crearTablero de tu ViewModel
     fun crearTablero(filas: Int, columnas: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             // Crea las listas de tags del 1 al 8 para cada mitad del tablero

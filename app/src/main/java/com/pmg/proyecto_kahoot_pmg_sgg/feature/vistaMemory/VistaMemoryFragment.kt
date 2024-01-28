@@ -58,6 +58,7 @@ class VistaMemoryFragment : Fragment() {
      */
     private var jugadorActivo by Delegates.notNull<Int>()
 
+
     /**
      * Contador de tags asignados a los botones del juego Memory.
      */
@@ -204,6 +205,7 @@ class VistaMemoryFragment : Fragment() {
         }
     }
 
+
     /**
      * Función llamada cuando se hace clic en un botón del tablero de memoria.
      *
@@ -319,7 +321,6 @@ class VistaMemoryFragment : Fragment() {
 
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
-
 
     /**
      * Obtiene el recurso de fondo según el tag proporcionado.

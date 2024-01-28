@@ -130,5 +130,4 @@ Be the first to answer it correctly, and you will win the game.
     <string name="guardar_partida">Save Game</string>
     <string name="borrar_partida">Delete Game</string>
     <string name="cargar_partida">Load Game</string>
-
 </resources>

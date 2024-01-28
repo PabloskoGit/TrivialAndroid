@@ -73,12 +73,12 @@ class VistaTableroFragment : Fragment() {
      * Identificador de la partida cargada actualmente.
      */
     private var partidaCargada = 0
-
+  
     /**
      * Identificador de la partida que se desea borrar.
      */
     private var partidaBorrar = 0
-
+  
     private val startForResultCargarPartida =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             // Este bloque de código se ejecutará cuando VistaSeleccionPartida envíe un resultado de vuelta.
@@ -386,6 +386,7 @@ class VistaTableroFragment : Fragment() {
         builder.create().show()
     }
 
+
     /**
      * Muestra un diálogo de confirmación para borrar una partida.
      * Se utiliza para obtener la confirmación antes de borrar una partida específica.
@@ -411,6 +412,7 @@ class VistaTableroFragment : Fragment() {
 
         builder.create().show()
     }
+
 
     /**
      * Muestra un diálogo de alerta para informar sobre la victoria de un jugador.
@@ -442,6 +444,7 @@ class VistaTableroFragment : Fragment() {
         builder.setCancelable(false)
         builder.show()
     }
+
     /**
      * Muestra un diálogo de confirmación para borrar la partida actual.
      * Se utiliza para obtener la confirmación antes de borrar la partida cargada actualmente.
@@ -469,6 +472,7 @@ class VistaTableroFragment : Fragment() {
 
         builder.create().show()
     }
+
 
     /**
      * Muestra un diálogo de confirmación para cargar una partida.
@@ -599,6 +603,7 @@ class VistaTableroFragment : Fragment() {
         viewModel.moverJugador(numeroCasillas)
     }
 
+
     /**
      * Muestra la imagen de un dado en una ImageView según el valor del dado proporcionado.
      *
@@ -619,6 +624,7 @@ class VistaTableroFragment : Fragment() {
         imagenDado?.setImageResource(arrayDados[dado])
 
     }
+
 
     /**
      * Inicia un minijuego basado en la casilla seleccionada, navegando al fragmento correspondiente.
