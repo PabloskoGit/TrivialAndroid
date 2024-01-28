@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.gridlayout.widget.GridLayout
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pmg.proyecto_kahoot_pmg_sgg.R
@@ -75,12 +74,12 @@ class VistaAhorcadoFragment : Fragment() {
 
         jugadorActivo = args.Jugador
 
-        viewModel.tablero.observe(viewLifecycleOwner, Observer { tableroNuevo ->
+        viewModel.tablero.observe(viewLifecycleOwner) { tableroNuevo ->
             // Actualiza la interfaz de usuario con el nuevo tablero
             actualizarTableroUI(tableroNuevo)
-        })
+        }
 
-        viewModel.palabraMostrar.observe(viewLifecycleOwner) { palabra ->
+        viewModel.palabraMostrar.observe(viewLifecycleOwner) {
 
             // Actualiza la interfaz de usuario con la nueva pregunta
             palabraTextView.text = viewModel.palabraMostrar.value

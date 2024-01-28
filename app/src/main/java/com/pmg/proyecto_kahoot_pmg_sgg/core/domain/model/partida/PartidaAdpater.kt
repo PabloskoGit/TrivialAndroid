@@ -1,4 +1,4 @@
-package com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.Patida
+package com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.partida
 
 import android.view.LayoutInflater
 import android.view.View

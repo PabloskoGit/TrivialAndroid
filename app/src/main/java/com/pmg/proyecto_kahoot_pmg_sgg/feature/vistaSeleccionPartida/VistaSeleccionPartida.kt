@@ -1,21 +1,15 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaSeleccionPartida
 
-import RecyclerItemClickListener
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.t8_ej01_persistenciadatossqlite.DatabaseHelper
-import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.Patida.PartidaAdapter
-import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
+import com.pmg.proyecto_kahoot_pmg_sgg.core.data.persistencia.DatabaseHelper
+import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.partida.PartidaAdapter
 import com.pmg.proyecto_kahoot_pmg_sgg.R
-import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero.VistaTableroViewModel
+import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.recyclerItemClickListener.RecyclerItemClickListener
 
 class VistaSeleccionPartida : AppCompatActivity() {
 
@@ -50,7 +44,7 @@ class VistaSeleccionPartida : AppCompatActivity() {
                         // Añadimos el ID de la partida seleccionada al Intent.
                         intent.putExtra("selectedPartidaId", partidaList[position].idPartida)
                         // Establecemos el resultado de la actividad con el Intent y RESULT_OK.
-                        setResult(Activity.RESULT_OK, intent)
+                        setResult(RESULT_OK, intent)
                         // Finalizamos la actividad, cerrándola y volviendo a la anterior.
                         finish()
                     }

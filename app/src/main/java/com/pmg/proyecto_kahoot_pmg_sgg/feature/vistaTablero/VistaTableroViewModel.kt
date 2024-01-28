@@ -1,17 +1,12 @@
 package com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaTablero
 
-import android.content.Context
 import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.*
-import com.example.t8_ej01_persistenciadatossqlite.DatabaseHelper
+import com.pmg.proyecto_kahoot_pmg_sgg.core.data.persistencia.DatabaseHelper
 import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.Jugador
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.collections.List
 import kotlin.collections.find
 import kotlin.collections.forEach
@@ -40,7 +35,7 @@ class VistaTableroViewModel : ViewModel() {
     // Mapa que asocia ID de jugador con su LiveData de posición
     private val mapPosicionesJugadores = mutableMapOf<Int, MutableLiveData<Pair<Int, Int>>>()
 
-    private lateinit var databaseHelper: DatabaseHelper
+    private var databaseHelper: DatabaseHelper
 
 
 
@@ -95,10 +90,9 @@ class VistaTableroViewModel : ViewModel() {
                     // Itera según el número de casillas que el jugador debe avanzar
                     repeat(numeroCasillas) {
                         // Obtiene la dirección actual del jugador
-                        val direccionActual = Direccion.valueOf(jugador.direccion)
 
                         // Realiza acciones basadas en la dirección actual del jugador
-                        when (direccionActual) {
+                        when (Direccion.valueOf(jugador.direccion)) {
                             Direccion.DERECHA -> {
                                 nuevaColumna++
                                 if (nuevaColumna >= tablero[0].size - 1 || tablero[nuevaFila][nuevaColumna].isEmpty()) {
@@ -160,7 +154,7 @@ class VistaTableroViewModel : ViewModel() {
     }
 
     // Método para actualizar la posición de un jugador
-    fun actualizarPosicionJugador(jugadorId: Int, nuevaPosicion: Pair<Int, Int>) {
+    private fun actualizarPosicionJugador(jugadorId: Int, nuevaPosicion: Pair<Int, Int>) {
         // Obtén el MutableLiveData del jugador y actualiza su valor
         getPosicionJugadorLiveData(jugadorId).postValue(nuevaPosicion)
     }
@@ -193,22 +187,6 @@ class VistaTableroViewModel : ViewModel() {
                 }
             }
         }
-    }
-
-    fun restablecerPartida() {
-        // Limpia los datos de juegos completados, id, posicion y direccion de todos los jugadores
-        _jugadores.value?.forEach { jugador ->
-            jugador.juegosCompletados.clear()
-            jugador.esVictoria(false)
-            // Inicializar aquí la lista de jugadores
-            _jugadores.value = listOf(
-                Jugador(id = 1, posicion = Pair(0, 0), direccion = "DERECHA"),
-                Jugador(id = 2, posicion = Pair(0, 0), direccion = "DERECHA")
-                // Puedes agregar más jugadores según sea necesario
-            )  }
-
-        _jugadorActual.postValue(1)
-
     }
 
     fun actualizarTextoPuntosJugador(jugadorId: Int): String {
@@ -258,28 +236,6 @@ class VistaTableroViewModel : ViewModel() {
         }
         return posiciones
     }
-    /*fun checkMinijuego(casilla: Int, jugador: Int, haFallado: Boolean) : Boolean{
-
-        // Comprueba si el minijuego ya ha sido completado por el jugador. Si es así, no se ejecuta
-        if (jugador == 1) {
-            if (checkMinijuegos1[casilla - 1]) {
-                return false
-            } else {
-                checkMinijuegos1[casilla - 1] = true
-                return true
-            }
-        } else if (jugador == 2) {
-            if (checkMinijuegos2[casilla - 1]) {
-                return false
-            } else {
-                checkMinijuegos2[casilla - 1] = true
-                return true
-            }
-        }
-
-        return false
-    }*/
-
 
     // Enumeración para representar las direcciones posibles
     private enum class Direccion {
@@ -370,11 +326,7 @@ class VistaTableroViewModel : ViewModel() {
     }
 
     fun borrarPartidaPorId(partidaId: Long) {
-        var borradoExitoso = false
-        borradoExitoso = databaseHelper.borrarPartidaPorId(partidaId)
-
-
-
+        databaseHelper.borrarPartidaPorId(partidaId)
     }
 
 }

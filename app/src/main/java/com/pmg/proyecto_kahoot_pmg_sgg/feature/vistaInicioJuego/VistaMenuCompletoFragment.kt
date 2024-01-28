@@ -8,18 +8,13 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.pmg.proyecto_kahoot_pmg_sgg.R
 import com.pmg.proyecto_kahoot_pmg_sgg.app.MainActivity
 import com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.jugador.InformacionTablero
-import com.pmg.proyecto_kahoot_pmg_sgg.feature.vistaJuego.VistaJuegoViewModel
 import kotlin.properties.Delegates
 
 class VistaMenuCompletoFragment : Fragment() {
-
-    // ViewModel asociado a la vista
-    private val viewModel: VistaJuegoViewModel by viewModels()
 
     // Botones en la vista
     private lateinit var btnJugarLocal: Button
@@ -29,7 +24,7 @@ class VistaMenuCompletoFragment : Fragment() {
 
     private var mediaPlayer: MediaPlayer? = null
 
-    var reproducirMusica by Delegates.notNull<Boolean>()
+    private var reproducirMusica by Delegates.notNull<Boolean>()
 
 
 
@@ -61,7 +56,7 @@ class VistaMenuCompletoFragment : Fragment() {
 
         btnJugarMultijugador.setOnClickListener {
             // Muestra un Toast cuando se hace clic en el botón
-            Toast.makeText(requireContext(), "El multijugador local aun no esta añadido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Proximamente estará disponible", Toast.LENGTH_SHORT).show()
         }
 
         btnAjustes.setOnClickListener {
@@ -136,20 +131,17 @@ class VistaMenuCompletoFragment : Fragment() {
         builder.show()
     }
 
-    fun iniciarReproduccion() {
+    private fun iniciarReproduccion() {
         mediaPlayer?.start()
     }
 
-    fun detenerReproduccion() {
+    private fun detenerReproduccion() {
         mediaPlayer?.stop()
         mediaPlayer?.prepare()
         mediaPlayer?.seekTo(0)
     }
-    fun pausarReproduccion() {
-        mediaPlayer?.pause()
-    }
 
-    fun verAjustes(){
+    private fun verAjustes(){
         val opciones = resources.getStringArray(R.array.opciones_array)
 
         val builder = AlertDialog.Builder(requireContext())

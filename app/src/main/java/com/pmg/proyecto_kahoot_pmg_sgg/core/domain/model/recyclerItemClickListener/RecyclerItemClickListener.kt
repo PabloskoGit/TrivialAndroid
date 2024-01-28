@@ -1,3 +1,5 @@
+package com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.recyclerItemClickListener
+
 import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent

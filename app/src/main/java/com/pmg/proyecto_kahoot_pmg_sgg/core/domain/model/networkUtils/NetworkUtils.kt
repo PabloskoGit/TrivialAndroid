@@ -1,4 +1,4 @@
-package com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.NetworkUtils
+package com.pmg.proyecto_kahoot_pmg_sgg.core.domain.model.networkUtils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities

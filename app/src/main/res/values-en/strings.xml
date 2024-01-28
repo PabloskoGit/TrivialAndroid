@@ -14,6 +14,7 @@
     <string name="btnResp3">Answer 3</string>
 
     <string name="modoJuego">Guess 5 questions to win</string>
+    <string name="modoJuegoRepaso">Complete the gap to win</string>
     <string name="modoJuegoMemory">Discover all pairs to win</string>
     <string name="modoJuegoFinal">Guess the final question to win</string>
     <string name="ahorcado">Guess the word to win</string>
