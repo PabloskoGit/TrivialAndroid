@@ -13,14 +13,39 @@ import kotlinx.coroutines.launch
 
 class VistaJuegoViewModel : ViewModel() {
 
+    /**
+     * Modelo LiveData que contiene la pregunta actual.
+     */
     val preguntaDTOModel = MutableLiveData<PreguntaDTO>()
+
+    /**
+     * Caso de uso para obtener preguntas.
+     */
     var getPreguntaUseCase = GetPreguntasUseCase()
 
+    /**
+     * Índice de la pregunta actual.
+     */
     private var indicePregunta = 0
+
+    /**
+     * Contador de aciertos.
+     */
     private var aciertos = 0
+
+    /**
+     * Contador de fallos.
+     */
     private var fallos = 0
 
+    /**
+     * LiveData para indicar si el juego fue ganado.
+     */
     val juegoGanado = MutableLiveData(false)
+
+    /**
+     * LiveData para indicar si el juego fue perdido.
+     */
     val juegoPerdido = MutableLiveData(false)
 
     fun onCreate() {
@@ -34,6 +59,12 @@ class VistaJuegoViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Función para comprobar si la respuesta seleccionada es correcta.
+     *
+     * @param numRespuesta Índice de la respuesta seleccionada.
+     * @param boton Botón que representa la respuesta seleccionada.
+     */
     fun comprobarRespuestaAcertada(numRespuesta: Int, boton: Button) {
 
         val respuestaSeleccionada = getListaRespuestas()?.get(numRespuesta)
@@ -72,6 +103,10 @@ class VistaJuegoViewModel : ViewModel() {
         }
 
     }
+
+    /**
+     * Función para avanzar a la siguiente pregunta.
+     */
     private fun nextOracion() {
 
         viewModelScope.launch {
@@ -85,12 +120,20 @@ class VistaJuegoViewModel : ViewModel() {
         }
     }
 
-    // Obtiene la lista de preguntas
+    /**
+     * Obtiene la lista de respuestas de la pregunta actual.
+     *
+     * @return Lista de respuestas o null si no hay pregunta cargada.
+     */
     private fun getListaRespuestas(): List<String>? {
         return preguntaDTOModel.value?.respuestas
     }
 
-    // Obtiene el numero de respuesta correcta
+    /**
+     * Obtiene el número de respuesta correcta de la pregunta actual.
+     *
+     * @return Número de respuesta correcta o null si no hay pregunta cargada.
+     */
     private fun getRespuestaCorrecta(): Int? {
         return preguntaDTOModel.value?.correcta
     }

@@ -127,4 +127,8 @@ Sergio García and Pablo Mata
 Be the first to answer it correctly, and you will win the game.
 \n\nGood luck!\n\nAccept to continue.</string>
 
+    <string name="guardar_partida">Save Game</string>
+    <string name="borrar_partida">Delete Game</string>
+    <string name="cargar_partida">Load Game</string>
+
 </resources>

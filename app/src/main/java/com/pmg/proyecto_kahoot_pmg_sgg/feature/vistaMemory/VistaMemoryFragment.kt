@@ -22,16 +22,45 @@ class VistaMemoryFragment : Fragment() {
     private val args: VistaMemoryFragmentArgs by navArgs()
 
     private val viewModel: VistaMemoryViewModel by viewModels()
+
+    /**
+     * Matriz de botones en el tablero del juego Memory.
+     */
     private lateinit var botones: Array<Array<Button>>
+
+    /**
+     * Primer botón clicado por el jugador en el juego Memory.
+     */
     private var primerBoton: Button? = null
+
+    /**
+     * Puntuación del jugador en el juego Memory.
+     */
     private var puntos = 0
+
+    /**
+     * Temporizador utilizado en el juego Memory.
+     */
     private var timer: CountDownTimer? = null
 
+    /**
+     * Conjunto que almacena los tags asignados a los botones del juego Memory.
+     */
     private val assignedTags = mutableSetOf<String>()
 
+    /**
+     * TextView utilizado para mostrar el tiempo restante en el juego Memory.
+     */
     private lateinit var tx_Tiempo: TextView
+
+    /**
+     * Identificador del jugador activo en el juego Memory.
+     */
     private var jugadorActivo by Delegates.notNull<Int>()
 
+    /**
+     * Contador de tags asignados a los botones del juego Memory.
+     */
     private var contadorTags = 0
 
     override fun onCreateView(
@@ -77,6 +106,11 @@ class VistaMemoryFragment : Fragment() {
         })
     }
 
+    /**
+     * Inicia un temporizador con un conteo descendente de 40 segundos y realiza acciones
+     * periódicas cada segundo. Actualiza la interfaz de usuario con el tiempo restante.
+     * Cuando el temporizador llega a cero, muestra una alerta de derrota.
+     */
     private fun iniciarTemporizador() {
         timer = object : CountDownTimer(40000, 1000) { // 60000 milisegundos = 60 segundos
             override fun onTick(millisUntilFinished: Long) {
@@ -94,10 +128,19 @@ class VistaMemoryFragment : Fragment() {
         }.start()
     }
 
+    /**
+     * Detiene el temporizador en curso. Cancela la cuenta regresiva y detiene cualquier
+     * acción asociada al temporizador.
+     */
     private fun detenerTemporizador() {
         timer?.cancel()
     }
 
+    /**
+     * Actualiza la interfaz de usuario con el nuevo estado del tablero.
+     *
+     * @param tablero La matriz que representa el estado actualizado del tablero.
+     */
     private fun actualizarTableroUI(tablero: Array<Array<String>>) {
         // Obtiene una referencia al GridLayout
         val gridLayout = view?.findViewById<GridLayout>(R.id.gridTableroCartas)
@@ -161,7 +204,11 @@ class VistaMemoryFragment : Fragment() {
         }
     }
 
-    // En tu Fragmento, en la función onBotonClicked
+    /**
+     * Función llamada cuando se hace clic en un botón del tablero de memoria.
+     *
+     * @param boton El botón que se ha clicado.
+     */
     private fun onBotonClicked(boton: Button) {
         // Verifica si ya hay un primer botón clicado
         if (primerBoton == null) {
@@ -217,13 +264,23 @@ class VistaMemoryFragment : Fragment() {
         }
     }
 
-    // Función para determinar si dos botones pertenecen a la misma mitad del tablero
+    /**
+     * Determina si dos botones pertenecen a la misma mitad del tablero de memoria.
+     *
+     * @param boton1 El primer botón.
+     * @param boton2 El segundo botón.
+     * @return `true` si ambos botones pertenecen a la misma mitad, `false` en caso contrario.
+     */
     private fun esMismaMitad(boton1: Button?, boton2: Button?): Boolean {
         return (boton1 != null && boton2 != null &&
                 (boton1.top <= (boton1.height * 2) || boton2.top <= (boton2.height * 2)))
     }
 
 
+    /**
+     * Ejecuta acciones adicionales cuando el jugador gana el juego de memoria.
+     * Detiene el temporizador, guarda la información del tablero y navega hacia atrás en el flujo de navegación.
+     */
     private fun ganarJuego() {
         // Realizar acciones adicionales cuando se gana el juego
         detenerTemporizador()
@@ -241,6 +298,10 @@ class VistaMemoryFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Ejecuta acciones adicionales cuando el jugador pierde el juego de memoria.
+     * Detiene el temporizador, guarda la información del tablero y navega hacia atrás en el flujo de navegación.
+     */
     private fun perderJuego() {
         // Realizar acciones adicionales cuando se pierde el juego
         // Por ejemplo, navegar hacia atrás
@@ -260,7 +321,12 @@ class VistaMemoryFragment : Fragment() {
     }
 
 
-    // Función para obtener el recurso de fondo según el tag
+    /**
+     * Obtiene el recurso de fondo según el tag proporcionado.
+     *
+     * @param text Valor del tag que determina el recurso de fondo.
+     * @return ID del recurso de fondo correspondiente al tag.
+     */
     private fun getBackgroundResourceFromTag(text: Any?): Int {
         return when (text) {
             "1text" -> R.drawable.memory_basket_text
@@ -283,6 +349,9 @@ class VistaMemoryFragment : Fragment() {
         }
     }
 
+    /**
+     * Muestra un cuadro de diálogo de victoria al completar el juego.
+     */
     private fun alertaVictoria() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
@@ -294,6 +363,9 @@ class VistaMemoryFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Muestra un cuadro de diálogo de derrota al perder el juego.
+     */
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)

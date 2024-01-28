@@ -49,12 +49,34 @@ class VistaTableroFragment : Fragment() {
 
     private lateinit var botones: Array<Array<Button>>
 
+    /**
+     * Número del minijuego actual.
+     */
     private var numMinijuego: Int = 0
+
+    /**
+     * Indica si se está en modo de juego.
+     */
     private var jugar: Boolean = false
+
+    /**
+     * Número del jugador actual.
+     */
     private var jugador: Int = 0
+
+    /**
+     * Última posición conocida del jugador en el tablero.
+     */
     private var ultimaPosicionJugador: Pair<Int, Int> = Pair(0, 0)
 
+    /**
+     * Identificador de la partida cargada actualmente.
+     */
     private var partidaCargada = 0
+
+    /**
+     * Identificador de la partida que se desea borrar.
+     */
     private var partidaBorrar = 0
 
     private val startForResultCargarPartida =
@@ -308,6 +330,10 @@ class VistaTableroFragment : Fragment() {
 
     }
 
+    /**
+     * Muestra un diálogo que permite al usuario elegir entre sobrescribir una partida cargada o crear una nueva.
+     * Se utiliza para confirmar la acción antes de guardar una partida existente o crear una nueva.
+     */
     private fun mostrarDialogSobrescribirNuevaPartida() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.dialogo_guardar_partida_titulo))
@@ -335,6 +361,10 @@ class VistaTableroFragment : Fragment() {
         builder.create().show()
     }
 
+    /**
+     * Muestra un diálogo que permite al usuario confirmar la creación de una nueva partida.
+     * Se utiliza para obtener la confirmación antes de guardar una partida como nueva.
+     */
     private fun mostrarDialogNuevaPartida() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.dialogo_guardar_partida_titulo))
@@ -356,6 +386,11 @@ class VistaTableroFragment : Fragment() {
         builder.create().show()
     }
 
+    /**
+     * Muestra un diálogo de confirmación para borrar una partida.
+     * Se utiliza para obtener la confirmación antes de borrar una partida específica.
+     * El ID de la partida a borrar se especifica en la variable partidaBorrar.
+     */
     private fun confirmarYBorrarPartida() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.dialogo_confirmar_borrado_titulo))
@@ -377,6 +412,10 @@ class VistaTableroFragment : Fragment() {
         builder.create().show()
     }
 
+    /**
+     * Muestra un diálogo de alerta para informar sobre la victoria de un jugador.
+     * Incluye opciones para volver al menú principal o salir de la aplicación.
+     */
     private fun alertaVictoria() {
 
         val builder = AlertDialog.Builder(requireContext()).create()
@@ -403,7 +442,12 @@ class VistaTableroFragment : Fragment() {
         builder.setCancelable(false)
         builder.show()
     }
-
+    /**
+     * Muestra un diálogo de confirmación para borrar la partida actual.
+     * Se utiliza para obtener la confirmación antes de borrar la partida cargada actualmente.
+     * El ID de la partida a borrar se especifica en la variable partidaBorrar.
+     * Después de borrar la partida, se reinician las variables partidaBorrar y partidaCargada.
+     */
     private fun confirmarYBorrarPartidaActual() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.dialogo_confirmar_borrado_titulo))
@@ -426,6 +470,11 @@ class VistaTableroFragment : Fragment() {
         builder.create().show()
     }
 
+    /**
+     * Muestra un diálogo de confirmación para cargar una partida.
+     * Se utiliza para obtener la confirmación antes de cargar la partida especificada por el ID almacenado en la variable partidaCargada.
+     * Luego de la confirmación, se llama a la función de carga de partida.
+     */
     private fun confirmarYCargarPartida() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.dialogo_confirmar_cargar_partida_titulo))
@@ -451,6 +500,11 @@ class VistaTableroFragment : Fragment() {
         builder.create().show()
     }
 
+    /**
+     * Muestra un diálogo de bienvenida al usuario antes de empezar la partida.
+     * El diálogo informa al usuario sobre el inicio del juego y espera a que el usuario haga clic en el botón "Aceptar"
+     * antes de comenzar la partida.
+     */
     private fun alertaBienvenida() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
@@ -545,6 +599,11 @@ class VistaTableroFragment : Fragment() {
         viewModel.moverJugador(numeroCasillas)
     }
 
+    /**
+     * Muestra la imagen de un dado en una ImageView según el valor del dado proporcionado.
+     *
+     * @param dado El valor del dado (número entre 1 y 6) que determina qué imagen mostrar.
+     */
     private fun mostrarDado(dado: Int) {
 
         arrayDados = arrayOf(
@@ -561,6 +620,11 @@ class VistaTableroFragment : Fragment() {
 
     }
 
+    /**
+     * Inicia un minijuego basado en la casilla seleccionada, navegando al fragmento correspondiente.
+     *
+     * @param casilla La casilla seleccionada que determina qué mini juego iniciar.
+     */
     private fun inicioMiniJuego(casilla: Int) {
 
         when (casilla) {

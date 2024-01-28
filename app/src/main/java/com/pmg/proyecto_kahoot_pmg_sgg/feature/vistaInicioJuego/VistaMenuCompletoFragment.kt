@@ -24,6 +24,9 @@ class VistaMenuCompletoFragment : Fragment() {
 
     private var mediaPlayer: MediaPlayer? = null
 
+    /**
+     * Variable para indicar si se debe reproducir música.
+     */
     private var reproducirMusica by Delegates.notNull<Boolean>()
 
 
@@ -91,6 +94,9 @@ class VistaMenuCompletoFragment : Fragment() {
         })
     }
 
+    /**
+     * Muestra un cuadro de diálogo para confirmar la salida de la aplicación.
+     */
     private fun mostrarDialogSalir() {
         // Alerta de que si quiere salir de la aplicación
         val builder = AlertDialog.Builder(requireContext())
@@ -105,6 +111,10 @@ class VistaMenuCompletoFragment : Fragment() {
         }
         builder.show()
     }
+
+    /**
+     * Muestra un cuadro de diálogo con las reglas del juego.
+     */
     private fun mostrarDialogReglas() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(R.string.titulo_reglas)
@@ -118,6 +128,9 @@ class VistaMenuCompletoFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Muestra un cuadro de diálogo con información sobre los creadores del juego.
+     */
     private fun mostrarDialogCreadores() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(R.string.titulo_creadores)
@@ -131,16 +144,25 @@ class VistaMenuCompletoFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Inicia la reproducción del audio asociado al juego.
+     */
     private fun iniciarReproduccion() {
         mediaPlayer?.start()
     }
 
+    /**
+     * Detiene la reproducción del audio asociado al juego y lo reinicia al principio.
+     */
     private fun detenerReproduccion() {
         mediaPlayer?.stop()
         mediaPlayer?.prepare()
         mediaPlayer?.seekTo(0)
     }
 
+    /**
+     * Muestra un diálogo con opciones para ver las reglas, los creadores y activar/desactivar la música.
+     */
     private fun verAjustes(){
         val opciones = resources.getStringArray(R.array.opciones_array)
 

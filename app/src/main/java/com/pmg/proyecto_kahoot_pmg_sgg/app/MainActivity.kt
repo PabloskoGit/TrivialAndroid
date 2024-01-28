@@ -169,6 +169,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Muestra un diálogo con las opciones del juego.
+     * Las opciones incluyen reglas, creadores y activar/desactivar la música.
+     */
     private fun verAjustes() {
         val opciones = resources.getStringArray(R.array.opciones_array)
 
@@ -213,6 +217,9 @@ class MainActivity : AppCompatActivity() {
         window?.setGravity(Gravity.CENTER)
     }
 
+    /**
+     * Muestra un diálogo con las reglas del juego.
+     */
     private fun mostrarDialogReglas() {
         val builder = android.app.AlertDialog.Builder(this)
         builder.setTitle(R.string.titulo_reglas)
@@ -226,6 +233,9 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
+    /**
+     * Muestra un diálogo con la información de los creadores del juego.
+     */
     private fun mostrarDialogCreadores() {
         val builder = android.app.AlertDialog.Builder(this)
         builder.setTitle(R.string.titulo_creadores)
@@ -239,10 +249,16 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
+    /**
+     * Inicia la reproducción de la música del juego.
+     */
     private fun iniciarReproduccion() {
         mediaPlayer?.start()
     }
 
+    /**
+     * Detiene la reproducción de la música, prepara el reproductor y lo reinicia a la posición inicial.
+     */
     private fun detenerReproduccion() {
         mediaPlayer?.stop()
         mediaPlayer?.prepare()

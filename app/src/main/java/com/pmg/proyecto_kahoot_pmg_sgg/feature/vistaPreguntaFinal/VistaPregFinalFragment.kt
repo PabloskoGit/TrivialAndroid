@@ -29,6 +29,10 @@ class VistaPregFinalFragment : Fragment() {
     private lateinit var btn2: Button
     private lateinit var btn3: Button
 
+    /**
+     * Representa el ID del jugador activo en el juego. Utilizado para identificar al jugador cuyo turno es actual.
+     * La propiedad es manejada por la delegación de 'Delegates.notNull()' para garantizar que siempre tenga un valor no nulo.
+     */
     private var jugadorActivo by Delegates.notNull<Int>()
 
     override fun onCreateView(
@@ -140,6 +144,10 @@ class VistaPregFinalFragment : Fragment() {
     }
 
 
+    /**
+     * Función llamada cuando el jugador gana el juego de la Pregunta Final.
+     * Realiza acciones adicionales y navega de regreso al fragmento anterior.
+     */
     private fun ganarJuego() {
         // Realizar acciones adicionales cuando se gana el juego
 
@@ -156,6 +164,11 @@ class VistaPregFinalFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Función llamada cuando el jugador pierde el juego de la Pregunta Final.
+     * Realiza acciones adicionales, como navegar hacia atrás y comunicar el resultado y el cambio de jugador.
+     * La información se comunica al fragmento anterior a través de la entrada manejada por el estado guardado.
+     */
     private fun perderJuego() {
         // Realizar acciones adicionales cuando se pierde el juego
         // Por ejemplo, navegar hacia atrás
@@ -173,6 +186,10 @@ class VistaPregFinalFragment : Fragment() {
         findNavController().popBackStack(R.id.vistaTableroView, false)
     }
 
+    /**
+     * Función llamada cuando el jugador pierde el juego de la Pregunta Final.
+     * Realiza acciones adicionales y navega de regreso al fragmento anterior.
+     */
     private fun alertaDerrota() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)

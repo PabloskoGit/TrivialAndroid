@@ -13,26 +13,64 @@ import kotlinx.coroutines.launch
 
 class VistaAhorcadoViewModel : ViewModel() {
 
+    /**
+     * Contiene las palabras para el juego del ahorcado.
+     */
     private val repasoModel = MutableLiveData<PalabrasDTO>()
+
+    /**
+     * Caso de uso para obtener las palabras del juego del ahorcado.
+     */
     var getAhorcadoUseCase = GetAhorcadoUseCase()
 
+    /**
+     * LiveData que representa el tablero del juego.
+     */
     private val _tablero = MutableLiveData<Array<Array<String>>>()
     val tablero: LiveData<Array<Array<String>>> get() = _tablero
 
+    /**
+     * Índice de la palabra actual en la lista de palabras.
+     */
     private var indiceOracion = 0
+
+    /**
+     * Número de fallos del jugador.
+     */
     private var fallos = 0
+
+    /**
+     * Número de aciertos del jugador.
+     */
     private var aciertos = 0
+
+    /**
+     * LiveData que muestra la palabra con las letras adivinadas.
+     */
     val palabraMostrar = MutableLiveData<String>()
+
+    /**
+     * Representa el estado del ahorcado (imagen).
+     */
     val imagenAhorcado = MutableLiveData<Int>()
 
+    /**
+     * Indica si el jugador ha ganado el juego.
+     */
     val juegoGanado = MutableLiveData(false)
+
+    /**
+     * LiveData que indica si el jugador ha perdido el juego.
+     */
     val juegoPerdido = MutableLiveData(false)
 
     fun onCreate() {
         getAhorcado()
     }
 
-    // Obtiene la lista de palabras, y segun el indice, obtiene la palabra que quieras, y luego la divide en letras
+    /**
+     * Obtiene la lista de palabras del juego del ahorcado, elige una al azar y establece la palabra a mostrar.
+     */
     private fun getAhorcado() {
 
         viewModelScope.launch {
@@ -48,7 +86,13 @@ class VistaAhorcadoViewModel : ViewModel() {
         }
     }
 
-    // Crea un tablero de letras, recibe como parametros el numero de filas y columnas, las letras van ordenadas en oren alfabetico
+    /**
+     * Crea un tablero de letras organizadas en orden alfabético.
+     *
+     * @param filas Número de filas del tablero.
+     * @param columnas Número de columnas del tablero.
+     */
+
     fun crearTableroLetras(filas: Int, columnas: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             var letraActual = 'A'
@@ -71,7 +115,12 @@ class VistaAhorcadoViewModel : ViewModel() {
         }
     }
 
-    // Gestiona la letra ya dividida en letras, obtiene como parametros el contenido de un editText
+    /**
+     * Comprueba si la letra introducida es correcta y actualiza el tablero.
+     *
+     * @param letra La letra introducida por el usuario.
+     * @return Devuelve `true` si la letra es correcta y `false` si es incorrecta.
+     */
     fun comprobarLetraAcertada(letra: String) : Boolean {
 
         var letrasEncontradas = false
@@ -102,6 +151,10 @@ class VistaAhorcadoViewModel : ViewModel() {
         cambiarImagenAhorcado()
         return letrasEncontradas
     }
+
+    /**
+     * Cambia la imagen del ahorcado según la cantidad de fallos.
+     */
     private fun cambiarImagenAhorcado() {
         imagenAhorcado.value = fallos
     }
